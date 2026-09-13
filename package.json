@@ -1,0 +1,9 @@
+{
+  "name": "project-grayfall-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Strona Project Grayfall + logowanie przez Discord OAuth2 (Vercel serverless functions)",
+  "engines": {
+    "node": ">=18"
+  }
+}
