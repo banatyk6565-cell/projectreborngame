@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="pl" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Grayfall | Oficjalny Portal Społeczności</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkbg: '#08090a',
+                        cardbg: '#121417',
+                        cardborder: '#272b33',
+                        accent: '#c53030',
+                        accenthover: '#e53e3e',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .font-cinzel { font-family: 'Cinzel', serif; }
+        body {
+            background-color: #08090a;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(to bottom, rgba(8,9,10,0.45), rgba(8,9,10,0.88), #08090a), url('ee819ac9-e800-40e3-b6bb-5bfcba65233d.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.15; transform: scale(1); }
+            50% { opacity: 0.35; transform: scale(1.08); }
+        }
+
+        @keyframes floatParticle {
+            0% { transform: translateY(0px) translateX(0px); opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { transform: translateY(-120px) translateX(40px); opacity: 0; }
+        }
+
+        /* Spectacular Title Animation */
+        @keyframes titleGlowPulse {
+            0%, 100% { 
+                filter: drop-shadow(0 0 15px rgba(197, 48, 48, 0.4));
+                transform: scale(1);
+            }
+            50% { 
+                filter: drop-shadow(0 0 35px rgba(229, 62, 62, 0.8));
+                transform: scale(1.02);
+            }
+        }
+
+        .animated-title {
+            animation: titleGlowPulse 4s ease-in-out infinite;
+        }
+
+        .ambient-glow-1 {
+            position: absolute;
+            top: 15%;
+            left: 20%;
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(197, 48, 48, 0.25) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            animation: pulseGlow 7s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .ambient-glow-2 {
+            position: absolute;
+            top: 50%;
+            right: 15%;
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(180, 83, 9, 0.15) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            animation: pulseGlow 9s ease-in-out infinite alternate;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .ember {
+            position: absolute;
+            background: rgba(255, 100, 50, 0.7);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 2;
+            box-shadow: 0 0 10px rgba(255, 69, 0, 0.8);
+            animation: floatParticle 6s linear infinite;
+        }
+
+        .glow-effect {
+            box-shadow: 0 0 40px -10px rgba(197, 48, 48, 0.3);
+        }
+        .glow-discord {
+            box-shadow: 0 0 35px -8px rgba(88, 101, 242, 0.4);
+        }
+        .glow-green {
+            box-shadow: 0 0 35px -8px rgba(34, 197, 94, 0.3);
+        }
+
+        .interactive-card {
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .interactive-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(197, 48, 48, 0.5);
+            box-shadow: 0 20px 40px -15px rgba(197, 48, 48, 0.15);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-red-600 selection:text-white">
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-darkbg/85 backdrop-blur-md border-b border-cardborder transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Logo jako przycisk powrotu na stronę główną -->
+            <a href="#" class="flex items-center space-x-3 group">
+                <span class="font-cinzel text-xl md:text-2xl font-extrabold tracking-wider text-white group-hover:text-red-500 transition">
+                    PROJECT <span class="text-red-600 group-hover:text-white transition">GRAYFALL</span>
+                </span>
+            </a>
+            
+            <div class="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-300">
+                <a href="#o-projekcie" class="hover:text-red-500 transition">O Projekcie</a>
+                <a href="#newsy" class="hover:text-red-500 transition flex items-center gap-1.5 text-red-400 font-semibold">
+                    <i class="fa-solid fa-newspaper text-xs"></i> Newsy
+                </a>
+                <a href="#poszukujemy" class="hover:text-red-500 transition flex items-center gap-1.5 text-amber-400 font-semibold">
+                    <i class="fa-solid fa-users-gear text-xs"></i> Poszukujemy
+                </a>
+                <a href="#spolecznosc" class="hover:text-red-500 transition">Społeczność</a>
+            </div>
+
+            <!-- Login / Panel Gracza Button -->
+            <div class="flex items-center space-x-4">
+                <button onclick="togglePanel()" id="auth-btn" class="bg-[#5865F2] hover:bg-[#4752C4] text-white px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition shadow-lg glow-discord cursor-pointer">
+                    <i class="fa-brands fa-discord text-lg"></i>
+                    <span>Zaloguj się</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- PANEL GRACZA -->
+    <div id="player-panel" class="hidden fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div class="relative bg-cardbg border border-cardborder rounded-3xl max-w-3xl w-full p-8 shadow-2xl animate-in fade-in zoom-in duration-300">
+            <button onclick="togglePanel()" class="absolute top-6 right-6 text-gray-400 hover:text-white text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-12 h-12 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 text-xl font-bold">
+                    <i class="fa-solid fa-id-card"></i>
+                </div>
+                <div>
+                    <h2 class="font-cinzel text-2xl font-bold text-white">Panel Gracza Project Grayfall</h2>
+                    <p class="text-xs text-gray-400">Zalogowano pomyślnie przez Discord (Ocalały #0001)</p>
+                </div>
+            </div>
+
+            <!-- Ogromna informacja o pracach nad panelem -->
+            <div class="bg-red-950/40 border border-red-600/50 rounded-2xl p-6 mb-8 text-center shadow-lg">
+                <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-600/20 text-red-500 text-2xl mb-3">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <h3 class="font-cinzel text-lg font-bold text-white mb-2">TEN PANEL JEST W TRAKCIE PRAC</h3>
+                <p class="text-sm text-red-200/90 leading-relaxed font-medium">
+                    Zacznie funkcjonowanie dopiero za <strong class="text-white underline">2-3 miesiące</strong>, gdy prace nad projektem będą bardziej zaawansowane!
+                </p>
+            </div>
+
+            <!-- Kafelki Panelu Gracza -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="bg-darkbg/70 border border-cardborder rounded-2xl p-5 hover:border-red-600/40 transition">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-lg bg-red-600/10 text-red-500 flex items-center justify-center">
+                            <i class="fa-solid fa-clipboard-list"></i>
+                        </div>
+                        <h4 class="font-bold text-white text-sm">Zgłoś się na Whitelistę</h4>
+                    </div>
+                    <p class="text-xs text-gray-400 mb-4">Formularz zgłoszeniowy zostanie aktywowany przed startem testów alpha.</p>
+                    <span class="inline-block px-3 py-1 rounded-lg bg-gray-800 text-gray-400 text-xs font-semibold">Wkrótce dostępne</span>
+                </div>
+
+                <div class="bg-darkbg/70 border border-cardborder rounded-2xl p-5 hover:border-indigo-600/40 transition">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-lg bg-indigo-600/10 text-indigo-400 flex items-center justify-center">
+                            <i class="fa-solid fa-user-gear"></i>
+                        </div>
+                        <h4 class="font-bold text-white text-sm">Profil i Postacie</h4>
+                    </div>
+                    <p class="text-xs text-gray-400 mb-4">Zarządzanie kartami postaci, statystykami i powiązaniami.</p>
+                    <span class="inline-block px-3 py-1 rounded-lg bg-gray-800 text-gray-400 text-xs font-semibold">Wkrótce dostępne</span>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center">
+                <button onclick="togglePanel()" class="bg-gray-800 hover:bg-gray-700 text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition">
+                    Zamknij Panel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="relative min-h-screen flex items-center justify-center hero-bg pt-20 px-4 overflow-hidden">
+        <div class="ambient-glow-1"></div>
+        <div class="ambient-glow-2"></div>
+
+        <div class="ember" style="width: 4px; height: 4px; left: 10%; bottom: 10%; animation-duration: 5s; animation-delay: 0s;"></div>
+        <div class="ember" style="width: 3px; height: 3px; left: 30%; bottom: 5%; animation-duration: 7s; animation-delay: 1s;"></div>
+        <div class="ember" style="width: 5px; height: 5px; left: 55%; bottom: 15%; animation-duration: 6s; animation-delay: 2.5s;"></div>
+        <div class="ember" style="width: 3px; height: 3px; left: 75%; bottom: 8%; animation-duration: 8s; animation-delay: 0.5s;"></div>
+        <div class="ember" style="width: 4px; height: 4px; left: 90%; bottom: 20%; animation-duration: 5.5s; animation-delay: 1.8s;"></div>
+
+        <div class="absolute inset-0 bg-gradient-to-t from-darkbg via-transparent to-black/30 pointer-events-none"></div>
+        
+        <div class="relative z-10 max-w-5xl mx-auto text-center py-20">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-red-950/80 border border-red-800/60 text-red-400 text-xs font-semibold tracking-wider uppercase mb-6 shadow-inner animate-pulse">
+                <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                Twórcy Project Reborn przedstawiają
+            </div>
+            
+            <!-- Animowany tytuł główny -->
+            <div class="mb-6">
+                <h1 class="font-cinzel text-5xl sm:text-7xl md:text-8xl font-black tracking-wider text-white animated-title">
+                    PROJECT <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-600 via-red-500 to-amber-500">GRAYFALL</span>
+                </h1>
+            </div>
+            
+            <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto mb-10 leading-relaxed font-light">
+                Nadchodzi nowy, potężny rozdział w polskiej społeczności Project Zomboid. Przekraczamy granice dotychczasowych możliwości, tworząc bezkompromisowy świat totalnego przetrwania.
+            </p>
+
+            <div class="flex flex-wrap items-center justify-center gap-4">
+                <a href="#o-projekcie" class="bg-red-600 hover:bg-red-700 text-white font-semibold px-7 py-3.5 rounded-xl transition shadow-lg glow-effect flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>Dowiedz się więcej</span>
+                </a>
+                <a href="#poszukujemy" class="bg-cardbg hover:bg-cardborder border border-cardborder text-white font-semibold px-7 py-3.5 rounded-xl transition flex items-center gap-2">
+                    <i class="fa-solid fa-briefcase text-red-500"></i>
+                    <span>Strefa Rekrutacyjna</span>
+                </a>
+                <a href="#newsy" class="bg-cardbg hover:bg-cardborder border border-cardborder text-white font-semibold px-7 py-3.5 rounded-xl transition flex items-center gap-2">
+                    <i class="fa-solid fa-newspaper text-red-400"></i>
+                    <span>Newsy</span>
+                </a>
+                <a href="#spolecznosc" class="bg-cardbg hover:bg-cardborder border border-cardborder text-white font-semibold px-7 py-3.5 rounded-xl transition flex items-center gap-2">
+                    <i class="fa-solid fa-users text-green-400"></i>
+                    <span>Społeczność</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-gray-500 animate-bounce hidden sm:block z-10">
+            <i class="fa-solid fa-chevron-down text-xl"></i>
+        </div>
+    </header>
+
+    <!-- O Projekcie & Status Produkcyjny -->
+    <section id="o-projekcie" class="relative py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            <div>
+                <span class="text-red-500 font-semibold text-sm uppercase tracking-widest block mb-2">Ewolucja Doświadczenia</span>
+                <h2 class="font-cinzel text-3xl sm:text-4xl font-bold text-white mb-6">
+                    Nowy gigantyczny projekt z rąk doświadczonych twórców
+                </h2>
+                <p class="text-gray-300 mb-6 leading-relaxed">
+                    Po latach tworzenia, zarządzania i rozwijania unikalnych projektów (w tym kultowego <strong>Project Reborn</strong>), nasza ekipa postanowiła wejść na zupełnie nowy poziom. Project Grayfall nie jest kolejnym zwykłym serwerem — to całkowicie autorska wizja apokalipsy, zbudowana na fundamencie lat doświadczeń, błędów młodości i wyciągniętych wniosków.
+                </p>
+                <p class="text-gray-300 mb-8 leading-relaxed">
+                    Łączymy zaawansowane systemy, niespotykaną dotąd optymalizację, unikalny lore oraz dbałość o każdy detal rozgrywki, by dostarczyć Wam miejsce, w którym historia Waszych postaci nabierze prawdziwego znaczenia.
+                </p>
+                
+                <div class="grid grid-cols-2 gap-6 p-6 rounded-2xl bg-cardbg border border-cardborder shadow-xl">
+                    <div>
+                        <span class="block text-3xl font-extrabold text-red-500 font-cinzel mb-1">3 - 6</span>
+                        <span class="text-sm text-gray-400 font-medium">Miesięcy do wielkiego otwarcia</span>
+                    </div>
+                    <div>
+                        <span class="block text-3xl font-extrabold text-white font-cinzel mb-1">100%</span>
+                        <span class="text-sm text-gray-400 font-medium">Autorskie podejście i custom content</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status Produkcyjny: 2 zrobione, 3 w trakcie, reszta oczekuje -->
+            <div class="relative">
+                <div class="absolute -inset-1 rounded-2xl bg-gradient-to-r from-red-600 to-amber-600 opacity-25 blur-xl"></div>
+                <div class="relative rounded-2xl bg-cardbg border border-cardborder p-8 shadow-2xl">
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="w-12 h-12 rounded-xl bg-red-600/10 border border-red-500/20 flex items-center justify-center text-red-500 text-xl font-bold">
+                            <i class="fa-solid fa-list-check"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-bold text-white">Status Produkcyjny</h3>
+                            <p class="text-xs text-gray-400">Postępy prac i przygotowań</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3.5 text-sm">
+                        <!-- 1. Zrobione -->
+                        <div class="flex items-center gap-3 p-3.5 rounded-xl bg-darkbg/70 border border-cardborder">
+                            <i class="fa-solid fa-circle-check text-green-500 text-base shrink-0"></i>
+                            <span class="text-gray-200">Koncepcja główna strony internetowej i funkcji</span>
+                        </div>
+                        <!-- 2. Zrobione -->
+                        <div class="flex items-center gap-3 p-3.5 rounded-xl bg-darkbg/70 border border-cardborder">
+                            <i class="fa-solid fa-circle-check text-green-500 text-base shrink-0"></i>
+                            <span class="text-gray-200">Aktulizacja NPC_SYSTEM 16.4.0 - Modernizacja Bazy Danych do przyszłej integracji</span>
+                        </div>
+                        <!-- 3. W trakcie -->
+                        <div class="flex items-center gap-3 p-3.5 rounded-xl bg-darkbg/70 border border-red-600/40 bg-red-950/15 shadow-inner">
+                            <i class="fa-solid fa-circle-dot text-red-500 text-base shrink-0 animate-pulse"></i>
+                            <span class="text-white font-medium">Rozszerzenie działania strony internetowej, nowe funkcję, panel gracza etc</span>
+                        </div>
+                        <!-- Pozostałe: Nie zrobione -->
+                        <div class="flex items-center gap-3 p-3.5 rounded-xl bg-darkbg/70 border border-cardborder">
+                            <i class="fa-regular fa-clock text-gray-500 text-base shrink-0"></i>
+                            <span class="text-gray-400">Projekt lore, fabuły sezonowej Grayfall</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-3.5 rounded-xl bg-darkbg/70 border border-cardborder">
+                            <i class="fa-regular fa-clock text-gray-500 text-base shrink-0"></i>
+                            <span class="text-gray-400">Struktura zespołu rekrutacyjnego i podział ról</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-3.5 rounded-xl bg-darkbg/70 border border-cardborder">
+                            <i class="fa-regular fa-clock text-gray-500 text-base shrink-0"></i>
+                            <span class="text-gray-400">Wstępne tworzenie Projektu od strony serwerowej</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-3.5 rounded-xl bg-darkbg/70 border border-cardborder">
+                            <i class="fa-regular fa-clock text-gray-500 text-base shrink-0"></i>
+                            <span class="text-gray-400">Przygotowanie Serwera, Strony Internetowej, Baz danych i realizacja wszystkich założeń</span>
+                        </div>
+                        <div class="flex items-center gap-3 p-3.5 rounded-xl bg-darkbg/70 border border-cardborder">
+                            <i class="fa-regular fa-clock text-gray-500 text-base shrink-0"></i>
+                            <span class="text-gray-400">Oficjalny start serwera dla szerokiej społeczności (3-6 msc)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ZAKŁADKA / SEKCJA NEWSY -->
+    <section id="newsy" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-cardborder/50">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <span class="text-red-500 font-semibold text-sm uppercase tracking-widest block mb-2">Bieżące Raporty</span>
+            <h2 class="font-cinzel text-3xl sm:text-5xl font-bold text-white mb-4">
+                NEWSY I OGŁOSZENIA
+            </h2>
+            <p class="text-gray-400 text-base">
+                Śledź najnowsze informacje z frontu prac nad Project Grayfall. Oficjalne dzienniki deweloperskie i zapowiedzi mechanik.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Nowy DevBlog -->
+            <div class="interactive-card bg-cardbg border border-cardborder rounded-2xl p-6 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3 py-1 rounded-full bg-red-950/80 border border-red-800/50 text-red-400 text-xs font-semibold">DevBlog #1</span>
+                        <span class="text-xs text-gray-500">Wrzesień 2026</span>
+                    </div>
+                    <h3 class="font-cinzel text-xl font-bold text-white mb-3">Prace Nad Stroną Internetową</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        Ukończono podstawowe funkcję strony internetowej przyszłego projektu Project GrayFall. Wstępne funkcję są wdrążone. Strona ta w domyśle ma posiadać w przyszłości panel użytkownika połączoną bazę danych z serwerem a także z silnikiem NPC System dla pełnej przejrzystości. Dzięki temu będzie ona dużym filarem ogromnego nowego Projektu.
+                    </p>
+                </div>
+                <div class="pt-4 border-t border-cardborder flex items-center justify-between text-xs text-gray-500">
+                    <span>Autor: Zespół Grayfall</span>
+                    <span class="text-red-400 font-semibold">Przeczytaj więcej</span>
+                </div>
+            </div>
+
+            <div class="interactive-card bg-cardbg border border-cardborder rounded-2xl p-6 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3 py-1 rounded-full bg-amber-950/80 border border-amber-800/50 text-amber-400 text-xs font-semibold">Rekrutacja</span>
+                        <span class="text-xs text-gray-500">Wrzesień 2026</span>
+                    </div>
+                    <h3 class="font-cinzel text-xl font-bold text-white mb-3">Otwarcie strefy rekrutacyjnej</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        Poszukujemy utalentowanych programistów Lua, grafików oraz techników Discord. Dołącz do nas i twórz projekt od zera!
+                    </p>
+                </div>
+                <div class="pt-4 border-t border-cardborder flex items-center justify-between text-xs text-gray-500">
+                    <span>Status: Otwarte</span>
+                    <a href="#poszukujemy" class="text-amber-400 font-semibold hover:underline">Sprawdź role</a>
+                </div>
+            </div>
+
+            <div class="interactive-card bg-cardbg border border-cardborder rounded-2xl p-6 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="px-3 py-1 rounded-full bg-indigo-950/80 border border-indigo-800/50 text-indigo-400 text-xs font-semibold">Społeczność</span>
+                        <span class="text-xs text-gray-500">Sierpień 2026</span>
+                    </div>
+                    <h3 class="font-cinzel text-xl font-bold text-white mb-3">Dziedzictwo Project Reborn</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        Dziękujemy za wspólne setki tysięcy godzin na Reborn. Grayfall to kolejny krok naprzód dla naszej całej społeczności.
+                    </p>
+                </div>
+                <div class="pt-4 border-t border-cardborder flex items-center justify-between text-xs text-gray-500">
+                    <span>Społeczność</span>
+                    <a href="#spolecznosc" class="text-indigo-400 font-semibold hover:underline">Zobacz szczegóły</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sekcja Rekrutacja / Poszukujemy -->
+    <section id="poszukujemy" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-cardborder/50">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <span class="text-red-500 font-semibold text-sm uppercase tracking-widest block mb-2">Dołącz do Elity</span>
+            <h2 class="font-cinzel text-3xl sm:text-5xl font-bold text-white mb-4">
+                STREFA REKRUTACJI
+            </h2>
+            <p class="text-gray-400 text-base">
+                Tworzymy potężny projekt na skalę krajową i szukamy utalentowanych, zaangażowanych ludzi z pasją. Jeśli chcesz współtworzyć coś wyjątkowego od samego początku – to Twój moment.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="interactive-card bg-cardbg border border-cardborder rounded-2xl p-6 flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-xl bg-red-600/10 border border-red-500/20 flex items-center justify-center text-red-500 text-2xl mb-6">
+                        <i class="fa-solid fa-code"></i>
+                    </div>
+                    <h3 class="font-cinzel text-xl font-bold text-white mb-3">Modderzy / Programiści Lua</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        Osoby odpowiedzialne za tworzenie i konfigurację skryptów Project Zomboid (Lua), implementację autorskich mechanik, optymalizację oraz wdrażanie unikalnych rozwiązań gameplayowych.
+                    </p>
+                </div>
+                <div class="pt-4 border-t border-cardborder flex items-center justify-between text-xs text-gray-500">
+                    <span>Wymagane doświadczenie</span>
+                    <span class="text-red-400 font-semibold">Wysoki priorytet</span>
+                </div>
+            </div>
+
+            <div class="interactive-card bg-cardbg border border-cardborder rounded-2xl p-6 flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-xl bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 text-2xl mb-6">
+                        <i class="fa-brands fa-discord"></i>
+                    </div>
+                    <h3 class="font-cinzel text-xl font-bold text-white mb-3">Technicy Discord</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        Specjaliści od konfiguracji botów, uprawnień, integracji webhooków, systemów ticketowych oraz nowoczesnego, przejrzystego layoutu serwera Discord społecznościowego.
+                    </p>
+                </div>
+                <div class="pt-4 border-t border-cardborder flex items-center justify-between text-xs text-gray-500">
+                    <span>Automatyzacja & Boty</span>
+                    <span class="text-indigo-400 font-semibold">Poszukiwani</span>
+                </div>
+            </div>
+
+            <div class="interactive-card bg-cardbg border border-cardborder rounded-2xl p-6 flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-xl bg-amber-600/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-2xl mb-6">
+                        <i class="fa-solid fa-palette"></i>
+                    </div>
+                    <h3 class="font-cinzel text-xl font-bold text-white mb-3">Graficy / UI Designerzy</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        Twórcy grafik promocyjnych, banerów, materiałów identyfikacji wizualnej, elementów interfejsu (UI) oraz grafik pod social media i postacie w grze.
+                    </p>
+                </div>
+                <div class="pt-4 border-t border-cardborder flex items-center justify-between text-xs text-gray-500">
+                    <span>Photoshop / Blender / Figma</span>
+                    <span class="text-amber-400 font-semibold">Kluczowa rola</span>
+                </div>
+            </div>
+
+            <div class="interactive-card bg-cardbg border border-cardborder rounded-2xl p-6 flex flex-col justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-xl bg-emerald-600/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-2xl mb-6">
+                        <i class="fa-solid fa-bullhorn"></i>
+                    </div>
+                    <h3 class="font-cinzel text-xl font-bold text-white mb-3">Media & Promocja</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        Osoby zajmujące się szeroko pojętym wsparciem promocji serwera, prowadzeniem social mediów, tworzeniem materiałów wideo, tiktoków oraz współpracą z twórcami treści.
+                    </p>
+                </div>
+                <div class="pt-4 border-t border-cardborder flex items-center justify-between text-xs text-gray-500">
+                    <span>Marketing & Społeczność</span>
+                    <span class="text-emerald-400 font-semibold">Open</span>
+                </div>
+            </div>
+
+            <div class="interactive-card bg-cardbg border border-cardborder rounded-2xl p-6 flex flex-col justify-between md:col-span-2 lg:col-span-2">
+                <div>
+                    <div class="w-14 h-14 rounded-xl bg-blue-600/10 border border-blue-500/20 flex items-center justify-center text-blue-400 text-2xl mb-6">
+                        <i class="fa-solid fa-headset"></i>
+                    </div>
+                    <h3 class="font-cinzel text-xl font-bold text-white mb-3">Support & Moderacja</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        Filar społeczności. Osoby opanowane, kultowe i sprawiedliwe, które będą dbać o porządek na platformach, pomagać nowym graczom, rozwiązywać zgłoszenia i reprezentować wysoki standard projektu.
+                    </p>
+                </div>
+                <div class="pt-4 border-t border-cardborder flex items-center justify-between text-xs text-gray-500">
+                    <span>Kontakt z graczami & Kultura</span>
+                    <span class="text-blue-400 font-semibold">Stała rekrutacja</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-12 text-center bg-gradient-to-r from-red-950/30 via-cardbg to-red-950/30 border border-cardborder rounded-2xl p-8 shadow-xl">
+            <h3 class="font-cinzel text-2xl font-bold text-white mb-3">Chcesz dołączyć do zespołu?</h3>
+            <p class="text-gray-300 text-sm max-w-xl mx-auto mb-6">
+                Wejdź na nasz oficjalny serwer Discord, przejdź do odpowiedniego kanału rekrutacyjnego lub skontaktuj się z główną administracją.
+            </p>
+            <a href="https://discord.gg/p7d9etbSgY" target="_blank" class="inline-flex items-center gap-2 bg-[#5865F2] hover:bg-[#4752C4] text-white font-semibold px-8 py-3 rounded-xl transition shadow-lg glow-discord">
+                <i class="fa-brands fa-discord text-xl"></i>
+                <span>Aplikuj przez Discord</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- ZAKŁADKA / SEKCJA SPOŁECZNOŚĆ (Bezpośrednio działający odtwarzacz wideo na stronie) -->
+    <section id="spolecznosc" class="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-cardborder/50">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <span class="text-green-500 font-semibold text-sm uppercase tracking-widest block mb-2">Nasza Społeczność</span>
+                <h2 class="font-cinzel text-3xl sm:text-4xl font-bold text-white mb-6">
+                    Dziedzictwo Project Reborn i Nowy Początek
+                </h2>
+                <p class="text-gray-300 mb-6 leading-relaxed">
+                    Na naszym poprzednim projekcie <strong>Project Reborn</strong> zrzeszyło się niezwykle duże, oddane community, które wspólnie przegrało łącznie <strong>kilkaset tysięcy godzin</strong> w świecie Project Zomboid.
+                </p>
+                <p class="text-gray-300 mb-8 leading-relaxed">
+                    Project Grayfall czerpie z tego doświadczenia pełnymi garściami. To idealny dom zarówno dla naszych weteranów ze środowiska Reborn, jak i dla całkowicie nowych graczy spoza niego, którzy szukają najwyższego standardu rozgrywki, zgranej ekipy i niezapomnianych emocji.
+                </p>
+                
+                <div class="flex items-center gap-4">
+                    <a href="https://discord.gg/p7d9etbSgY" target="_blank" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-xl transition shadow-lg glow-green flex items-center gap-2">
+                        <i class="fa-brands fa-discord text-lg"></i>
+                        <span>Dołącz do społeczności</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Działający odtwarzacz YouTube osadzony bezpośrednio na stronie -->
+            <div class="relative">
+                <div class="absolute -inset-1 rounded-2xl bg-gradient-to-r from-green-600 to-emerald-800 opacity-30 blur-xl"></div>
+                <div class="relative rounded-2xl bg-cardbg border border-cardborder overflow-hidden shadow-2xl">
+                    <div class="p-4 bg-darkbg/90 border-b border-cardborder flex items-center justify-between">
+                        <span class="text-xs font-semibold text-gray-300 flex items-center gap-2">
+                            <i class="fa-brands fa-youtube text-red-600 text-base"></i> Oficjalny Materiał Wideo / Zapowiedź
+                        </span>
+                        <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-ping"></span>
+                    </div>
+                    
+                    <div class="relative w-full aspect-video bg-black">
+                        <iframe class="w-full h-full" src="https://www.youtube-nocookie.com/embed/cl5U55k0u5A?enablejsapi=1&rel=0&modestbranding=1" title="Project Grayfall Zapowiedź" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="kontakt" class="bg-cardbg border-t border-cardborder py-12 px-4 text-center text-gray-400 text-sm">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+                <span class="font-cinzel text-lg font-bold text-white tracking-wider">
+                    PROJECT <span class="text-red-600">GRAYFALL</span>
+                </span>
+                <p class="text-xs text-gray-500 mt-1">Stworzony przez twórców Project Reborn.</p>
+            </div>
+            <div class="flex items-center space-x-6 text-gray-400">
+                <a href="https://discord.gg/p7d9etbSgY" target="_blank" class="hover:text-white transition"><i class="fa-brands fa-discord text-xl"></i></a>
+            </div>
+            <p class="text-xs text-gray-600">
+                &copy; 2026 Project Grayfall. Wszelkie prawa zastrzeżone.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Skrypt panelu -->
+    <script>
+        function togglePanel() {
+            const panel = document.getElementById('player-panel');
+            panel.classList.toggle('hidden');
+        }
+    </script>
+</body>
+</html>
