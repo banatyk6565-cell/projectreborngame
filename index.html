@@ -159,12 +159,21 @@
 
             <!-- Panel Gracza Button + Hamburger (mobile) -->
             <div class="flex items-center space-x-3">
-                <button onclick="handleAuthClick()" id="auth-btn" class="bg-[#5865F2] hover:bg-[#4752C4] text-white px-4 sm:px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition shadow-lg glow-discord cursor-pointer">
-                    <img id="auth-avatar" src="" alt="Avatar" class="hidden w-6 h-6 rounded-full object-cover">
-                    <i class="fa-brands fa-discord text-lg" id="auth-icon"></i>
-                    <span class="hidden sm:inline" id="auth-label-desktop">Panel Gracza</span>
-                    <span class="sm:hidden" id="auth-label-mobile">Panel</span>
-                </button>
+                <div class="relative">
+                    <button onclick="handleAuthClick()" id="auth-btn" class="bg-[#5865F2] hover:bg-[#4752C4] text-white px-4 sm:px-5 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition shadow-lg glow-discord cursor-pointer">
+                        <img id="auth-avatar" src="" alt="Avatar" class="hidden w-6 h-6 rounded-full object-cover">
+                        <i class="fa-brands fa-discord text-lg" id="auth-icon"></i>
+                        <span class="hidden sm:inline" id="auth-label-desktop">Panel Gracza</span>
+                        <span class="sm:hidden" id="auth-label-mobile">Panel</span>
+                    </button>
+
+                    <!-- Mini live widget Discorda, pod przyciskiem Panel Gracza -->
+                    <div id="top-discord-widget" class="absolute top-full right-0 mt-2 flex items-center gap-2 bg-cardbg border border-cardborder rounded-xl px-3 py-1.5 shadow-xl whitespace-nowrap max-w-[220px]">
+                        <span id="top-widget-dot" class="w-2 h-2 rounded-full bg-gray-600 shrink-0"></span>
+                        <span id="top-widget-count" class="text-xs font-semibold text-gray-300">Ładowanie...</span>
+                        <div id="top-widget-avatars" class="flex -space-x-1.5 shrink-0"></div>
+                    </div>
+                </div>
                 <button onclick="toggleMobileMenu()" id="mobile-menu-btn" aria-label="Otwórz menu" aria-expanded="false" class="md:hidden text-gray-200 hover:text-red-500 transition text-xl w-10 h-10 flex items-center justify-center rounded-lg border border-cardborder">
                     <i class="fa-solid fa-bars" id="mobile-menu-icon"></i>
                 </button>
@@ -937,34 +946,46 @@
         }
 
         async function loadDiscordWidget() {
-            const dot = document.getElementById('discord-widget-dot');
-            const countEl = document.getElementById('discord-widget-count');
-            const avatarsEl = document.getElementById('discord-widget-avatars');
-            if (!dot || !countEl || !avatarsEl) return;
+            const targets = [
+                { dot: 'top-widget-dot', count: 'top-widget-count', avatars: 'top-widget-avatars', dotSize: 'w-2 h-2', avatarLimit: 4, avatarSize: 'w-6 h-6' },
+                { dot: 'discord-widget-dot', count: 'discord-widget-count', avatars: 'discord-widget-avatars', dotSize: 'w-2.5 h-2.5', avatarLimit: 6, avatarSize: 'w-7 h-7' },
+            ];
 
+            let data = null;
             try {
                 const res = await fetch(`https://discord.com/api/guilds/${DISCORD_GUILD_ID}/widget.json`);
                 if (!res.ok) throw new Error('Widget wyłączony albo złe ID serwera');
-                const data = await res.json();
+                data = await res.json();
+            } catch (err) {
+                console.error('Nie udało się pobrać widgetu Discorda:', err);
+            }
 
-                dot.className = 'w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse';
+            targets.forEach((t) => {
+                const dot = document.getElementById(t.dot);
+                const countEl = document.getElementById(t.count);
+                const avatarsEl = document.getElementById(t.avatars);
+                if (!dot || !countEl || !avatarsEl) return;
+
+                if (!data) {
+                    dot.className = `${t.dotSize} rounded-full bg-gray-600 shrink-0`;
+                    countEl.textContent = 'Widget Discorda niedostępny';
+                    return;
+                }
+
+                dot.className = `${t.dotSize} rounded-full bg-green-500 animate-pulse shrink-0`;
                 countEl.textContent = `${data.presence_count} ${polishOnlineLabel(data.presence_count)} online`;
 
                 avatarsEl.innerHTML = '';
-                (data.members || []).slice(0, 6).forEach((m) => {
+                (data.members || []).slice(0, t.avatarLimit).forEach((m) => {
                     const img = document.createElement('img');
                     img.src = m.avatar_url;
                     img.alt = m.username;
                     img.title = m.username;
                     img.loading = 'lazy';
-                    img.className = 'w-7 h-7 rounded-full border-2 border-darkbg object-cover bg-cardbg';
+                    img.className = `${t.avatarSize} rounded-full border-2 border-darkbg object-cover bg-cardbg`;
                     avatarsEl.appendChild(img);
                 });
-            } catch (err) {
-                dot.className = 'w-2.5 h-2.5 rounded-full bg-gray-600';
-                countEl.textContent = 'Widget Discorda niedostępny';
-                console.error('Nie udało się pobrać widgetu Discorda:', err);
-            }
+            });
         }
 
         // ================== FORMULARZ WHITELISTY ==================
