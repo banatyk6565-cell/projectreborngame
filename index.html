@@ -196,6 +196,88 @@
             50% { box-shadow: 0 0 0 5px #121417, 0 0 0 9px rgba(197, 48, 48, 0); }
         }
 
+        .project-chronicle {
+            position: relative;
+            isolation: isolate;
+            overflow: hidden;
+            background: linear-gradient(145deg, rgba(18, 20, 23, 0.98), rgba(10, 11, 13, 0.98));
+        }
+        .project-chronicle::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 15% 20%, rgba(197, 48, 48, 0.14), transparent 32%), radial-gradient(circle at 90% 80%, rgba(37, 99, 235, 0.11), transparent 30%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        .chronicle-scanline {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(0deg, transparent 0 5px, rgba(255, 255, 255, 0.018) 6px, transparent 7px);
+            opacity: 0.35;
+            pointer-events: none;
+        }
+        .chronicle-stage {
+            position: relative;
+            min-height: 132px;
+            overflow: hidden;
+            border: 1px solid rgba(71, 78, 90, 0.75);
+            background: rgba(5, 6, 7, 0.72);
+        }
+        .chronicle-stage::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 1px solid rgba(197, 48, 48, 0.14);
+            box-shadow: inset 0 0 35px rgba(0, 0, 0, 0.8);
+            pointer-events: none;
+        }
+        .chronicle-name {
+            position: absolute;
+            z-index: 1;
+            white-space: nowrap;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-shadow: 0 0 12px currentColor;
+            animation: chronicleDrift 15s linear infinite;
+            pointer-events: none;
+        }
+        .chronicle-name:nth-child(3n) { animation-duration: 19s; animation-direction: reverse; }
+        .chronicle-name:nth-child(4n) { animation-duration: 23s; }
+        .chronicle-name:nth-child(5n) { animation-duration: 17s; animation-direction: reverse; }
+        @keyframes chronicleDrift {
+            0% { transform: translate3d(-110px, 12px, 0) rotate(-3deg); opacity: 0; }
+            12%, 82% { opacity: 0.78; }
+            50% { transform: translate3d(155px, -9px, 0) rotate(2deg); opacity: 1; }
+            100% { transform: translate3d(390px, 14px, 0) rotate(-2deg); opacity: 0; }
+        }
+        .chronicle-line {
+            position: relative;
+            margin-left: 8px;
+            border-left: 1px solid rgba(197, 48, 48, 0.42);
+            padding-left: 17px;
+        }
+        .chronicle-line::before {
+            content: '';
+            position: absolute;
+            top: 12px;
+            left: -4px;
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: #c53030;
+            box-shadow: 0 0 0 4px rgba(197, 48, 48, 0.12), 0 0 14px rgba(197, 48, 48, 0.7);
+        }
+        .chronicle-entry {
+            transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+        }
+        .chronicle-entry:hover {
+            transform: translateX(4px);
+            border-color: rgba(197, 48, 48, 0.52);
+            background-color: rgba(127, 29, 29, 0.18);
+        }
+
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
                 animation-duration: 0.01ms !important;
@@ -438,6 +520,65 @@
                     <div>
                         <span class="block text-3xl font-extrabold text-white font-cinzel mb-1">100%</span>
                         <span class="text-sm text-gray-400 font-medium">Autorskie podejście i custom content</span>
+                    </div>
+                </div>
+
+                <div class="project-chronicle mt-8 rounded-2xl border border-cardborder p-5 shadow-2xl reveal-on-scroll" style="--reveal-index: 2;">
+                    <div class="chronicle-scanline"></div>
+                    <div class="relative z-10 mb-5 flex items-start justify-between gap-4">
+                        <div>
+                            <span class="mb-1 block text-[10px] font-bold uppercase tracking-[0.24em] text-red-500">Archiwum ocalałych</span>
+                            <h3 class="font-cinzel text-2xl font-bold text-white">Kronika projektu</h3>
+                            <p class="mt-1 text-xs leading-relaxed text-gray-500">Droga, która doprowadziła nas do świata Grayfall.</p>
+                        </div>
+                        <span class="mt-1 shrink-0 rounded-full border border-cardborder bg-darkbg/80 px-2.5 py-1 text-[9px] font-bold uppercase tracking-wider text-gray-500">2021 — dziś</span>
+                    </div>
+
+                    <div class="chronicle-stage mb-5 rounded-xl p-3">
+                        <span class="chronicle-name left-[4%] top-[18%] text-red-400">Franek</span>
+                        <span class="chronicle-name left-[20%] top-[62%] text-amber-300" style="animation-delay: -7s;">Jane</span>
+                        <span class="chronicle-name left-[42%] top-[28%] text-emerald-400" style="animation-delay: -12s;">Androo</span>
+                        <span class="chronicle-name left-[66%] top-[70%] text-sky-400" style="animation-delay: -3s;">Gosia</span>
+                        <span class="chronicle-name left-[78%] top-[14%] text-fuchsia-400" style="animation-delay: -15s;">Intryga90</span>
+                        <span class="chronicle-name left-[8%] top-[78%] text-orange-400" style="animation-delay: -5s;">Cae</span>
+                        <span class="chronicle-name left-[31%] top-[46%] text-cyan-300" style="animation-delay: -10s;">Popcat</span>
+                        <span class="chronicle-name left-[54%] top-[12%] text-violet-300" style="animation-delay: -1s;">Krystian</span>
+                        <span class="chronicle-name left-[70%] top-[48%] text-rose-300" style="animation-delay: -8s;">Maklak</span>
+                        <span class="chronicle-name left-[15%] top-[32%] text-lime-300" style="animation-delay: -14s;">Cappy</span>
+                        <span class="chronicle-name left-[47%] top-[82%] text-yellow-300" style="animation-delay: -4s;">Jamal</span>
+                        <span class="chronicle-name left-[84%] top-[58%] text-blue-300" style="animation-delay: -11s;">Stasopen</span>
+                        <span class="chronicle-name left-[58%] top-[60%] text-pink-300" style="animation-delay: -16s;">Meganek</span>
+                        <span class="chronicle-name left-[3%] top-[48%] text-orange-300" style="animation-delay: -9s;">Polski Szpadel</span>
+                        <span class="chronicle-name left-[36%] top-[8%] text-teal-300" style="animation-delay: -6s;">Partizanto</span>
+                        <span class="chronicle-name left-[73%] top-[84%] text-red-300" style="animation-delay: -13s;">Susie</span>
+                        <span class="chronicle-name left-[25%] top-[86%] text-indigo-300" style="animation-delay: -2s;">Albercik</span>
+                        <span class="chronicle-name left-[62%] top-[38%] text-amber-200" style="animation-delay: -17s;">Pączek</span>
+                        <span class="chronicle-name left-[88%] top-[30%] text-green-300" style="animation-delay: -6s;">Henry Badger</span>
+                        <span class="chronicle-name left-[50%] top-[52%] text-cyan-200" style="animation-delay: -18s;">Akemi</span>
+                        <span class="chronicle-name left-[12%] top-[10%] text-purple-300" style="animation-delay: -12s;">Majorek</span>
+                    </div>
+
+                    <div class="relative z-10 space-y-2.5 text-xs">
+                        <div class="chronicle-line chronicle-entry rounded-r-xl border border-transparent bg-darkbg/45 py-2.5 pr-3">
+                            <p class="font-cinzel font-bold text-red-300">2021 / 2022</p>
+                            <p class="mt-0.5 text-gray-300">Project Zomboid by Franek <span class="text-gray-500">· Seasons 1–3</span></p>
+                        </div>
+                        <div class="chronicle-line chronicle-entry rounded-r-xl border border-transparent bg-darkbg/45 py-2.5 pr-3">
+                            <p class="font-cinzel font-bold text-amber-300">2022</p>
+                            <p class="mt-0.5 text-gray-300">Project Apocalypse <span class="text-gray-500">· Seasons 1–2</span></p>
+                        </div>
+                        <div class="chronicle-line chronicle-entry rounded-r-xl border border-transparent bg-darkbg/45 py-2.5 pr-3">
+                            <p class="font-cinzel font-bold text-emerald-300">2022 / 2025</p>
+                            <p class="mt-0.5 text-gray-300">Project Reborn <span class="text-gray-500">· 15 sezonów</span></p>
+                        </div>
+                        <div class="chronicle-line chronicle-entry rounded-r-xl border border-transparent bg-darkbg/45 py-2.5 pr-3">
+                            <p class="font-cinzel font-bold text-orange-300">2025</p>
+                            <p class="mt-0.5 text-gray-300">Project Reborn: Redneck Season</p>
+                        </div>
+                        <div class="chronicle-line chronicle-entry rounded-r-xl border border-transparent bg-darkbg/45 py-2.5 pr-3">
+                            <p class="font-cinzel font-bold text-sky-300">2025 / 2026</p>
+                            <p class="mt-0.5 text-gray-300">Project Reborn: Nexus Saga <span class="text-gray-500">· 3 sezony</span></p>
+                        </div>
                     </div>
                 </div>
             </div>
