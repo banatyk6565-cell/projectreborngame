@@ -138,11 +138,15 @@
         }
 
         .reveal-on-scroll {
-            opacity: 0;
-            transform: translateY(28px);
+            opacity: 1;
+            transform: none;
             transition: opacity 0.75s ease, transform 0.75s cubic-bezier(0.2, 0.7, 0, 1);
         }
-        .reveal-on-scroll.is-visible {
+        body.reveal-ready .reveal-on-scroll {
+            opacity: 0;
+            transform: translateY(28px);
+        }
+        body.reveal-ready .reveal-on-scroll.is-visible {
             opacity: 1;
             transform: translateY(0);
         }
@@ -899,6 +903,8 @@
                 element.style.setProperty('--reveal-index', index % 4);
             });
 
+            document.body.classList.add('reveal-ready');
+
             if (!('IntersectionObserver' in window)) {
                 revealElements.forEach((element) => element.classList.add('is-visible'));
                 return;
@@ -913,6 +919,9 @@
             }, { threshold: 0.12, rootMargin: '0px 0px -45px' });
 
             revealElements.forEach((element) => revealObserver.observe(element));
+            window.setTimeout(() => {
+                revealElements.forEach((element) => element.classList.add('is-visible'));
+            }, 1600);
         }
 
         function setupHeroDepth() {
