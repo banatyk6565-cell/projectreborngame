@@ -897,7 +897,7 @@
         }
 
         function setupScrollReveal() {
-            const revealElements = document.querySelectorAll('section, #o-projekcie > div, .interactive-card');
+            const revealElements = document.querySelectorAll('section, #o-projekcie > div, .interactive-card, .reveal-on-scroll');
             revealElements.forEach((element, index) => {
                 element.classList.add('reveal-on-scroll');
                 element.style.setProperty('--reveal-index', index % 4);
