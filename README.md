@@ -119,6 +119,41 @@ uprawnień administracyjnych — działa wyłącznie w kontekście tego, co uży
 Gdy formularz "Zgłoś się na Whitelistę" będzie gotowy, osoby ze statusem "Oczekujący" powinny móc go wypełnić,
 a Ty (lub bot) nadajecie im rolę ręcznie lub automatycznie po zatwierdzeniu zgłoszenia.
 
+## Prawdziwy formularz "Zgłoś się na Whitelistę"
+
+To już jest wdrożone. Kliknięcie "Wypełnij formularz" w Panelu Gracza otwiera formularz (nick w grze, wiek,
+doświadczenie, uzasadnienie, skąd o nas wie). Po wysłaniu trafia jako ładna wiadomość (embed) na wybrany kanał
+Discord — z avatarem, nickiem i odnośnikiem (`@wzmianka`) do osoby, żeby admin mógł od razu kliknąć i napisać.
+
+Zachowanie w zależności od stanu użytkownika:
+- **Niezalogowany** → przycisk logowania przez Discord.
+- **Zalogowany, ale nie na serwerze Discord** → prośba o dołączenie (link z `DISCORD_INVITE_URL`).
+- **Już wybielony** → informacja "Jesteś już wybielony!", bez formularza.
+- **Zalogowany, na serwerze, bez roli** → właściwy formularz.
+
+### Ustawienie webhooka (1 nowa zmienna środowiskowa)
+
+1. Na Discordzie: Ustawienia serwera → Integracje → Webhooki → **Nowy webhook**.
+2. Wybierz kanał, na który mają trafiać zgłoszenia (np. `#zgloszenia-whitelist`, widoczny tylko dla admów).
+3. Skopiuj **URL webhooka** (przycisk "Kopiuj URL webhooka").
+4. W Vercelu dodaj zmienną środowiskową:
+
+   | Nazwa | Wartość |
+   |---|---|
+   | `DISCORD_WEBHOOK_URL` | skopiowany URL webhooka |
+
+5. Zrób Redeploy.
+
+**Uwaga:** URL webhooka jest tajny — każdy, kto go ma, może wysyłać wiadomości na Twój kanał. Dlatego trzyma się
+go wyłącznie jako zmienną środowiskową na serwerze (w `api/whitelist/submit.js`), nigdy w kodzie front-endu.
+
+### Co dalej (opcjonalnie, na przyszłość)
+
+- **Zapobieganie podwójnym zgłoszeniom** — obecnie ta sama osoba może wysłać formularz wielokrotnie. Można to
+  ograniczyć np. bazą danych (Vercel KV / Postgres) zapisującą, kto już wysłał zgłoszenie.
+- **Automatyczne nadawanie roli** po zatwierdzeniu — wymagałoby już bota na serwerze (Discord Bot Token) zamiast
+  samego webhooka, bo webhook może tylko *wysyłać* wiadomości, nie może zarządzać rolami.
+
 ## Bezpieczeństwo — o co chodzi z tymi zmiennymi środowiskowymi
 
 `DISCORD_CLIENT_SECRET` i `SESSION_SECRET` **nigdy** nie powinny trafić do kodu front-endowego (HTML/JS
