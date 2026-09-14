@@ -154,6 +154,31 @@ go wyłącznie jako zmienną środowiskową na serwerze (w `api/whitelist/submit
 - **Automatyczne nadawanie roli** po zatwierdzeniu — wymagałoby już bota na serwerze (Discord Bot Token) zamiast
   samego webhooka, bo webhook może tylko *wysyłać* wiadomości, nie może zarządzać rolami.
 
+## Live widget Discorda (kto jest online)
+
+W sekcji "Społeczność" pojawił się mały panel pokazujący na żywo, ile osób jest online na Twoim serwerze +
+avatary kilku z nich. Korzysta z **publicznego** "Server Widget" Discorda — bez logowania, bez sekretów, dane
+pobierane są wprost z przeglądarki użytkownika.
+
+### Włączenie (2 kroki, bez Vercela)
+
+1. Na Discordzie: Ustawienia serwera → Widget → włącz **"Enable Server Widget"**. Jako kanał zaproszenia wybierz
+   dowolny publiczny kanał tekstowy.
+2. W pliku `index.html` znajdź linię:
+   ```js
+   const DISCORD_GUILD_ID = 'WSTAW_ID_SERWERA';
+   ```
+   i wklej tam **to samo ID serwera**, którego już użyłeś jako `DISCORD_GUILD_ID` w zmiennych środowiskowych
+   Vercela (Ustawienia serwera → Widget, ID jest też tam widoczne, albo skopiuj je tak jak poprzednio przez
+   Tryb dewelopera → prawy klik na ikonę serwera → Kopiuj ID serwera).
+
+To wszystko — ID serwera nie jest tajne (widać je zresztą w każdym linku zaproszenia), więc spokojnie może być
+w kodzie front-endu. Nie trzeba nic ustawiać w Vercelu ani robić redeployu przez zmienne środowiskowe — wystarczy
+zwykły commit zmiany w `index.html` na GitHub.
+
+Jeśli widget pokaże "Widget Discorda niedostępny" — najczęściej znaczy to, że krok 1 (Enable Server Widget)
+nie został zapisany, albo ID w kroku 2 jest błędne.
+
 ## Bezpieczeństwo — o co chodzi z tymi zmiennymi środowiskowymi
 
 `DISCORD_CLIENT_SECRET` i `SESSION_SECRET` **nigdy** nie powinny trafić do kodu front-endowego (HTML/JS

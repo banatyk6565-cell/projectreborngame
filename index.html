@@ -703,11 +703,20 @@
                     Project Grayfall czerpie z tego doświadczenia pełnymi garściami. To idealny dom zarówno dla naszych weteranów ze środowiska Reborn, jak i dla całkowicie nowych graczy spoza niego, którzy szukają najwyższego standardu rozgrywki, zgranej ekipy i niezapomnianych emocji.
                 </p>
                 
-                <div class="flex items-center gap-4">
+                <div class="flex items-center gap-4 flex-wrap">
                     <a href="https://discord.gg/p7d9etbSgY" target="_blank" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-xl transition shadow-lg glow-green flex items-center gap-2">
                         <i class="fa-brands fa-discord text-lg"></i>
                         <span>Dołącz do społeczności</span>
                     </a>
+                </div>
+
+                <!-- Live widget Discorda: liczba osób online + avatary -->
+                <div id="discord-widget" class="mt-6 bg-darkbg/70 border border-cardborder rounded-2xl p-4 flex items-center gap-4 max-w-md">
+                    <div class="flex items-center gap-2 shrink-0">
+                        <span id="discord-widget-dot" class="w-2.5 h-2.5 rounded-full bg-gray-600"></span>
+                        <span id="discord-widget-count" class="text-sm font-semibold text-gray-300">Ładowanie...</span>
+                    </div>
+                    <div id="discord-widget-avatars" class="flex -space-x-2"></div>
                 </div>
             </div>
 
@@ -803,6 +812,8 @@
         const DISCORD_REDIRECT_URI = window.location.origin + '/api/auth/callback';
         // TODO: podmień na link zaproszenia na Twój serwer Discord (np. https://discord.gg/XXXXXXX)
         const DISCORD_INVITE_URL = 'https://discord.gg/p7d9etbSgY';
+        // To samo ID serwera, którego już użyłeś jako DISCORD_GUILD_ID w Vercelu. Nie jest tajne.
+        const DISCORD_GUILD_ID = '617606630615547906';
 
         let currentUser = null;
 
@@ -910,7 +921,51 @@
         document.addEventListener('DOMContentLoaded', () => {
             checkSession();
             checkLoginError();
+            loadDiscordWidget();
         });
+
+        // ================== LIVE WIDGET DISCORDA ==================
+        // Korzysta z publicznego, nie wymagającego autoryzacji "Server Widget" Discorda.
+        // Trzeba go włączyć raz w ustawieniach serwera: Ustawienia serwera -> Widget -> Enable Server Widget.
+
+        function polishOnlineLabel(n) {
+            if (n === 1) return 'osoba';
+            const mod10 = n % 10;
+            const mod100 = n % 100;
+            if (mod10 >= 2 && mod10 <= 4 && !(mod100 >= 12 && mod100 <= 14)) return 'osoby';
+            return 'osób';
+        }
+
+        async function loadDiscordWidget() {
+            const dot = document.getElementById('discord-widget-dot');
+            const countEl = document.getElementById('discord-widget-count');
+            const avatarsEl = document.getElementById('discord-widget-avatars');
+            if (!dot || !countEl || !avatarsEl) return;
+
+            try {
+                const res = await fetch(`https://discord.com/api/guilds/${DISCORD_GUILD_ID}/widget.json`);
+                if (!res.ok) throw new Error('Widget wyłączony albo złe ID serwera');
+                const data = await res.json();
+
+                dot.className = 'w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse';
+                countEl.textContent = `${data.presence_count} ${polishOnlineLabel(data.presence_count)} online`;
+
+                avatarsEl.innerHTML = '';
+                (data.members || []).slice(0, 6).forEach((m) => {
+                    const img = document.createElement('img');
+                    img.src = m.avatar_url;
+                    img.alt = m.username;
+                    img.title = m.username;
+                    img.loading = 'lazy';
+                    img.className = 'w-7 h-7 rounded-full border-2 border-darkbg object-cover bg-cardbg';
+                    avatarsEl.appendChild(img);
+                });
+            } catch (err) {
+                dot.className = 'w-2.5 h-2.5 rounded-full bg-gray-600';
+                countEl.textContent = 'Widget Discorda niedostępny';
+                console.error('Nie udało się pobrać widgetu Discorda:', err);
+            }
+        }
 
         // ================== FORMULARZ WHITELISTY ==================
 

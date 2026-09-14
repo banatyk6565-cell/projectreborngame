@@ -18,6 +18,7 @@ module.exports = async function handler(req, res) {
       avatar: session.avatar,
       inGuild: !!session.inGuild,
       isWhitelisted: !!session.isWhitelisted,
+      roles: session.roles || [],
     },
   });
 };

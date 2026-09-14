@@ -62,6 +62,7 @@ module.exports = async function handler(req, res) {
     //     Jeśli DISCORD_GUILD_ID nie jest ustawione, ten krok jest po prostu pomijany.
     let inGuild = false;
     let isWhitelisted = false;
+    let memberRoles = [];
     const guildId = process.env.DISCORD_GUILD_ID;
 
     if (guildId) {
@@ -73,10 +74,10 @@ module.exports = async function handler(req, res) {
         if (memberRes.ok) {
           const member = await memberRes.json();
           inGuild = true;
-          const roles = member.roles || [];
+          memberRoles = member.roles || [];
           const whitelistRoleId = process.env.DISCORD_WHITELIST_ROLE_ID;
           if (whitelistRoleId) {
-            isWhitelisted = roles.includes(whitelistRoleId);
+            isWhitelisted = memberRoles.includes(whitelistRoleId);
           }
         } else if (memberRes.status === 404) {
           inGuild = false; // użytkownik po prostu nie jest (jeszcze) na serwerze
@@ -96,6 +97,7 @@ module.exports = async function handler(req, res) {
       avatar: avatarUrl,
       inGuild,
       isWhitelisted,
+      roles: memberRoles, // tymczasowo, do diagnostyki - Twoje własne ID ról, nic tajnego
       exp: Date.now() + 1000 * 60 * 60 * 24 * 7,
     };
     const sessionToken = sign(sessionPayload, process.env.SESSION_SECRET);
