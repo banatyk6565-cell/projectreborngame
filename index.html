@@ -222,7 +222,11 @@
             min-height: 168px;
             overflow: hidden;
             border: 1px solid rgba(71, 78, 90, 0.75);
-            background: linear-gradient(to bottom, #070b13 0%, #101621 58%, #1b1614 100%);
+            background-color: #10151b;
+            background-image: url('chronicle-campfire.png');
+            background-size: cover;
+            background-position: center 58%;
+            background-repeat: no-repeat;
         }
         .chronicle-night {
             position: absolute;
@@ -262,6 +266,10 @@
             width: 31px;
             height: 48px;
             filter: drop-shadow(0 0 12px rgba(255, 88, 15, 0.72));
+        }
+
+        .chronicle-night {
+            display: none;
         }
         .campfire::before,
         .campfire::after {
