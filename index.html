@@ -222,7 +222,146 @@
             min-height: 168px;
             overflow: hidden;
             border: 1px solid rgba(71, 78, 90, 0.75);
-            background: rgba(5, 6, 7, 0.72);
+            background: linear-gradient(to bottom, #070b13 0%, #101621 58%, #1b1614 100%);
+        }
+        .chronicle-night {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+        .chronicle-night::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 47% 91%, rgba(255, 119, 31, 0.34), transparent 23%), linear-gradient(to bottom, transparent 55%, rgba(3, 4, 5, 0.55));
+            animation: campfireGlow 2.8s ease-in-out infinite alternate;
+        }
+        .forest-layer {
+            position: absolute;
+            inset: 0 0 34% 0;
+            opacity: 0.9;
+            background: linear-gradient(125deg, transparent 0 8%, #05080d 8% 11%, transparent 11% 19%, #080d13 19% 23%, transparent 23% 32%, #05080d 32% 36%, transparent 36% 47%, #080d13 47% 51%, transparent 51% 62%, #05080d 62% 66%, transparent 66% 76%, #080d13 76% 80%, transparent 80%);
+            clip-path: polygon(0 72%, 5% 28%, 10% 71%, 17% 15%, 23% 72%, 31% 34%, 37% 72%, 46% 7%, 53% 72%, 62% 28%, 68% 72%, 77% 13%, 84% 72%, 92% 31%, 100% 72%, 100% 100%, 0 100%);
+        }
+        .camp-ground {
+            position: absolute;
+            right: -4%;
+            bottom: -18px;
+            left: -4%;
+            height: 62px;
+            border-radius: 50% 50% 0 0;
+            background: radial-gradient(ellipse at center, #34201a 0%, #171417 54%, #0a0b0d 100%);
+            box-shadow: 0 -10px 28px rgba(255, 92, 24, 0.12);
+        }
+        .campfire {
+            position: absolute;
+            z-index: 1;
+            bottom: 18px;
+            left: 46%;
+            width: 31px;
+            height: 48px;
+            filter: drop-shadow(0 0 12px rgba(255, 88, 15, 0.72));
+        }
+        .campfire::before,
+        .campfire::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform-origin: bottom center;
+            border-radius: 70% 20% 65% 35%;
+        }
+        .campfire::before {
+            width: 23px;
+            height: 38px;
+            background: linear-gradient(135deg, #fff7ad 0 12%, #ffbd32 42%, #ef4b18 78%);
+            animation: flameDance 0.72s ease-in-out infinite alternate;
+        }
+        .campfire::after {
+            width: 13px;
+            height: 25px;
+            background: linear-gradient(135deg, #fffbd1 0 20%, #ffdf4d 55%, #ff701c 100%);
+            animation: flameDance 0.55s ease-in-out -0.2s infinite alternate-reverse;
+        }
+        .campfire-logs {
+            position: absolute;
+            bottom: -1px;
+            left: 3px;
+            width: 28px;
+            height: 7px;
+            border-radius: 8px;
+            background: #6b341d;
+            transform: rotate(12deg);
+            box-shadow: 0 4px 0 #3b2118, 0 -5px 0 -1px #8b4a25;
+        }
+        .campfire-sparks,
+        .campfire-sparks::before,
+        .campfire-sparks::after {
+            position: absolute;
+            z-index: 2;
+            width: 3px;
+            height: 3px;
+            border-radius: 50%;
+            background: #ffd76a;
+            box-shadow: 0 0 7px #ff7b1a;
+            content: '';
+            animation: sparkRise 1.8s linear infinite;
+        }
+        .campfire-sparks { bottom: 54px; left: 49%; }
+        .campfire-sparks::before { bottom: -12px; left: -13px; animation-delay: -0.7s; }
+        .campfire-sparks::after { bottom: -20px; left: 14px; animation-delay: -1.25s; }
+        .campervan {
+            position: absolute;
+            z-index: 1;
+            right: 7%;
+            bottom: 20px;
+            width: 72px;
+            height: 30px;
+            border: 2px solid #536273;
+            border-radius: 7px 12px 4px 4px;
+            background: linear-gradient(#6b7c82 0 38%, #35434b 39% 100%);
+            box-shadow: 0 0 16px rgba(108, 157, 165, 0.2);
+            transform: scale(0.92);
+        }
+        .campervan::before {
+            content: 'KAMPERVAN ALBERCIKA I JEGO PACZKI';
+            position: absolute;
+            top: 7px;
+            left: 7px;
+            width: 57px;
+            overflow: hidden;
+            color: #f7cf62;
+            font-size: 4px;
+            font-weight: 800;
+            line-height: 1.1;
+            text-align: center;
+            text-shadow: 0 0 4px #0b1118;
+            transform: rotate(-2deg);
+        }
+        .campervan::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            bottom: -6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #111827;
+            box-shadow: -54px 0 0 #111827, inset 0 0 0 3px #5b6470;
+        }
+        @keyframes campfireGlow {
+            from { opacity: 0.7; }
+            to { opacity: 1; }
+        }
+        @keyframes flameDance {
+            from { transform: translateX(-50%) rotate(-7deg) scaleY(0.9); }
+            to { transform: translateX(-50%) rotate(8deg) scaleY(1.08); }
+        }
+        @keyframes sparkRise {
+            0% { transform: translate(0, 8px) scale(0.5); opacity: 0; }
+            25% { opacity: 1; }
+            100% { transform: translate(6px, -42px) scale(0); opacity: 0; }
         }
         .chronicle-stage::after {
             content: '';
@@ -536,6 +675,13 @@
                     </div>
 
                     <div class="chronicle-stage mb-5 rounded-xl p-3">
+                        <div class="chronicle-night" aria-hidden="true">
+                            <div class="forest-layer"></div>
+                            <div class="camp-ground"></div>
+                            <div class="campervan"></div>
+                            <div class="campfire"><span class="campfire-logs"></span></div>
+                            <div class="campfire-sparks"></div>
+                        </div>
                         <span class="chronicle-name left-[4%] top-[18%] text-red-400">Franek</span>
                         <span class="chronicle-name left-[20%] top-[62%] text-amber-300" style="animation-delay: -7s;">Jane</span>
                         <span class="chronicle-name left-[42%] top-[28%] text-emerald-400" style="animation-delay: -12s;">Androo</span>
