@@ -16,6 +16,8 @@ module.exports = async function handler(req, res) {
       username: session.username,
       globalName: session.globalName,
       avatar: session.avatar,
+      inGuild: !!session.inGuild,
+      isWhitelisted: !!session.isWhitelisted,
     },
   });
 };

@@ -210,6 +210,17 @@
                 </div>
             </div>
 
+            <div id="panel-guild-status" class="hidden mb-6 rounded-2xl p-5 border flex items-center gap-4">
+                <div id="panel-status-icon-wrap" class="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0">
+                    <i id="panel-status-icon" class="fa-solid"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h4 id="panel-status-title" class="font-bold text-white text-sm mb-1"></h4>
+                    <p id="panel-status-desc" class="text-xs text-gray-400"></p>
+                </div>
+                <a id="panel-status-cta" href="#" target="_blank" rel="noopener" class="hidden text-xs font-semibold px-3 py-2 rounded-lg whitespace-nowrap transition"></a>
+            </div>
+
             <div class="bg-red-950/40 border border-red-600/50 rounded-2xl p-6 mb-8 text-center shadow-lg">
                 <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-600/20 text-red-500 text-2xl mb-3">
                     <i class="fa-solid fa-triangle-exclamation"></i>
@@ -778,8 +789,10 @@
 
         // TODO: podmień na swoje Client ID z Discord Developer Portal (zakładka OAuth2)
         // To jest wartość PUBLICZNA - może bezpiecznie znaleźć się w kodzie front-endu.
-        const DISCORD_CLIENT_ID = '1548820786037399554';
+        const DISCORD_CLIENT_ID = 'WSTAW_SWOJE_CLIENT_ID';
         const DISCORD_REDIRECT_URI = window.location.origin + '/api/auth/callback';
+        // TODO: podmień na link zaproszenia na Twój serwer Discord (np. https://discord.gg/XXXXXXX)
+        const DISCORD_INVITE_URL = 'https://discord.gg/WSTAW_SWOJ_KOD_ZAPROSZENIA';
 
         let currentUser = null;
 
@@ -788,7 +801,7 @@
                 client_id: DISCORD_CLIENT_ID,
                 redirect_uri: DISCORD_REDIRECT_URI,
                 response_type: 'code',
-                scope: 'identify',
+                scope: 'identify guilds.members.read',
             });
             return `https://discord.com/oauth2/authorize?${params.toString()}`;
         }
@@ -819,6 +832,45 @@
             panelAvatar.classList.remove('hidden');
             document.getElementById('panel-status-text').textContent = `Zalogowano jako ${user.globalName}`;
             document.getElementById('logout-link').classList.remove('hidden');
+
+            renderGuildStatus(user);
+        }
+
+        function renderGuildStatus(user) {
+            const box = document.getElementById('panel-guild-status');
+            const iconWrap = document.getElementById('panel-status-icon-wrap');
+            const icon = document.getElementById('panel-status-icon');
+            const title = document.getElementById('panel-status-title');
+            const desc = document.getElementById('panel-status-desc');
+            const cta = document.getElementById('panel-status-cta');
+
+            box.classList.remove('hidden');
+            // reset klas kolorystycznych przed ustawieniem nowego stanu
+            box.className = 'mb-6 rounded-2xl p-5 border flex items-center gap-4';
+            cta.classList.add('hidden');
+
+            if (!user.inGuild) {
+                box.classList.add('bg-red-950/30', 'border-red-700/50');
+                iconWrap.className = 'w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0 bg-red-600/15 text-red-400';
+                icon.className = 'fa-solid fa-door-open';
+                title.textContent = 'Nie jesteś jeszcze na naszym serwerze';
+                desc.textContent = 'Dołącz do Discorda, żeby odblokować status i whitelistę.';
+                cta.textContent = 'Dołącz do Discorda';
+                cta.href = DISCORD_INVITE_URL;
+                cta.className = 'text-xs font-semibold px-3 py-2 rounded-lg whitespace-nowrap transition bg-[#5865F2] hover:bg-[#4752C4] text-white';
+            } else if (!user.isWhitelisted) {
+                box.classList.add('bg-amber-950/20', 'border-amber-600/40');
+                iconWrap.className = 'w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0 bg-amber-600/15 text-amber-400';
+                icon.className = 'fa-solid fa-hourglass-half';
+                title.textContent = 'Status: Oczekujący';
+                desc.textContent = 'Jesteś na serwerze Discord, ale nie masz jeszcze roli wybielonego. Formularz zgłoszeniowy pojawi się poniżej, gdy będzie gotowy.';
+            } else {
+                box.classList.add('bg-emerald-950/20', 'border-emerald-600/40');
+                iconWrap.className = 'w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0 bg-emerald-600/15 text-emerald-400';
+                icon.className = 'fa-solid fa-circle-check';
+                title.textContent = 'Status: Wybielony ✅';
+                desc.textContent = 'Masz dostęp do serwera. Do zobaczenia w grze!';
+            }
         }
 
         async function checkSession() {

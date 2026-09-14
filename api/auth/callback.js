@@ -57,12 +57,45 @@ module.exports = async function handler(req, res) {
       ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128`
       : `https://cdn.discordapp.com/embed/avatars/${Number(user.discriminator || 0) % 5}.png`;
 
+    // 2b) Opcjonalnie: sprawdzenie członkostwa na serwerze Discord i posiadanych ról
+    //     (wymaga zakresu "guilds.members.read" w linku logowania i ustawienia DISCORD_GUILD_ID).
+    //     Jeśli DISCORD_GUILD_ID nie jest ustawione, ten krok jest po prostu pomijany.
+    let inGuild = false;
+    let isWhitelisted = false;
+    const guildId = process.env.DISCORD_GUILD_ID;
+
+    if (guildId) {
+      try {
+        const memberRes = await fetch(`https://discord.com/api/users/@me/guilds/${guildId}/member`, {
+          headers: { Authorization: `Bearer ${tokenData.access_token}` },
+        });
+
+        if (memberRes.ok) {
+          const member = await memberRes.json();
+          inGuild = true;
+          const roles = member.roles || [];
+          const whitelistRoleId = process.env.DISCORD_WHITELIST_ROLE_ID;
+          if (whitelistRoleId) {
+            isWhitelisted = roles.includes(whitelistRoleId);
+          }
+        } else if (memberRes.status === 404) {
+          inGuild = false; // użytkownik po prostu nie jest (jeszcze) na serwerze
+        } else {
+          console.error('Nie udało się pobrać danych członkostwa:', memberRes.status, await memberRes.text());
+        }
+      } catch (guildErr) {
+        console.error('Błąd sprawdzania członkostwa na serwerze:', guildErr);
+      }
+    }
+
     // 3) Podpisany, bezstanowy "session token" trzymany w httpOnly cookie (7 dni)
     const sessionPayload = {
       id: user.id,
       username: user.username,
       globalName: user.global_name || user.username,
       avatar: avatarUrl,
+      inGuild,
+      isWhitelisted,
       exp: Date.now() + 1000 * 60 * 60 * 24 * 7,
     };
     const sessionToken = sign(sessionPayload, process.env.SESSION_SECRET);

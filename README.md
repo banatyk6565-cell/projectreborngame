@@ -76,13 +76,48 @@ Najprościej przez GitHub:
 
 ## Co dalej (kolejny etap, nie teraz)
 
-To jest wersja "prosta": logowanie + nick/avatar. Naturalny następny krok to **sprawdzanie, czy dana osoba
-jest na serwerze Discord / ma odpowiednią rolę** (np. czy jest wybielona) — wymaga to:
-- rozszerzenia `scope` o `guilds` lub `guilds.members.read` przy budowaniu linku logowania,
-- dodatkowego zapytania do Discord API (`/users/@me/guilds/{guild.id}/member`) w `api/auth/callback.js`,
-- zapisania roli/statusu w sesji, żeby np. odblokować sekcję "Zgłoś się na Whitelistę".
+~~To jest wersja "prosta": logowanie + nick/avatar.~~ **Zrobione poniżej** ⬇️
 
-Daj znać, kiedy będziesz gotowy na ten krok — dobudujemy to na tym samym fundamencie.
+## Sprawdzanie członkostwa na serwerze i roli "wybielony"
+
+To już jest wdrożone w kodzie. Żeby zadziałało, dodaj **dwie nowe zmienne środowiskowe** w Vercelu (Settings →
+Environment Variables), obok tych czterech, które już masz:
+
+| Nazwa | Wartość | Wymagana? |
+|---|---|---|
+| `DISCORD_GUILD_ID` | ID Twojego serwera Discord | Tak, żeby funkcja działała w ogóle |
+| `DISCORD_WHITELIST_ROLE_ID` | ID roli "wybielony" (lub jak ją nazwałeś) | Tak, żeby odróżniać "na serwerze" od "wybielony" |
+
+Jak zdobyć te ID:
+1. W Discordzie: Ustawienia użytkownika → Zaawansowane → włącz **Tryb dewelopera**.
+2. ID serwera: kliknij prawym na ikonę serwera na pasku po lewej → **Kopiuj ID serwera**.
+3. ID roli: Ustawienia serwera → Role → kliknij prawym na rolę (np. "Wybielony") → **Kopiuj ID roli**.
+
+Poza tym w pliku `index.html` znajdź linię:
+```js
+const DISCORD_INVITE_URL = 'https://discord.gg/WSTAW_SWOJ_KOD_ZAPROSZENIA';
+```
+i wklej prawdziwy link zaproszenia na swój serwer (Discord → kliknij ikonę serwera → Zaproś ludzi →
+"Edytuj zaproszenie" → ustaw "Nigdy nie wygasa" → skopiuj link).
+
+Po dodaniu zmiennych zrób **Redeploy** (dokładnie jak poprzednio) i zacommituj zmianę w `index.html` na GitHub.
+
+### Co widzi teraz zalogowany użytkownik w Panelu Gracza
+
+- **Nie jest na serwerze Discord** → czerwona plakietka z przyciskiem "Dołącz do Discorda"
+- **Jest na serwerze, ale bez roli** → żółta plakietka "Status: Oczekujący"
+- **Ma rolę wybielonego** → zielona plakietka "Status: Wybielony ✅"
+
+### Ważna uwaga o uprawnieniach
+
+Ta funkcja korzysta z zakresu OAuth `guilds.members.read` — to znaczy, że przy logowaniu Discord poprosi
+użytkownika o zgodę na odczyt jego członkostwa/ról na Twoim serwerze. **Nie wymaga to bota** ani dodatkowych
+uprawnień administracyjnych — działa wyłącznie w kontekście tego, co użytkownik sam autoryzuje o sobie.
+
+### Naturalny kolejny krok (na później)
+
+Gdy formularz "Zgłoś się na Whitelistę" będzie gotowy, osoby ze statusem "Oczekujący" powinny móc go wypełnić,
+a Ty (lub bot) nadajecie im rolę ręcznie lub automatycznie po zatwierdzeniu zgłoszenia.
 
 ## Bezpieczeństwo — o co chodzi z tymi zmiennymi środowiskowymi
 
