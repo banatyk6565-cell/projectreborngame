@@ -5,5 +5,8 @@
   "description": "Strona Project Grayfall + logowanie przez Discord OAuth2 (Vercel serverless functions)",
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
   }
 }
