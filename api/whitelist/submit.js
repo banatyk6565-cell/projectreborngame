@@ -1,5 +1,6 @@
 const { verify } = require('../../lib/session');
 const { parseCookies } = require('../../lib/cookies');
+const { readJson, writeJson } = require('../../lib/admin-store');
 
 const MAX_SHORT = 150;   // np. nick w grze, skąd o nas wiesz
 const MAX_LONG = 800;    // np. doświadczenie, uzasadnienie
@@ -78,6 +79,24 @@ module.exports = async function handler(req, res) {
     if (!webhookRes.ok) {
       console.error('Webhook Discord odrzucił wiadomość:', webhookRes.status, await webhookRes.text());
       return res.status(502).json({ ok: false, error: 'Nie udało się wysłać zgłoszenia. Spróbuj ponownie za chwilę.' });
+    }
+
+    try {
+      const applications = await readJson('grayfall:whitelist:applications', []);
+      await writeJson('grayfall:whitelist:applications', [...applications, {
+        id: `${Date.now()}-${session.id}`,
+        discordId: session.id,
+        discordName: session.globalName,
+        avatar: session.avatar,
+        gameNick,
+        age,
+        experience: experience || 'nie podano',
+        reason,
+        source: source || 'nie podano',
+        submittedAt: new Date().toISOString(),
+      }]);
+    } catch (storeError) {
+      console.error('Nie udało się zapisać zgłoszenia w panelu:', storeError);
     }
 
     return res.status(200).json({ ok: true });
