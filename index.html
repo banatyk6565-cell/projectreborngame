@@ -595,12 +595,77 @@
             </div>
 
             <div class="mt-8 text-center flex items-center justify-center gap-3 flex-wrap">
+                <button onclick="openAdminPanel()" id="admin-panel-trigger" class="hidden bg-amber-500/15 hover:bg-amber-500/25 border border-amber-400/40 text-amber-200 px-6 py-2.5 rounded-xl text-sm font-semibold transition">
+                    <i class="fa-solid fa-screwdriver-wrench mr-2"></i>Panel administracyjny
+                </button>
                 <button onclick="togglePanel()" class="bg-gray-800 hover:bg-gray-700 text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition">
                     Zamknij Panel
                 </button>
                 <a href="/api/auth/logout" id="logout-link" class="hidden bg-red-950/60 hover:bg-red-900/60 border border-red-700/40 text-red-300 px-6 py-2.5 rounded-xl text-sm font-semibold transition">
                     Wyloguj się
                 </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- PANEL ADMINISTRACYJNY -->
+    <div id="admin-panel" class="hidden fixed inset-0 z-[55] bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div class="relative bg-cardbg border border-amber-500/30 rounded-3xl max-w-6xl w-full max-h-[92vh] overflow-y-auto p-5 sm:p-8 shadow-2xl">
+            <button onclick="closeAdminPanel()" class="absolute top-5 right-5 text-gray-400 hover:text-white text-xl" aria-label="Zamknij panel administracyjny">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="mb-6 pr-8">
+                <span class="text-amber-400 text-xs font-semibold uppercase tracking-widest">Strefa zespołu</span>
+                <h2 class="font-cinzel text-2xl sm:text-3xl font-bold text-white mt-1">Panel administracyjny</h2>
+                <p id="admin-panel-subtitle" class="text-sm text-gray-400 mt-2">Zarządzaj treścią Grayfall i porozmawiaj z zespołem.</p>
+            </div>
+            <div id="admin-panel-error" class="hidden mb-5 rounded-xl border border-red-700/50 bg-red-950/40 px-4 py-3 text-sm text-red-200"></div>
+            <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_290px] gap-6">
+                <main>
+                    <section class="bg-darkbg/60 border border-cardborder rounded-2xl p-5">
+                        <div class="flex items-center justify-between gap-3 mb-4">
+                            <div>
+                                <h3 class="font-cinzel text-lg font-bold text-white">Newsy</h3>
+                                <p class="text-xs text-gray-500">Dodawaj, edytuj i usuwaj ogłoszenia na stronie.</p>
+                            </div>
+                            <span class="text-amber-400 text-lg"><i class="fa-solid fa-newspaper"></i></span>
+                        </div>
+                        <form id="admin-news-form" class="space-y-3">
+                            <input type="hidden" id="admin-news-id">
+                            <input id="admin-news-title" required maxlength="120" placeholder="Tytuł ogłoszenia" class="w-full rounded-xl bg-cardbg border border-cardborder px-4 py-3 text-sm text-white placeholder-gray-600 outline-none focus:border-amber-500/60">
+                            <textarea id="admin-news-content" required maxlength="4000" rows="4" placeholder="Treść ogłoszenia" class="w-full rounded-xl bg-cardbg border border-cardborder px-4 py-3 text-sm text-white placeholder-gray-600 outline-none focus:border-amber-500/60"></textarea>
+                            <div class="flex flex-wrap items-center gap-3">
+                                <label class="flex items-center gap-2 text-xs text-gray-400"><input id="admin-news-important" type="checkbox" class="accent-amber-500"> Ważne ogłoszenie</label>
+                                <button type="submit" class="rounded-xl bg-amber-500 hover:bg-amber-400 text-black px-4 py-2.5 text-xs font-bold transition"><i class="fa-solid fa-paper-plane mr-1"></i><span id="admin-news-submit-label">Opublikuj</span></button>
+                                <button type="button" onclick="resetNewsForm()" class="hidden rounded-xl bg-gray-800 hover:bg-gray-700 text-gray-200 px-4 py-2.5 text-xs font-semibold transition" id="admin-news-cancel">Anuluj edycję</button>
+                            </div>
+                        </form>
+                        <div id="admin-news-list" class="mt-6 space-y-3"></div>
+                    </section>
+
+                    <section id="admin-team-section" class="hidden bg-darkbg/60 border border-cardborder rounded-2xl p-5 mt-6">
+                        <div class="flex items-center justify-between gap-3 mb-4">
+                            <div><h3 class="font-cinzel text-lg font-bold text-white">Zarządzanie ekipą</h3><p class="text-xs text-gray-500">Widoczne i dostępne tylko dla Ownera.</p></div>
+                            <span class="text-indigo-400 text-lg"><i class="fa-solid fa-users-gear"></i></span>
+                        </div>
+                        <form id="admin-team-form" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <input type="hidden" id="admin-team-id">
+                            <input id="admin-team-name" required maxlength="80" placeholder="Nazwa / nick" class="rounded-xl bg-cardbg border border-cardborder px-4 py-3 text-sm text-white placeholder-gray-600 outline-none focus:border-indigo-500/60">
+                            <input id="admin-team-role" required maxlength="80" placeholder="Rola" class="rounded-xl bg-cardbg border border-cardborder px-4 py-3 text-sm text-white placeholder-gray-600 outline-none focus:border-indigo-500/60">
+                            <input id="admin-team-icon" maxlength="40" placeholder="Ikona Font Awesome, np. fa-palette" class="rounded-xl bg-cardbg border border-cardborder px-4 py-3 text-sm text-white placeholder-gray-600 outline-none focus:border-indigo-500/60">
+                            <input id="admin-team-color" maxlength="20" placeholder="Kolor, np. teal" class="rounded-xl bg-cardbg border border-cardborder px-4 py-3 text-sm text-white placeholder-gray-600 outline-none focus:border-indigo-500/60">
+                            <input id="admin-team-description" maxlength="180" placeholder="Krótki opis" class="sm:col-span-2 rounded-xl bg-cardbg border border-cardborder px-4 py-3 text-sm text-white placeholder-gray-600 outline-none focus:border-indigo-500/60">
+                            <button type="submit" class="sm:col-span-2 justify-self-start rounded-xl bg-indigo-500 hover:bg-indigo-400 text-white px-4 py-2.5 text-xs font-bold transition"><i class="fa-solid fa-user-plus mr-1"></i><span id="admin-team-submit-label">Dodaj do ekipy</span></button>
+                        </form>
+                        <div id="admin-team-list" class="mt-5 space-y-2"></div>
+                    </section>
+                </main>
+
+                <aside class="bg-darkbg/60 border border-cardborder rounded-2xl p-4 flex flex-col min-h-[420px] lg:max-h-[660px]">
+                    <div class="flex items-center gap-3 pb-3 border-b border-cardborder"><span class="w-9 h-9 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center"><i class="fa-solid fa-comments"></i></span><div><h3 class="font-bold text-white text-sm">Czat zespołu</h3><p class="text-[11px] text-gray-500">Tylko uprawniona administracja</p></div></div>
+                    <div id="admin-chat-messages" class="flex-1 overflow-y-auto space-y-3 py-4 min-h-[260px]"></div>
+                    <form id="admin-chat-form" class="flex gap-2 border-t border-cardborder pt-3"><input id="admin-chat-input" maxlength="1000" required placeholder="Napisz do zespołu..." class="min-w-0 flex-1 rounded-xl bg-cardbg border border-cardborder px-3 py-2.5 text-xs text-white placeholder-gray-600 outline-none focus:border-emerald-500/60"><button class="w-10 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white transition" aria-label="Wyślij wiadomość"><i class="fa-solid fa-arrow-up"></i></button></form>
+                </aside>
             </div>
         </div>
     </div>
@@ -825,7 +890,7 @@
             </p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id="public-news-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div class="interactive-card bg-cardbg border border-cardborder rounded-2xl p-6 flex flex-col justify-between">
                 <div>
                     <div class="flex items-center justify-between mb-4">
@@ -1091,7 +1156,7 @@
                 <i class="fa-solid fa-code text-indigo-400 text-xl"></i>
                 <h3 class="font-cinzel text-2xl font-bold text-white tracking-wide">Dev / Discord / Grafik</h3>
             </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div id="public-team-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <!-- Akemi -->
                 <div class="bg-teal-950/10 border border-teal-500/50 rounded-2xl p-5 flex items-center gap-4 interactive-card shadow-lg">
                     <div class="w-14 h-14 rounded-xl bg-teal-500/15 border-2 border-teal-400/80 flex items-center justify-center text-teal-300 text-2xl shrink-0 shadow-md shadow-teal-950/40">
@@ -1318,6 +1383,8 @@
         const DISCORD_GUILD_ID = '617606630615547906';
 
         let currentUser = null;
+        let adminAccess = null;
+        let adminChatTimer = null;
 
         function buildDiscordAuthUrl() {
             const params = new URLSearchParams({
@@ -1339,6 +1406,7 @@
 
         function applyLoggedInUI(user) {
             currentUser = user;
+            adminAccess = user.adminAccess || null;
 
             // Przycisk w navbarze: avatar zamiast ikony Discorda, nick zamiast "Panel Gracza"
             document.getElementById('auth-icon').classList.add('hidden');
@@ -1355,6 +1423,9 @@
             panelAvatar.classList.remove('hidden');
             document.getElementById('panel-status-text').textContent = `Zalogowano jako ${user.globalName}`;
             document.getElementById('logout-link').classList.remove('hidden');
+
+            const adminTrigger = document.getElementById('admin-panel-trigger');
+            if (adminAccess && adminAccess.canUseChat) adminTrigger.classList.remove('hidden');
 
             renderGuildStatus(user);
         }
@@ -1408,6 +1479,171 @@
             }
         }
 
+        function showAdminError(message) {
+            const element = document.getElementById('admin-panel-error');
+            element.textContent = message;
+            element.classList.remove('hidden');
+        }
+
+        function clearAdminError() {
+            document.getElementById('admin-panel-error').classList.add('hidden');
+        }
+
+        async function adminRequest(path, options = {}) {
+            const response = await fetch(path, { headers: { 'Content-Type': 'application/json' }, ...options });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(data.error || 'Nie udało się wykonać operacji.');
+            return data;
+        }
+
+        async function openAdminPanel() {
+            if (!adminAccess?.canUseChat) return;
+            document.getElementById('player-panel').classList.add('hidden');
+            document.getElementById('admin-panel').classList.remove('hidden');
+            clearAdminError();
+            await loadAdminPanel();
+            window.clearInterval(adminChatTimer);
+            adminChatTimer = window.setInterval(loadAdminChat, 15000);
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('admin-panel').classList.add('hidden');
+            window.clearInterval(adminChatTimer);
+        }
+
+        async function loadAdminPanel() {
+            try {
+                const requests = [adminRequest('/api/admin/news'), adminRequest('/api/admin/chat')];
+                if (adminAccess?.canManageTeam) requests.push(adminRequest('/api/admin/team'));
+                const [newsData, chatData, teamData] = await Promise.all(requests);
+                renderAdminNews(newsData.news);
+                renderAdminChat(chatData.messages);
+                if (teamData) renderAdminTeam(teamData.team);
+            } catch (error) {
+                showAdminError(error.message);
+            }
+        }
+
+        async function loadAdminChat() {
+            try { renderAdminChat((await adminRequest('/api/admin/chat')).messages); } catch (error) { showAdminError(error.message); }
+        }
+
+        function renderAdminNews(news) {
+            const list = document.getElementById('admin-news-list');
+            if (!news.length) { list.innerHTML = '<p class="text-xs text-gray-600">Nie ma jeszcze żadnych ogłoszeń.</p>'; return; }
+            list.innerHTML = news.map((item) => `<article class="rounded-xl border ${item.important ? 'border-amber-500/50 bg-amber-950/10' : 'border-cardborder bg-cardbg/60'} p-4"><div class="flex items-start justify-between gap-3"><div><h4 class="font-bold text-white text-sm">${escapeAdminHtml(item.title)} ${item.important ? '<span class="text-amber-400 text-[10px] uppercase ml-1">Ważne</span>' : ''}</h4><p class="text-[11px] text-gray-500 mt-1">${escapeAdminHtml(item.author)} · ${formatAdminDate(item.publishedAt)}</p></div><div class="flex gap-2 shrink-0"><button onclick="editAdminNews('${item.id}')" class="text-gray-400 hover:text-amber-300" aria-label="Edytuj news"><i class="fa-solid fa-pen"></i></button><button onclick="deleteAdminNews('${item.id}')" class="text-gray-400 hover:text-red-400" aria-label="Usuń news"><i class="fa-solid fa-trash"></i></button></div></div><p class="text-xs text-gray-300 leading-relaxed mt-3 whitespace-pre-line">${escapeAdminHtml(item.content)}</p></article>`).join('');
+            window.adminNews = news;
+        }
+
+        function renderAdminChat(messages) {
+            const list = document.getElementById('admin-chat-messages');
+            list.innerHTML = messages.length ? messages.map((message) => `<div class="flex gap-2"><img src="${escapeAdminHtml(message.avatar)}" alt="" class="w-7 h-7 rounded-full shrink-0"><div class="min-w-0"><p class="text-[11px] text-emerald-300 font-semibold">${escapeAdminHtml(message.author)} <span class="text-[9px] text-gray-600 font-normal">${formatAdminDate(message.createdAt)}</span></p><p class="text-xs text-gray-300 break-words">${escapeAdminHtml(message.text)}</p></div></div>`).join('') : '<p class="text-xs text-gray-600 text-center py-8">Czat jest jeszcze pusty.</p>';
+            list.scrollTop = list.scrollHeight;
+        }
+
+        function renderAdminTeam(team) {
+            const list = document.getElementById('admin-team-list');
+            list.innerHTML = team.length ? team.map((member) => `<div class="flex items-center justify-between gap-3 rounded-xl border border-cardborder bg-cardbg/60 p-3"><div class="min-w-0"><p class="text-sm font-semibold text-white"><i class="fa-solid ${escapeAdminHtml(member.icon)} text-indigo-400 mr-2"></i>${escapeAdminHtml(member.name)} <span class="text-xs text-gray-500">${escapeAdminHtml(member.role)}</span></p><p class="text-[11px] text-gray-500 truncate">${escapeAdminHtml(member.description || '')}</p></div><div class="flex gap-3"><button onclick="editAdminTeamMember('${member.id}')" class="text-gray-500 hover:text-indigo-300" aria-label="Edytuj członka ekipy"><i class="fa-solid fa-pen"></i></button><button onclick="deleteAdminTeamMember('${member.id}')" class="text-gray-500 hover:text-red-400" aria-label="Usuń członka ekipy"><i class="fa-solid fa-trash"></i></button></div></div>`).join('') : '<p class="text-xs text-gray-600">Lista ekipy zarządzana z panelu jest pusta.</p>';
+            window.adminTeam = team;
+        }
+
+        function escapeAdminHtml(value) { return String(value ?? '').replace(/[&<>'"]/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[character])); }
+        function formatAdminDate(value) { return new Date(value).toLocaleString('pl-PL', { dateStyle: 'short', timeStyle: 'short' }); }
+
+        async function loadPublicNews() {
+            try {
+                const response = await fetch('/api/news');
+                if (!response.ok) return;
+                const { news } = await response.json();
+                if (!news.length) return;
+                const list = document.getElementById('public-news-list');
+                news.forEach((item) => {
+                    const card = document.createElement('article');
+                    card.className = 'interactive-card bg-cardbg border border-cardborder rounded-2xl p-6 flex flex-col justify-between';
+                    card.innerHTML = `<div><div class="flex items-center justify-between mb-4"><span class="px-3 py-1 rounded-full ${item.important ? 'bg-amber-950/80 border-amber-800/50 text-amber-400' : 'bg-red-950/80 border-red-800/50 text-red-400'} border text-xs font-semibold">${item.important ? 'Ważne' : 'Ogłoszenie'}</span><span class="text-xs text-gray-500">${formatAdminDate(item.publishedAt)}</span></div><h3 class="font-cinzel text-xl font-bold text-white mb-3">${escapeAdminHtml(item.title)}</h3><p class="text-gray-400 text-sm leading-relaxed mb-6 whitespace-pre-line">${escapeAdminHtml(item.content)}</p></div><div class="pt-4 border-t border-cardborder text-xs text-gray-500">Autor: ${escapeAdminHtml(item.author)}</div>`;
+                    list.prepend(card);
+                });
+            } catch (error) { console.error('Nie udało się pobrać publicznych newsów:', error); }
+        }
+
+        async function loadPublicTeam() {
+            try {
+                const response = await fetch('/api/team');
+                if (!response.ok) return;
+                const { team } = await response.json();
+                const list = document.getElementById('public-team-list');
+                team.forEach((member) => {
+                    const card = document.createElement('div');
+                    card.className = 'bg-cardbg border border-indigo-500/30 rounded-2xl p-5 flex items-center gap-4 interactive-card shadow-lg';
+                    card.innerHTML = `<div class="w-14 h-14 rounded-xl bg-indigo-600/15 border-2 border-indigo-500/60 flex items-center justify-center text-indigo-300 text-2xl shrink-0 shadow-md"><i class="fa-solid ${escapeAdminHtml(member.icon || 'fa-user')}"></i></div><div><h4 class="font-bold text-white text-base flex items-center gap-2"><span>${escapeAdminHtml(member.name)}</span><span class="px-1.5 py-0.5 rounded bg-indigo-600/20 text-indigo-300 text-[10px] font-semibold border border-indigo-500/30">${escapeAdminHtml(member.role)}</span></h4><span class="text-[10px] text-gray-400 font-medium block mt-1">${escapeAdminHtml(member.description || '')}</span></div>`;
+                    list.prepend(card);
+                });
+            } catch (error) { console.error('Nie udało się pobrać publicznej ekipy:', error); }
+        }
+
+        function resetNewsForm() {
+            document.getElementById('admin-news-form').reset();
+            document.getElementById('admin-news-id').value = '';
+            document.getElementById('admin-news-submit-label').textContent = 'Opublikuj';
+            document.getElementById('admin-news-cancel').classList.add('hidden');
+        }
+
+        function editAdminNews(id) {
+            const item = (window.adminNews || []).find((news) => news.id === id);
+            if (!item) return;
+            document.getElementById('admin-news-id').value = item.id;
+            document.getElementById('admin-news-title').value = item.title;
+            document.getElementById('admin-news-content').value = item.content;
+            document.getElementById('admin-news-important').checked = item.important;
+            document.getElementById('admin-news-submit-label').textContent = 'Zapisz zmiany';
+            document.getElementById('admin-news-cancel').classList.remove('hidden');
+            document.getElementById('admin-news-title').focus();
+        }
+
+        async function deleteAdminNews(id) {
+            if (!window.confirm('Usunąć ten news?')) return;
+            try { await adminRequest(`/api/admin/news?id=${encodeURIComponent(id)}`, { method: 'DELETE' }); await loadAdminPanel(); } catch (error) { showAdminError(error.message); }
+        }
+
+        async function deleteAdminTeamMember(id) {
+            if (!window.confirm('Usunąć tę osobę z listy ekipy?')) return;
+            try { await adminRequest(`/api/admin/team?id=${encodeURIComponent(id)}`, { method: 'DELETE' }); await loadAdminPanel(); } catch (error) { showAdminError(error.message); }
+        }
+
+        function editAdminTeamMember(id) {
+            const member = (window.adminTeam || []).find((item) => item.id === id);
+            if (!member) return;
+            document.getElementById('admin-team-id').value = member.id;
+            document.getElementById('admin-team-name').value = member.name;
+            document.getElementById('admin-team-role').value = member.role;
+            document.getElementById('admin-team-icon').value = member.icon || '';
+            document.getElementById('admin-team-color').value = member.color || '';
+            document.getElementById('admin-team-description').value = member.description || '';
+            document.getElementById('admin-team-submit-label').textContent = 'Zapisz zmiany';
+            document.getElementById('admin-team-name').focus();
+        }
+
+        document.getElementById('admin-news-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const id = document.getElementById('admin-news-id').value;
+            const payload = { title: document.getElementById('admin-news-title').value, content: document.getElementById('admin-news-content').value, important: document.getElementById('admin-news-important').checked };
+            try { await adminRequest(id ? `/api/admin/news?id=${encodeURIComponent(id)}` : '/api/admin/news', { method: id ? 'PUT' : 'POST', body: JSON.stringify(payload) }); resetNewsForm(); await loadAdminPanel(); } catch (error) { showAdminError(error.message); }
+        });
+
+        document.getElementById('admin-chat-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const input = document.getElementById('admin-chat-input');
+            if (!input.value.trim()) return;
+            try { await adminRequest('/api/admin/chat', { method: 'POST', body: JSON.stringify({ text: input.value }) }); input.value = ''; await loadAdminChat(); } catch (error) { showAdminError(error.message); }
+        });
+
+        document.getElementById('admin-team-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const id = document.getElementById('admin-team-id').value;
+            const payload = { name: document.getElementById('admin-team-name').value, role: document.getElementById('admin-team-role').value, icon: document.getElementById('admin-team-icon').value || 'fa-user', color: document.getElementById('admin-team-color').value || 'indigo', description: document.getElementById('admin-team-description').value };
+            try { await adminRequest(id ? `/api/admin/team?id=${encodeURIComponent(id)}` : '/api/admin/team', { method: id ? 'PUT' : 'POST', body: JSON.stringify(payload) }); event.target.reset(); document.getElementById('admin-team-id').value = ''; document.getElementById('admin-team-submit-label').textContent = 'Dodaj do ekipy'; await loadAdminPanel(); } catch (error) { showAdminError(error.message); }
+        });
+
         function checkLoginError() {
             const params = new URLSearchParams(window.location.search);
             if (params.get('login') === 'error') {
@@ -1423,6 +1659,8 @@
         document.addEventListener('DOMContentLoaded', () => {
             checkSession();
             checkLoginError();
+            loadPublicNews();
+            loadPublicTeam();
             loadDiscordWidget();
             setupScrollReveal();
             setupHeroDepth();

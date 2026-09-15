@@ -9,6 +9,28 @@ Jak to działa w skrócie: klikasz "Panel Gracza" → strona przekierowuje Cię 
 wraca do `/api/auth/callback`, który **na serwerze** (nigdy w przeglądarce) wymienia kod na token, pobiera Twój
 nick/avatar i zapisuje podpisane ciasteczko sesji. Od tej pory `/api/me` mówi stronie "jesteś zalogowany jako X".
 
+## Panel administracyjny
+
+Panel administracyjny nie obsługuje whitelisty ani historii decyzji. Jest dostępny po zalogowaniu przez Discorda
+wyłącznie dla osób z poniższymi rolami na serwerze:
+
+| Rola | ID | Dostęp |
+|---|---|---|
+| Owner | `794629074391531521` | newsy, czat, zarządzanie ekipą |
+| Administrator | `1040662780233138238` | newsy i czat |
+| Community Manager | `1549379668355059783` | newsy i czat |
+| Grafik | `1350048629238399037` | brak panelu administracyjnego |
+
+Newsy i mały czat zespołu są zapisywane w Redisie przez REST, dzięki czemu są wspólne dla całej administracji.
+W Vercelu dodaj:
+
+| Nazwa | Wartość |
+|---|---|
+| `UPSTASH_REDIS_REST_URL` | REST URL utworzonej bazy Upstash Redis |
+| `UPSTASH_REDIS_REST_TOKEN` | REST token utworzonej bazy Upstash Redis |
+
+Bez tych dwóch zmiennych panel pozostanie niedostępny, zamiast zapisywać dane tylko lokalnie w przeglądarce.
+
 ---
 
 ## KROK 1 — Zarejestruj aplikację w Discord Developer Portal

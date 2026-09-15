@@ -1,5 +1,6 @@
 const { verify } = require('../lib/session');
 const { parseCookies } = require('../lib/cookies');
+const { getAdminAccess } = require('../lib/admin');
 
 module.exports = async function handler(req, res) {
   const cookies = parseCookies(req.headers.cookie);
@@ -19,6 +20,7 @@ module.exports = async function handler(req, res) {
       inGuild: !!session.inGuild,
       isWhitelisted: !!session.isWhitelisted,
       roles: session.roles || [],
+      adminAccess: getAdminAccess(session.roles || []),
     },
   });
 };
