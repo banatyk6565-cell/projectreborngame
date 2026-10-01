@@ -716,7 +716,7 @@
             </div>
         </div>
     </div>
-    <button id="lore-open" type="button" class="hidden fixed bottom-5 right-5 z-[60] inline-flex items-center gap-2 rounded-lg border border-red-200 bg-red-600 px-4 py-3 text-[11px] font-black text-white shadow-[0_0_28px_rgba(239,68,68,0.95)] backdrop-blur transition hover:bg-red-500 animate-pulse sm:text-sm" aria-haspopup="dialog" aria-label="Otwórz Tajne Akta Grayfall">
+    <button id="lore-open" type="button" class="fixed bottom-5 right-5 z-[60] inline-flex items-center gap-2 rounded-lg border border-red-200 bg-red-600 px-4 py-3 text-[11px] font-black text-white shadow-[0_0_28px_rgba(239,68,68,0.95)] backdrop-blur transition hover:bg-red-500 animate-pulse sm:text-sm" aria-haspopup="dialog" aria-label="Otwórz Tajne Akta Grayfall">
         <i class="fa-solid fa-bell animate-bounce" aria-hidden="true"></i>
         <span class="whitespace-nowrap">Tajne Akta Grayfall</span>
         <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
@@ -1366,6 +1366,44 @@
         let loreCountdownTimer = null;
         let loreLockTimer = null;
         let loreBlockedUntil = 0;
+        let loreAlertPlayed = false;
+        let loreAudioContext = null;
+
+        function playLoreEntryAlert() {
+            if (loreAlertPlayed) return;
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContextClass) return;
+            if (!loreAudioContext) loreAudioContext = new AudioContextClass();
+
+            const context = loreAudioContext;
+            const play = () => {
+                if (loreAlertPlayed || context.state !== 'running') return;
+                loreAlertPlayed = true;
+
+                const oscillator = context.createOscillator();
+                const volume = context.createGain();
+                const start = context.currentTime;
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(720, start);
+                oscillator.frequency.linearRampToValueAtTime(980, start + 0.12);
+                oscillator.frequency.linearRampToValueAtTime(720, start + 0.24);
+                oscillator.frequency.linearRampToValueAtTime(980, start + 0.36);
+                volume.gain.setValueAtTime(0.0001, start);
+                volume.gain.exponentialRampToValueAtTime(0.035, start + 0.02);
+                volume.gain.exponentialRampToValueAtTime(0.0001, start + 0.44);
+                oscillator.connect(volume);
+                volume.connect(context.destination);
+                oscillator.start(start);
+                oscillator.stop(start + 0.45);
+                oscillator.onended = () => context.close().catch(() => {});
+            };
+
+            if (context.state === 'running') {
+                play();
+            } else {
+                context.resume().then(play).catch(() => {});
+            }
+        }
 
         function formatLoreTime(milliseconds) {
             const totalSeconds = Math.max(0, Math.ceil(milliseconds / 1000));
@@ -1881,7 +1919,9 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            openLoreModal();
+            window.addEventListener('pointerdown', playLoreEntryAlert, { once: true });
+            window.addEventListener('keydown', playLoreEntryAlert, { once: true });
+            playLoreEntryAlert();
             loadLoreState();
             window.setInterval(loadLoreState, 30000);
             checkSession();
