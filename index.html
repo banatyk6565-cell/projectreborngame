@@ -708,13 +708,17 @@
             </div>
             <div id="lore-countdown-panel" class="hidden mt-8 border-t border-gray-800 pt-6 text-center">
                 <p id="lore-countdown-label" class="text-sm uppercase tracking-widest text-gray-400">Ujawnienie lore za</p>
-                <p id="lore-countdown" class="mt-3 font-mono text-4xl font-bold tabular-nums text-amber-300 sm:text-5xl" aria-live="off">04:00:00</p>
+                <p id="lore-countdown" class="mt-3 font-mono text-4xl font-bold tabular-nums text-amber-300 sm:text-5xl" aria-live="off">01:00:00</p>
                 <p id="lore-discord-status" class="hidden mt-4 text-sm" role="status" aria-live="polite"></p>
                 <a href="https://discord.gg/p7d9etbSgY" target="_blank" rel="noopener noreferrer" class="mt-6 inline-flex items-center gap-2 border border-indigo-400/40 px-5 py-3 text-sm font-semibold text-indigo-200 transition hover:bg-indigo-400/10">
                     <i class="fa-brands fa-discord"></i><span>Przejdź na Discorda</span>
                 </a>
             </div>
         </div>
+    </div>
+    <div id="lore-home-countdown" class="hidden fixed bottom-[5.5rem] right-5 z-50 min-w-[190px] border border-amber-400/60 bg-[#101214]/95 px-4 py-3 text-right shadow-[0_0_20px_rgba(251,191,36,0.3)] backdrop-blur" role="status" aria-live="off">
+        <p id="lore-home-countdown-label" class="text-[10px] font-bold uppercase tracking-widest text-amber-300">Ujawnienie lore za</p>
+        <p id="lore-home-countdown-time" class="mt-1 font-mono text-xl font-bold tabular-nums text-white">01:00:00</p>
     </div>
     <button id="lore-open" type="button" class="fixed bottom-5 right-5 z-[60] inline-flex items-center gap-2 rounded-lg border border-red-200 bg-red-600 px-4 py-3 text-[11px] font-black text-white shadow-[0_0_28px_rgba(239,68,68,0.95)] backdrop-blur transition hover:bg-red-500 animate-pulse sm:text-sm" aria-haspopup="dialog" aria-label="Otwórz Tajne Akta Grayfall">
         <i class="fa-solid fa-bell animate-bounce" aria-hidden="true"></i>
@@ -1373,7 +1377,9 @@
             if (loreAlertPlayed) return;
             const AudioContextClass = window.AudioContext || window.webkitAudioContext;
             if (!AudioContextClass) return;
-            if (!loreAudioContext) loreAudioContext = new AudioContextClass();
+            if (!loreAudioContext) {
+                try { loreAudioContext = new AudioContextClass(); } catch { return; }
+            }
 
             const context = loreAudioContext;
             const play = () => {
@@ -1389,7 +1395,7 @@
                 oscillator.frequency.linearRampToValueAtTime(720, start + 0.24);
                 oscillator.frequency.linearRampToValueAtTime(980, start + 0.36);
                 volume.gain.setValueAtTime(0.0001, start);
-                volume.gain.exponentialRampToValueAtTime(0.035, start + 0.02);
+                volume.gain.exponentialRampToValueAtTime(0.08, start + 0.02);
                 volume.gain.exponentialRampToValueAtTime(0.0001, start + 0.44);
                 oscillator.connect(volume);
                 volume.connect(context.destination);
@@ -1428,6 +1434,7 @@
                 loreRevealAt = data.revealAt;
                 passwordPanel.classList.add('hidden');
                 countdownPanel.classList.remove('hidden');
+                document.getElementById('lore-home-countdown').classList.remove('hidden');
                 window.clearInterval(loreCountdownTimer);
                 window.clearInterval(loreLockTimer);
                 loreCountdownTimer = window.setInterval(updateLoreCountdown, 1000);
@@ -1466,12 +1473,17 @@
             document.getElementById('lore-countdown-label').textContent = expired
                 ? 'Czas minął. Lore pojawi się na Discordzie.'
                 : 'Ujawnienie lore za';
+            document.getElementById('lore-home-countdown-time').textContent = formatLoreTime(remaining);
+            document.getElementById('lore-home-countdown-label').textContent = expired
+                ? 'Lore dostępne na Discordzie'
+                : 'Ujawnienie lore za';
             if (expired) {
                 window.clearInterval(loreCountdownTimer);
             }
         }
 
         function openLoreModal() {
+            playLoreEntryAlert();
             document.getElementById('lore-modal').classList.remove('hidden');
             document.getElementById('lore-open').classList.add('hidden');
             if (!loreRevealAt) document.getElementById('lore-password').focus();
@@ -1495,6 +1507,7 @@
 
         document.getElementById('lore-password-form').addEventListener('submit', async (event) => {
             event.preventDefault();
+            playLoreEntryAlert();
             const submit = document.getElementById('lore-submit');
             const password = document.getElementById('lore-password').value;
             submit.disabled = true;
