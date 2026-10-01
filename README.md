@@ -31,6 +31,14 @@ W Vercelu dodaj:
 
 Bez tych dwóch zmiennych panel pozostanie niedostępny, zamiast zapisywać dane tylko lokalnie w przeglądarce.
 
+## Odliczanie do ujawnienia lore
+
+Na stronie głównej pojawia się modal z polem hasła. Hasło `NEW_ERA` jest jednym z animowanych nicków w Kronice projektu. Pierwsze poprawne wpisanie uruchamia wspólny, zapisany w Redisie licznik 4 godzin. Błędne hasła są liczone per adres IP; po 10 błędach kolejne próby są blokowane na 30 minut. Funkcja wymaga tych samych zmiennych `UPSTASH_REDIS_REST_URL` i `UPSTASH_REDIS_REST_TOKEN` co panel administracyjny.
+
+Po zakończeniu odliczania strona pokazuje odnośnik do Discorda; publikację lore trzeba wykonać ręcznie. Hasło jest elementem zagadki, a nie zabezpieczeniem: tekst widoczny na stronie można odczytać w kodzie lub narzędziach przeglądarki.
+
+Przy pierwszym poprawnym haśle endpoint wysyła na Discorda jedną wiadomość z pingiem `@everyone`. Utwórz webhook w kanale alertów (osobnym od zgłoszeń whitelisty), dodaj jego URL w Vercel jako `DISCORD_LORE_WEBHOOK_URL` i wykonaj redeploy. Kanał musi pozwalać na wzmianki `@everyone`. Brak lub błąd webhooka nie zatrzymuje licznika; osoba uruchamiająca zobaczy informację o nieudanym powiadomieniu.
+
 ---
 
 ## KROK 1 — Zarejestruj aplikację w Discord Developer Portal
