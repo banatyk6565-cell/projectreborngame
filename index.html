@@ -426,6 +426,49 @@
             50% { transform: translate3d(155px, -9px, 0) rotate(2deg); opacity: 1; }
             100% { transform: translate3d(390px, 14px, 0) rotate(-2deg); opacity: 0; }
         }
+        .lore-launch-backdrop {
+            background: radial-gradient(circle at center, rgba(127, 29, 29, 0.38), rgba(4, 5, 7, 0.94) 72%);
+            animation: loreLaunchFlash 2.8s ease-out both;
+        }
+        .lore-launch-ring {
+            position: absolute;
+            inset: 0;
+            margin: auto;
+            width: min(88vw, 720px);
+            aspect-ratio: 1;
+            border: 1px solid rgba(248, 113, 113, 0.62);
+            border-radius: 50%;
+            box-shadow: 0 0 45px rgba(220, 38, 38, 0.3), inset 0 0 45px rgba(220, 38, 38, 0.12);
+            animation: loreLaunchRing 2.5s ease-out both;
+        }
+        .lore-launch-card { animation: loreLaunchCard 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+        .lore-launch-scanline {
+            background: repeating-linear-gradient(0deg, transparent 0 6px, rgba(255, 255, 255, 0.055) 7px, transparent 8px);
+            animation: loreLaunchScan 0.8s linear infinite;
+        }
+        .lore-live-clock { text-shadow: 0 0 18px rgba(251, 191, 36, 0.55); }
+        @keyframes loreLaunchFlash {
+            0% { opacity: 0; }
+            9% { opacity: 1; }
+            17% { opacity: 0.22; }
+            25% { opacity: 0.82; }
+            33% { opacity: 0.18; }
+            100% { opacity: 0; }
+        }
+        @keyframes loreLaunchRing {
+            0% { transform: scale(0.42); opacity: 0; }
+            18% { opacity: 0.8; }
+            100% { transform: scale(1.22); opacity: 0; }
+        }
+        @keyframes loreLaunchCard {
+            from { transform: translateY(18px) scale(0.94); opacity: 0; filter: blur(6px); }
+            to { transform: translateY(0) scale(1); opacity: 1; filter: blur(0); }
+        }
+        @keyframes loreLaunchScan { to { transform: translateY(8px); } }
+        @keyframes loreClockTick {
+            from { transform: translateY(-7px); opacity: 0.45; filter: blur(2px); }
+            to { transform: translateY(0); opacity: 1; filter: blur(0); }
+        }
         .chronicle-line {
             position: relative;
             margin-left: 8px;
@@ -708,7 +751,7 @@
             </div>
             <div id="lore-countdown-panel" class="hidden mt-8 border-t border-gray-800 pt-6 text-center">
                 <p id="lore-countdown-label" class="text-sm uppercase tracking-widest text-gray-400">Ujawnienie lore za</p>
-                <p id="lore-countdown" class="mt-3 font-mono text-4xl font-bold tabular-nums text-amber-300 sm:text-5xl" aria-live="off">01:00:00</p>
+                <p id="lore-countdown" class="lore-live-clock mt-3 font-mono text-4xl font-bold tabular-nums text-amber-300 sm:text-5xl" aria-live="off">01:00:00</p>
                 <p id="lore-discord-status" class="hidden mt-4 text-sm" role="status" aria-live="polite"></p>
                 <a href="https://discord.gg/p7d9etbSgY" target="_blank" rel="noopener noreferrer" class="mt-6 inline-flex items-center gap-2 border border-indigo-400/40 px-5 py-3 text-sm font-semibold text-indigo-200 transition hover:bg-indigo-400/10">
                     <i class="fa-brands fa-discord"></i><span>Przejdź na Discorda</span>
@@ -716,9 +759,25 @@
             </div>
         </div>
     </div>
+    <div id="lore-launch-overlay" class="hidden pointer-events-none fixed inset-0 z-[90] items-center justify-center overflow-hidden p-4" aria-hidden="true">
+        <div class="lore-launch-backdrop absolute inset-0"></div>
+        <div class="lore-launch-ring absolute" aria-hidden="true"></div>
+        <div class="lore-launch-card relative w-full max-w-2xl overflow-hidden rounded-lg border border-red-400/70 bg-[#0b0c0e]/95 p-6 text-center shadow-[0_0_70px_rgba(220,38,38,0.42)] sm:p-10">
+            <div class="lore-launch-scanline absolute inset-0 opacity-25"></div>
+            <div class="relative z-10">
+                <p class="mb-4 inline-flex items-center gap-2 border border-red-500/40 bg-red-950/60 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-red-200 sm:text-xs">
+                    <i class="fa-solid fa-tower-broadcast animate-pulse" aria-hidden="true"></i> System alert <span class="text-red-500">//</span> akta dokumentów
+                </p>
+                <h2 class="font-cinzel text-3xl font-black uppercase leading-tight text-white sm:text-5xl">Akta uruchomione</h2>
+                <p class="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-gray-300 sm:text-base">Wykryto poprawne hasło. Rozpoczęto odliczanie do ujawnienia lore Grayfall.</p>
+                <p id="lore-launch-countdown" class="lore-live-clock mt-7 font-mono text-4xl font-black tabular-nums text-amber-300 sm:text-6xl">01:00:00</p>
+                <p class="mt-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-red-400">Transmisja w toku <span class="text-gray-600">/</span> Grayfall</p>
+            </div>
+        </div>
+    </div>
     <div id="lore-home-countdown" class="hidden fixed bottom-[5.5rem] right-5 z-50 min-w-[190px] border border-amber-400/60 bg-[#101214]/95 px-4 py-3 text-right shadow-[0_0_20px_rgba(251,191,36,0.3)] backdrop-blur" role="status" aria-live="off">
         <p id="lore-home-countdown-label" class="text-[10px] font-bold uppercase tracking-widest text-amber-300">Ujawnienie lore za</p>
-        <p id="lore-home-countdown-time" class="mt-1 font-mono text-xl font-bold tabular-nums text-white">01:00:00</p>
+        <p id="lore-home-countdown-time" class="lore-live-clock mt-1 font-mono text-xl font-bold tabular-nums text-white">01:00:00</p>
     </div>
     <button id="lore-open" type="button" class="fixed bottom-5 right-5 z-[60] inline-flex items-center gap-2 rounded-lg border border-red-200 bg-red-600 px-4 py-3 text-[11px] font-black text-white shadow-[0_0_28px_rgba(239,68,68,0.95)] backdrop-blur transition hover:bg-red-500 animate-pulse sm:text-sm" aria-haspopup="dialog" aria-label="Otwórz Tajne Akta Grayfall">
         <i class="fa-solid fa-bell animate-bounce" aria-hidden="true"></i>
@@ -1370,44 +1429,87 @@
         let loreCountdownTimer = null;
         let loreLockTimer = null;
         let loreBlockedUntil = 0;
-        let loreAlertPlayed = false;
+        let loreAlarmPlayed = false;
         let loreAudioContext = null;
+        let loreStateLoaded = false;
+        let loreLaunchEffectShown = false;
+        let loreLaunchDismissTimer = null;
 
-        function playLoreEntryAlert() {
-            if (loreAlertPlayed) return;
+        function prepareLoreAlarmAudio() {
+            if (loreAlarmPlayed) return;
             const AudioContextClass = window.AudioContext || window.webkitAudioContext;
             if (!AudioContextClass) return;
+            if (loreAudioContext?.state === 'closed') loreAudioContext = null;
             if (!loreAudioContext) {
                 try { loreAudioContext = new AudioContextClass(); } catch { return; }
             }
+            if (loreAudioContext.state === 'suspended') loreAudioContext.resume().catch(() => {});
+        }
 
+        function playLoreActivationAlarm() {
+            if (loreAlarmPlayed) return;
+            prepareLoreAlarmAudio();
+            if (!loreAudioContext) return;
             const context = loreAudioContext;
             const play = () => {
-                if (loreAlertPlayed || context.state !== 'running') return;
-                loreAlertPlayed = true;
+                if (loreAlarmPlayed || context.state !== 'running') return;
+                loreAlarmPlayed = true;
 
                 const oscillator = context.createOscillator();
                 const volume = context.createGain();
                 const start = context.currentTime;
-                oscillator.type = 'sine';
-                oscillator.frequency.setValueAtTime(720, start);
-                oscillator.frequency.linearRampToValueAtTime(980, start + 0.12);
-                oscillator.frequency.linearRampToValueAtTime(720, start + 0.24);
-                oscillator.frequency.linearRampToValueAtTime(980, start + 0.36);
+                oscillator.type = 'triangle';
+                [[620, 0], [1080, 0.13], [620, 0.26], [1080, 0.39], [620, 0.52], [1080, 0.65], [620, 0.78]].forEach(([frequency, offset]) => {
+                    oscillator.frequency.setValueAtTime(frequency, start + offset);
+                });
                 volume.gain.setValueAtTime(0.0001, start);
-                volume.gain.exponentialRampToValueAtTime(0.08, start + 0.02);
-                volume.gain.exponentialRampToValueAtTime(0.0001, start + 0.44);
+                for (let pulse = 0; pulse < 4; pulse += 1) {
+                    const pulseStart = start + pulse * 0.22;
+                    volume.gain.setValueAtTime(0.0001, pulseStart);
+                    volume.gain.exponentialRampToValueAtTime(0.18, pulseStart + 0.025);
+                    volume.gain.setValueAtTime(0.18, pulseStart + 0.12);
+                    volume.gain.exponentialRampToValueAtTime(0.0001, pulseStart + 0.2);
+                }
                 oscillator.connect(volume);
                 volume.connect(context.destination);
                 oscillator.start(start);
-                oscillator.stop(start + 0.45);
-                oscillator.onended = () => context.close().catch(() => {});
+                oscillator.stop(start + 0.9);
+                oscillator.onended = () => {
+                    context.close().catch(() => {});
+                    if (loreAudioContext === context) loreAudioContext = null;
+                };
             };
 
             if (context.state === 'running') {
                 play();
             } else {
                 context.resume().then(play).catch(() => {});
+            }
+        }
+
+        function showLoreActivationEffects(playAlarm) {
+            if (!loreLaunchEffectShown) {
+                loreLaunchEffectShown = true;
+                const overlay = document.getElementById('lore-launch-overlay');
+                overlay.classList.remove('hidden');
+                overlay.classList.add('flex');
+                loreLaunchDismissTimer = window.setTimeout(() => {
+                    overlay.classList.add('hidden');
+                    overlay.classList.remove('flex');
+                }, 2800);
+            }
+            if (playAlarm) playLoreActivationAlarm();
+        }
+
+        function updateAnimatedClock(id, value) {
+            const element = document.getElementById(id);
+            if (element.textContent === value) return;
+            element.textContent = value;
+            if (typeof element.animate === 'function' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                element.animate([
+                    { transform: 'translateY(-7px)', opacity: 0.45, filter: 'blur(2px)' },
+                    { transform: 'translateY(0)', opacity: 1, filter: 'blur(0)' },
+                ], { duration: 280, easing: 'ease-out' });
             }
         }
 
@@ -1425,13 +1527,16 @@
             element.className = `mt-3 min-h-5 text-sm ${color}`;
         }
 
-        function renderLoreState(data) {
+        function renderLoreState(data, effects = {}) {
             const passwordPanel = document.getElementById('lore-password-panel');
             const countdownPanel = document.getElementById('lore-countdown-panel');
             const submit = document.getElementById('lore-submit');
             loreBlockedUntil = Number(data.blockedUntil || 0);
             if (data.revealAt) {
+                const newlyObserved = !loreRevealAt;
                 loreRevealAt = data.revealAt;
+                if (newlyObserved && effects.animateActivation) showLoreActivationEffects(false);
+                if (effects.playAlarm) showLoreActivationEffects(true);
                 passwordPanel.classList.add('hidden');
                 countdownPanel.classList.remove('hidden');
                 document.getElementById('lore-home-countdown').classList.remove('hidden');
@@ -1469,11 +1574,13 @@
             if (!loreRevealAt) return;
             const remaining = loreRevealAt - Date.now();
             const expired = remaining <= 0;
-            document.getElementById('lore-countdown').textContent = formatLoreTime(remaining);
+            const formattedTime = formatLoreTime(remaining);
+            updateAnimatedClock('lore-countdown', formattedTime);
             document.getElementById('lore-countdown-label').textContent = expired
                 ? 'Czas minął. Lore pojawi się na Discordzie.'
                 : 'Ujawnienie lore za';
-            document.getElementById('lore-home-countdown-time').textContent = formatLoreTime(remaining);
+            updateAnimatedClock('lore-home-countdown-time', formattedTime);
+            updateAnimatedClock('lore-launch-countdown', formattedTime);
             document.getElementById('lore-home-countdown-label').textContent = expired
                 ? 'Lore dostępne na Discordzie'
                 : 'Ujawnienie lore za';
@@ -1483,7 +1590,6 @@
         }
 
         function openLoreModal() {
-            playLoreEntryAlert();
             document.getElementById('lore-modal').classList.remove('hidden');
             document.getElementById('lore-open').classList.add('hidden');
             if (!loreRevealAt) document.getElementById('lore-password').focus();
@@ -1499,7 +1605,9 @@
                 const response = await fetch('/api/lore');
                 const data = await response.json();
                 if (!response.ok) throw new Error(data.error || 'Nie udało się wczytać licznika.');
-                renderLoreState(data);
+                const animateActivation = loreStateLoaded && !loreRevealAt && !!data.revealAt;
+                loreStateLoaded = true;
+                renderLoreState(data, { animateActivation });
             } catch (error) {
                 setLoreMessage(error.message, 'text-amber-300');
             }
@@ -1507,7 +1615,7 @@
 
         document.getElementById('lore-password-form').addEventListener('submit', async (event) => {
             event.preventDefault();
-            playLoreEntryAlert();
+            prepareLoreAlarmAudio();
             const submit = document.getElementById('lore-submit');
             const password = document.getElementById('lore-password').value;
             submit.disabled = true;
@@ -1526,7 +1634,8 @@
                 } else if (!response.ok) {
                     throw new Error(data.error || 'Nie udało się sprawdzić hasła.');
                 } else {
-                    renderLoreState(data);
+                    const firstActivation = typeof data.notificationSent === 'boolean';
+                    renderLoreState(data, { animateActivation: firstActivation, playAlarm: firstActivation });
                     if (typeof data.notificationSent === 'boolean') {
                         const status = document.getElementById('lore-discord-status');
                         status.textContent = data.notificationSent
@@ -1932,9 +2041,6 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            window.addEventListener('pointerdown', playLoreEntryAlert, { once: true });
-            window.addEventListener('keydown', playLoreEntryAlert, { once: true });
-            playLoreEntryAlert();
             loadLoreState();
             window.setInterval(loadLoreState, 30000);
             checkSession();
