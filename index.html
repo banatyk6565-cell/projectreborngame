@@ -698,7 +698,7 @@
             <p class="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-red-400">Sygnał z archiwum Grayfall</p>
             <h2 id="lore-title" class="font-cinzel pr-8 text-2xl font-black leading-tight text-white sm:text-4xl">Project Codename Grayfall Lore Reveal</h2>
             <div id="lore-password-panel" class="mt-7">
-                <p class="mb-5 text-sm leading-relaxed text-gray-300">Odnajdź hasło ukryte w Kronice projektu, aby uruchomić odliczanie do ujawnienia lore.</p>
+                <p class="mb-5 text-sm leading-relaxed text-gray-300">Odnajdź ukryte hasło do odblokowania tajnych Akt Kryptonimu Grayfall.</p>
                 <form id="lore-password-form" class="flex flex-col gap-3 sm:flex-row">
                     <label class="sr-only" for="lore-password">Hasło</label>
                     <input id="lore-password" name="password" type="password" maxlength="100" autocomplete="off" required placeholder="Wpisz hasło" class="min-w-0 flex-1 border border-gray-700 bg-black/40 px-4 py-3 text-white outline-none transition placeholder:text-gray-600 focus:border-red-500">
@@ -716,8 +716,10 @@
             </div>
         </div>
     </div>
-    <button id="lore-open" type="button" class="hidden fixed bottom-5 right-5 z-40 border border-red-700/50 bg-[#101214]/95 px-4 py-3 text-sm font-semibold text-red-200 shadow-xl backdrop-blur transition hover:bg-red-950" aria-haspopup="dialog">
-        Lore Grayfall
+    <button id="lore-open" type="button" class="hidden fixed bottom-5 right-5 z-[60] inline-flex items-center gap-2 rounded-lg border border-red-200 bg-red-600 px-4 py-3 text-[11px] font-black text-white shadow-[0_0_28px_rgba(239,68,68,0.95)] backdrop-blur transition hover:bg-red-500 animate-pulse sm:text-sm" aria-haspopup="dialog" aria-label="Otwórz Tajne Akta Grayfall">
+        <i class="fa-solid fa-bell animate-bounce" aria-hidden="true"></i>
+        <span class="whitespace-nowrap">Tajne Akta Grayfall</span>
+        <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
     </button>
 
     <!-- Hero Section -->
@@ -1382,14 +1384,12 @@
         function renderLoreState(data) {
             const passwordPanel = document.getElementById('lore-password-panel');
             const countdownPanel = document.getElementById('lore-countdown-panel');
-            const openButton = document.getElementById('lore-open');
             const submit = document.getElementById('lore-submit');
             loreBlockedUntil = Number(data.blockedUntil || 0);
             if (data.revealAt) {
                 loreRevealAt = data.revealAt;
                 passwordPanel.classList.add('hidden');
                 countdownPanel.classList.remove('hidden');
-                openButton.classList.add('hidden');
                 window.clearInterval(loreCountdownTimer);
                 window.clearInterval(loreLockTimer);
                 loreCountdownTimer = window.setInterval(updateLoreCountdown, 1000);
@@ -1430,7 +1430,6 @@
                 : 'Ujawnienie lore za';
             if (expired) {
                 window.clearInterval(loreCountdownTimer);
-                document.getElementById('lore-open').textContent = 'Lore na Discordzie';
             }
         }
 
