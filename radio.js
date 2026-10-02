@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const { requireAdmin } = require('../lib/admin-auth');
-const { addPublicRadioMessage, addRadioMessage, readRadioMessages, readRadioStatus, writeRadioStatus } = require('../lib/radio-store');
+const { addPublicRadioMessage, addRadioMessage, readRadioMessages, readRadioStatus } = require('../lib/radio-store');
 
 const RESERVED_CALLSIGN = 'Komunikat Radiowy 87.4 MHz — Region Zamknięty Grayfall';
 const RADIO_CALLSIGN = RESERVED_CALLSIGN;
@@ -51,17 +51,9 @@ module.exports = async function handler(req, res) {
     }
 
     const body = parseBody(req.body);
-    if (body.action === 'set-status' || body.action === 'broadcast') {
+    if (body.action === 'broadcast') {
       const admin = requireAdmin(req, res, 'canManageTeam');
       if (!admin) return;
-
-      if (body.action === 'set-status') {
-        if (!['live', 'offline'].includes(body.status)) {
-          return res.status(400).json({ error: 'Nieprawidłowy status radia.' });
-        }
-        const status = await writeRadioStatus(body.status);
-        return res.status(200).json({ status });
-      }
 
       const text = clean(body.text, 1000, true);
       if (text.length < 2) return res.status(400).json({ error: 'Komunikat musi mieć co najmniej 2 znaki.' });
@@ -99,9 +91,6 @@ module.exports = async function handler(req, res) {
       createdAt: new Date().toISOString(),
     };
     const result = await addPublicRadioMessage(message, getRateLimitKey(req));
-    if (result.offline) {
-      return res.status(409).json({ error: 'Stacja jest offline. Spróbuj ponownie, gdy wróci na częstotliwość.' });
-    }
     if (!result.accepted) {
       res.setHeader('Retry-After', String(result.retryAfter));
       return res.status(429).json({ error: 'Nadajesz zbyt często. Odczekaj chwilę przed kolejną transmisją.', retryAfter: result.retryAfter });

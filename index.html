@@ -798,10 +798,7 @@
                     <section id="admin-radio-section" class="hidden bg-darkbg/60 border border-amber-500/25 rounded-2xl p-5 mt-6">
                         <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
                             <div><h3 class="font-cinzel text-lg font-bold text-white">Radio Grayfall · 87.4 MHz</h3><p class="text-xs text-gray-500">Publiczne transmisje i odpowiedzi jako Komunikat Radiowy.</p></div>
-                            <div class="inline-flex shrink-0 rounded-lg border border-cardborder bg-black/30 p-1" role="group" aria-label="Status radia Grayfall">
-                                <button id="admin-radio-live" type="button" class="inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-[10px] font-bold text-gray-500 transition hover:text-emerald-200" aria-pressed="false"><span class="h-1.5 w-1.5 rounded-full bg-gray-600"></span>LIVE</button>
-                                <button id="admin-radio-offline" type="button" class="inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-[10px] font-bold text-gray-500 transition hover:text-gray-200" aria-pressed="true"><span class="h-1.5 w-1.5 rounded-full bg-gray-600"></span>OFFLINE</button>
-                            </div>
+                            <span class="inline-flex shrink-0 items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-300"><span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400"></span>LIVE 24/7</span>
                         </div>
                         <div id="admin-radio-reply-context" class="hidden mb-3 flex items-center justify-between gap-3 border-l-2 border-amber-400 bg-amber-950/20 px-3 py-2 text-xs text-amber-100">
                             <span id="admin-radio-reply-label" class="min-w-0 truncate"></span>
@@ -2286,26 +2283,6 @@
             document.getElementById('admin-radio-reply-context').classList.add('hidden');
         }
 
-        async function setAdminRadioStatus(status) {
-            const liveButton = document.getElementById('admin-radio-live');
-            const offlineButton = document.getElementById('admin-radio-offline');
-            const statusLabel = document.getElementById('admin-radio-status');
-            liveButton.disabled = true;
-            offlineButton.disabled = true;
-            statusLabel.textContent = 'Zmiana statusu radia...';
-            try {
-                await adminRadioRequest({ method: 'POST', body: JSON.stringify({ action: 'set-status', status }) });
-                statusLabel.textContent = status === 'live' ? 'Radio nadaje na żywo.' : 'Radio przełączone w tryb offline.';
-                await Promise.all([loadAdminRadio(), loadPublicRadio()]);
-            } catch (error) {
-                statusLabel.textContent = error.message;
-                statusLabel.className = 'mt-2 min-h-4 text-xs text-amber-300';
-            } finally {
-                liveButton.disabled = false;
-                offlineButton.disabled = false;
-            }
-        }
-
         function renderAdminNews(news) {
             const list = document.getElementById('admin-news-list');
             if (!news.length) { list.innerHTML = '<p class="text-xs text-gray-600">Nie ma jeszcze żadnych ogłoszeń.</p>'; return; }
@@ -2356,8 +2333,6 @@
             const button = event.target.closest('[data-radio-reply-id]');
             if (button) setRadioReplyTarget(button.dataset.radioReplyId, button.dataset.radioCallSign);
         });
-        document.getElementById('admin-radio-live').addEventListener('click', () => setAdminRadioStatus('live'));
-        document.getElementById('admin-radio-offline').addEventListener('click', () => setAdminRadioStatus('offline'));
         document.getElementById('admin-radio-reply-cancel').addEventListener('click', clearRadioReplyTarget);
         document.getElementById('admin-radio-form').addEventListener('submit', async (event) => {
             event.preventDefault();
