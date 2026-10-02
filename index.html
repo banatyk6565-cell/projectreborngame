@@ -1911,6 +1911,7 @@
 
             const phrase = 'Ra__ - __es ___N';
             const glyphs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            const blueGlyphs = 'DIOBRIA';
             const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             let width = 0;
             let height = 0;
@@ -1920,6 +1921,8 @@
             let startedAt = performance.now();
             let isVisible = true;
             let previousFrame = 0;
+            let blueDrops = [];
+            let nextBlueDrop = 0;
 
             function resize() {
                 const bounds = hero.getBoundingClientRect();
@@ -1942,12 +1945,16 @@
                         goldTrail: Array.from({ length: trailLength }, () => Math.random() < 0.14),
                     };
                 });
+                blueDrops = [];
+                nextBlueDrop = performance.now() + 1200 + Math.random() * 2200;
                 startedAt = performance.now();
                 if (reduceMotion) draw(startedAt, true);
             }
 
             function draw(timestamp, staticFrame = false) {
                 context.clearRect(0, 0, width, height);
+                const delta = previousFrame ? Math.min(timestamp - previousFrame, 50) : 16;
+                previousFrame = timestamp;
                 const fontSize = width < 640 ? 13 : 16;
                 const cellHeight = fontSize * 1.35;
                 context.font = `${fontSize}px monospace`;
@@ -1966,6 +1973,32 @@
                         }
                     });
                 });
+
+                if (!staticFrame) {
+                    if (timestamp >= nextBlueDrop) {
+                        const trailLength = 3 + Math.floor(Math.random() * 4);
+                        blueDrops.push({
+                            x: Math.random() * width,
+                            y: -fontSize,
+                            speed: 48 + Math.random() * 42,
+                            trail: Array.from({ length: trailLength }, () => blueGlyphs[Math.floor(Math.random() * blueGlyphs.length)]),
+                        });
+                        nextBlueDrop = timestamp + 2400 + Math.random() * 3600;
+                    }
+
+                    blueDrops = blueDrops.filter((drop) => drop.y - drop.trail.length * cellHeight < height);
+                    blueDrops.forEach((drop) => {
+                        drop.y += drop.speed * delta / 1000;
+                        context.fillStyle = '#60a5fa';
+                        context.shadowColor = 'rgba(96, 165, 250, 0.7)';
+                        context.shadowBlur = 7;
+                        drop.trail.forEach((glyph, index) => {
+                            const y = drop.y - index * cellHeight;
+                            if (y > 0 && y < height) context.fillText(glyph, drop.x, y);
+                        });
+                    });
+                    context.shadowBlur = 0;
+                }
 
                 const phraseSize = Math.min(width < 640 ? 15 : 23, Math.max(12, width / (phrase.length * 0.66)));
                 context.font = `700 ${phraseSize}px monospace`;
