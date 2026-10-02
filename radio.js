@@ -4,6 +4,11 @@ const { addPublicRadioMessage, addRadioMessage, readRadioMessages } = require('.
 
 const RESERVED_CALLSIGN = 'Komunikat Nadawczy Redwood Radio Szyfrowane';
 const RADIO_CALLSIGN = RESERVED_CALLSIGN;
+const DEFAULT_RADIO_DISPLAY_SETTINGS = {
+  messageColor: '#f87171',
+  senderTitle: RADIO_CALLSIGN,
+  location: 'Redwood Radio',
+};
 
 function normalizeCallSign(value) {
   return value.toLocaleLowerCase('pl-PL').normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/[^a-z0-9]/g, '');
@@ -54,6 +59,12 @@ module.exports = async function handler(req, res) {
 
       const text = clean(body.text, 1000, true);
       if (text.length < 2) return res.status(400).json({ error: 'Komunikat musi mieć co najmniej 2 znaki.' });
+      const requestedColor = clean(body.messageColor, 7);
+      const messageColor = /^#[0-9a-fA-F]{6}$/.test(requestedColor)
+        ? requestedColor
+        : DEFAULT_RADIO_DISPLAY_SETTINGS.messageColor;
+      const senderTitle = clean(body.senderTitle, 120) || DEFAULT_RADIO_DISPLAY_SETTINGS.senderTitle;
+      const location = clean(body.location, 120) || DEFAULT_RADIO_DISPLAY_SETTINGS.location;
       const messages = await readRadioMessages();
       const replyTo = typeof body.replyTo === 'string' ? body.replyTo : '';
       const target = replyTo ? messages.find((message) => message.id === replyTo && message.type === 'listener') : null;
@@ -64,6 +75,9 @@ module.exports = async function handler(req, res) {
         type: 'operator',
         callSign: RADIO_CALLSIGN,
         text,
+        messageColor,
+        senderTitle,
+        location,
         replyTo: target?.id || null,
         replyToCallSign: target?.callSign || null,
         createdAt: new Date().toISOString(),

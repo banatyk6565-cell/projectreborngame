@@ -2159,14 +2159,17 @@
             const article = document.createElement('article');
             const isOperator = message.type === 'operator';
             const radioSettings = getRadioDisplaySettings();
+            const messageColor = /^#[0-9a-fA-F]{6}$/.test(message.messageColor || '')
+                ? message.messageColor
+                : radioSettings.messageColor || DEFAULT_RADIO_DISPLAY_SETTINGS.messageColor;
             article.className = `rounded-lg border p-3 ${isOperator ? 'border-red-500/35 bg-red-950/15' : 'border-cardborder bg-cardbg/70'}`;
 
             const heading = document.createElement('div');
             heading.className = 'flex flex-wrap items-center justify-between gap-2';
             const sender = document.createElement('strong');
             sender.className = `text-xs ${isOperator ? 'font-semibold' : 'text-sky-300'}`;
-            sender.style.color = isOperator ? (radioSettings.messageColor || DEFAULT_RADIO_DISPLAY_SETTINGS.messageColor) : '';
-            sender.textContent = isOperator ? (radioSettings.senderTitle || DEFAULT_RADIO_DISPLAY_SETTINGS.senderTitle) : `Sygnał · ${message.callSign}`;
+            sender.style.color = isOperator ? messageColor : '';
+            sender.textContent = isOperator ? (message.senderTitle || radioSettings.senderTitle || DEFAULT_RADIO_DISPLAY_SETTINGS.senderTitle) : `Sygnał · ${message.callSign}`;
             const time = document.createElement('time');
             time.className = 'text-[10px] text-gray-600';
             time.dateTime = message.createdAt;
@@ -2177,7 +2180,7 @@
             if (isOperator) {
                 const location = document.createElement('p');
                 location.className = 'mt-2 text-[10px] uppercase tracking-[0.14em] text-gray-400';
-                location.textContent = `Lokalizacja · ${radioSettings.location || DEFAULT_RADIO_DISPLAY_SETTINGS.location}`;
+                location.textContent = `Lokalizacja · ${message.location || radioSettings.location || DEFAULT_RADIO_DISPLAY_SETTINGS.location}`;
                 article.append(location);
             }
 
@@ -2190,7 +2193,7 @@
 
             const text = document.createElement('p');
             text.className = 'mt-2 whitespace-pre-wrap break-words text-sm leading-relaxed text-gray-200';
-            if (isOperator) text.style.color = radioSettings.messageColor || DEFAULT_RADIO_DISPLAY_SETTINGS.messageColor;
+            if (isOperator) text.style.color = messageColor;
             text.textContent = message.text;
             article.append(text);
 
@@ -2361,7 +2364,12 @@
             try {
                 await adminRadioRequest({
                     method: 'POST',
-                    body: JSON.stringify({ action: 'broadcast', text: document.getElementById('admin-radio-input').value, replyTo: radioReplyTarget?.id || '' }),
+                    body: JSON.stringify({
+                        action: 'broadcast',
+                        text: document.getElementById('admin-radio-input').value,
+                        replyTo: radioReplyTarget?.id || '',
+                        ...getRadioDisplaySettings(),
+                    }),
                 });
                 document.getElementById('admin-radio-input').value = '';
                 clearRadioReplyTarget();
