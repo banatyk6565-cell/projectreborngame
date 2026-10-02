@@ -2059,9 +2059,9 @@
         }
 
         async function adminRadioRequest(options = {}) {
-            const response = await fetch('/api/admin/radio', { headers: { 'Content-Type': 'application/json' }, ...options });
+            const response = await fetch('/api/radio', { headers: { 'Content-Type': 'application/json' }, ...options });
             const data = await response.json().catch(() => ({}));
-            if (!response.ok) throw new Error(data.error || `Radio API zwróciło HTTP ${response.status}. Sprawdź wdrożenie endpointu /api/admin/radio.`);
+            if (!response.ok) throw new Error(data.error || `Radio API zwróciło HTTP ${response.status}.`);
             return data;
         }
 
@@ -2366,7 +2366,7 @@
             try {
                 await adminRadioRequest({
                     method: 'POST',
-                    body: JSON.stringify({ text: document.getElementById('admin-radio-input').value, replyTo: radioReplyTarget?.id || '' }),
+                    body: JSON.stringify({ action: 'broadcast', text: document.getElementById('admin-radio-input').value, replyTo: radioReplyTarget?.id || '' }),
                 });
                 document.getElementById('admin-radio-input').value = '';
                 clearRadioReplyTarget();
