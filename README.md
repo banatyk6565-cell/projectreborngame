@@ -41,7 +41,7 @@ Przy pierwszym poprawnym haśle endpoint wysyła na Discorda jedną wiadomość 
 
 ## Radio Grayfall 87.4 MHz
 
-Publiczny kanał radia pozwala gościom nadawać pod znakiem wywoławczym zapamiętanym w ich przeglądarce, gdy stacja jest w trybie LIVE. Domyślnie radio jest OFFLINE; Owner przełącza status przyciskami w panelu radiowym. W trybie OFFLINE formularz nadawania jest zablokowany, a API odrzuca transmisje. Widocznych jest 100 ostatnich transmisji, a limit nadawania wynosi 3 wiadomości na 5 minut z jednego adresu IP. Owner może odpowiadać w panelu administracyjnym; jego prawdziwe konto ani nick nie są zapisywane przy publicznej transmisji — wszystkie odpowiedzi mają nadawcę `Komunikat Radiowy 87.4 MHz — Region Zamknięty Grayfall`. Odpowiedzi są publiczne i mogą wskazywać transmisję, której dotyczą.
+Publiczny czat radiowy pozwala gościom nadawać pod znakiem wywoławczym zapamiętanym w ich przeglądarce. Widocznych jest 100 ostatnich wiadomości, a limit nadawania wynosi 3 wiadomości na 5 minut z jednego adresu IP. Owner może odpowiadać w panelu administracyjnym; jego prawdziwe konto ani nick nie są zapisywane przy publicznej wiadomości — wszystkie odpowiedzi mają nadawcę `Komunikat Radiowy 87.4 MHz — Region Zamknięty Grayfall`. Odpowiedzi są publiczne i mogą wskazywać wiadomość, której dotyczą.
 
 Radio korzysta z istniejącego Upstash Redis. Publiczny endpoint obsługuje odczyt i nadawanie, natomiast odpisywanie jest chronione istniejącą sesją Discord Ownera.
 

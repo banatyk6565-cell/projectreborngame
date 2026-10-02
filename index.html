@@ -526,8 +526,6 @@
             gap: 8px;
         }
         .radio-console-topline { font-size: 9px; font-weight: 700; letter-spacing: 0.12em; }
-        .radio-console-state { color: #84918b; font-size: 8px; }
-        .radio-console.is-live .radio-console-state { color: #6ee7b7; }
         .radio-console-frequency { margin-top: 3px; color: #d1fae5; font-size: 18px; font-weight: 700; line-height: 1; text-shadow: 0 0 12px rgba(52, 211, 153, 0.38); }
         .radio-console-frequency small { margin-left: 3px; color: #6b8b7c; font-size: 8px; font-weight: 400; }
         .radio-wave-display {
@@ -549,22 +547,17 @@
             height: var(--wave-height, 24%);
             flex: 1 1 3px;
             border-radius: 2px;
-            background: #315c4a;
-            opacity: 0.45;
-            transform: scaleY(0.2);
+            background: #6ee7b7;
+            opacity: 0.9;
+            animation: radioWaveform 0.72s ease-in-out infinite alternate;
             transform-origin: center;
         }
         .radio-wave-bar:nth-child(3n) { --wave-height: 72%; }
         .radio-wave-bar:nth-child(4n) { --wave-height: 48%; }
         .radio-wave-bar:nth-child(5n) { --wave-height: 92%; }
-        .radio-console.is-live .radio-wave-bar {
-            background: #6ee7b7;
-            opacity: 0.9;
-            animation: radioWaveform 0.72s ease-in-out infinite alternate;
-        }
-        .radio-console.is-live .radio-wave-bar:nth-child(3n) { animation-delay: -0.34s; }
-        .radio-console.is-live .radio-wave-bar:nth-child(4n) { animation-delay: -0.53s; }
-        .radio-console.is-live .radio-wave-bar:nth-child(5n) { animation-delay: -0.17s; }
+        .radio-wave-bar:nth-child(3n) { animation-delay: -0.34s; }
+        .radio-wave-bar:nth-child(4n) { animation-delay: -0.53s; }
+        .radio-wave-bar:nth-child(5n) { animation-delay: -0.17s; }
         .radio-wave-sweep {
             position: absolute;
             z-index: 2;
@@ -573,13 +566,12 @@
             left: -12%;
             width: 12%;
             background: linear-gradient(90deg, transparent, rgba(167, 243, 208, 0.42), transparent);
-            opacity: 0;
+            opacity: 1;
         }
-        .radio-console.is-live .radio-wave-sweep { opacity: 1; animation: radioSweep 2.4s linear infinite; }
+        .radio-wave-sweep { animation: radioSweep 2.4s linear infinite; }
         .radio-console-readout { margin-top: 7px; color: #6b8b7c; font-size: 8px; }
         .radio-level-track { height: 4px; flex: 1; overflow: hidden; border-radius: 4px; background: #1b2923; }
-        .radio-level-fill { display: block; width: 5%; height: 100%; border-radius: inherit; background: #6ee7b7; transition: width 0.5s ease; }
-        .radio-console.is-live .radio-level-fill { width: 82%; box-shadow: 0 0 8px rgba(110, 231, 183, 0.65); }
+        .radio-level-fill { display: block; width: 82%; height: 100%; border-radius: inherit; background: #6ee7b7; box-shadow: 0 0 8px rgba(110, 231, 183, 0.65); }
         .radio-console-bottomline { margin-top: 5px; color: #557164; font-size: 7px; letter-spacing: 0.1em; }
         .radio-console-dials { display: flex; align-items: center; justify-content: space-around; gap: 4px; }
         .radio-dial-unit { display: flex; min-width: 0; flex-direction: column; align-items: center; gap: 4px; color: #8d9692; font-family: monospace; font-size: 7px; letter-spacing: 0.08em; }
@@ -594,8 +586,8 @@
         }
         .radio-dial::before { position: absolute; inset: 5px; border: 1px solid rgba(210, 218, 214, 0.2); border-radius: 50%; content: ''; }
         .radio-dial::after { position: absolute; top: 5px; left: calc(50% - 1px); width: 2px; height: 9px; border-radius: 2px; background: #fbbf24; box-shadow: 0 0 5px rgba(251, 191, 36, 0.55); content: ''; transform: rotate(-22deg); transform-origin: 1px 14px; }
-        .radio-console.is-live .radio-dial-tuner::after { transform: rotate(28deg); }
-        .radio-console.is-live .radio-dial-squelch::after { transform: rotate(46deg); }
+        .radio-dial-tuner::after { transform: rotate(28deg); }
+        .radio-dial-squelch::after { transform: rotate(46deg); }
         @keyframes radioWaveform {
             from { transform: scaleY(0.2); }
             to { transform: scaleY(1); }
@@ -798,7 +790,7 @@
                     <section id="admin-radio-section" class="hidden bg-darkbg/60 border border-amber-500/25 rounded-2xl p-5 mt-6">
                         <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
                             <div><h3 class="font-cinzel text-lg font-bold text-white">Radio Grayfall · 87.4 MHz</h3><p class="text-xs text-gray-500">Publiczne transmisje i odpowiedzi jako Komunikat Radiowy.</p></div>
-                            <span class="inline-flex shrink-0 items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-emerald-300"><span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400"></span>LIVE 24/7</span>
+                            <span class="inline-flex shrink-0 items-center gap-2 rounded-full border border-amber-500/25 bg-amber-500/5 px-3 py-1.5 text-[10px] font-bold uppercase tracking-wider text-amber-200">Kanał publiczny</span>
                         </div>
                         <div id="admin-radio-reply-context" class="hidden mb-3 flex items-center justify-between gap-3 border-l-2 border-amber-400 bg-amber-950/20 px-3 py-2 text-xs text-amber-100">
                             <span id="admin-radio-reply-label" class="min-w-0 truncate"></span>
@@ -862,15 +854,15 @@
         <section class="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-lg border border-amber-500/35 bg-[#101214] shadow-2xl shadow-black/70">
             <header class="flex items-start justify-between gap-4 border-b border-cardborder bg-black/25 p-5 sm:p-6">
                 <div>
-                    <p class="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em]"><span id="radio-mode-dot" class="h-2 w-2 animate-pulse rounded-full bg-emerald-400"></span><span id="radio-mode-label" class="text-emerald-300">LIVE 24/7 · kanał otwarty</span></p>
+                    <p class="mb-2 text-[10px] font-bold uppercase tracking-[0.2em] text-amber-300">Publiczna częstotliwość · nasłuch</p>
                     <h2 id="radio-title" class="font-cinzel text-2xl font-black text-white sm:text-3xl">Radio Grayfall <span class="text-amber-300">87.4 MHz</span></h2>
                     <p class="mt-1 text-xs text-gray-500">Region Zamknięty Grayfall</p>
                 </div>
                 <button id="radio-close" type="button" class="flex h-9 w-9 shrink-0 items-center justify-center text-gray-400 transition hover:text-white" aria-label="Zamknij radio"><i class="fa-solid fa-xmark"></i></button>
             </header>
-            <div id="radio-console" class="radio-console is-live" role="img" aria-label="Monitor odbiornika radiowego 87.4 MHz">
+            <div id="radio-console" class="radio-console" role="img" aria-label="Monitor odbiornika radiowego 87.4 MHz">
                 <div class="radio-console-screen">
-                    <div class="radio-console-topline"><span>GRAYFALL / RX-04</span><span id="radio-console-state" class="radio-console-state">RECEIVING</span></div>
+                    <div class="radio-console-topline"><span>GRAYFALL / RX-04</span><span>FM · 87.4</span></div>
                     <div class="radio-console-frequency">87.4<small>MHz · FM</small></div>
                     <div class="radio-wave-display" aria-hidden="true">
                         <i class="radio-wave-bar"></i><i class="radio-wave-bar"></i><i class="radio-wave-bar"></i><i class="radio-wave-bar"></i><i class="radio-wave-bar"></i><i class="radio-wave-bar"></i>
@@ -879,7 +871,7 @@
                         <i class="radio-wave-bar"></i><i class="radio-wave-bar"></i><i class="radio-wave-bar"></i><i class="radio-wave-bar"></i><i class="radio-wave-bar"></i><i class="radio-wave-bar"></i>
                         <i class="radio-wave-sweep"></i>
                     </div>
-                    <div class="radio-console-readout"><span>RF</span><span class="radio-level-track"><span id="radio-signal-fill" class="radio-level-fill"></span></span><span id="radio-signal-label">SIGNAL 82%</span></div>
+                    <div class="radio-console-readout"><span>RF</span><span class="radio-level-track"><span class="radio-level-fill"></span></span><span>SIGNAL 82%</span></div>
                     <div class="radio-console-bottomline"><span>REGION ZAMKNIĘTY</span><span>CH 87.4</span></div>
                 </div>
                 <div class="radio-console-dials" aria-hidden="true">
@@ -902,13 +894,13 @@
                         <textarea id="radio-message" maxlength="500" rows="2" required placeholder="Nadaj wiadomość na otwartym kanale..." class="min-w-0 flex-1 resize-y rounded-lg border border-cardborder bg-cardbg px-3 py-2.5 text-sm text-white outline-none placeholder:text-gray-600 focus:border-amber-400/60"></textarea>
                         <button id="radio-send" type="submit" class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-amber-500 text-black transition hover:bg-amber-400" aria-label="Nadaj wiadomość"><i class="fa-solid fa-tower-broadcast"></i></button>
                     </div>
-                    <p id="radio-submit-help" class="text-[10px] text-gray-500">Kanał LIVE 24/7. Wiadomości publiczne, maksymalnie 3 transmisje na 5 minut.</p>
+                    <p id="radio-submit-help" class="text-[10px] text-gray-500">Wiadomości są publiczne. Maksymalnie 3 transmisje na 5 minut.</p>
                 </form>
             </footer>
         </section>
     </div>
     <button id="radio-open" type="button" class="fixed bottom-5 left-3 z-[60] inline-flex items-center gap-2 rounded-lg border border-amber-300/50 bg-[#101214]/95 px-3 py-3 text-xs font-bold text-amber-100 shadow-lg shadow-amber-950/20 backdrop-blur transition hover:border-amber-300 hover:bg-amber-950/50 sm:bottom-5 sm:left-5 sm:px-4 sm:text-sm" aria-haspopup="dialog" aria-label="Otwórz publiczne Radio Grayfall 87.4 MHz">
-        <i class="fa-solid fa-tower-broadcast text-amber-300" aria-hidden="true"></i><span class="hidden sm:inline">Radio Grayfall</span><span class="sm:hidden">Radio</span><span class="hidden border-l border-amber-300/30 pl-2 font-mono text-[10px] text-amber-300 sm:inline">87.4 MHz</span><span id="radio-button-status" class="border-l border-emerald-400/40 pl-2 font-mono text-[9px] font-black tracking-wider text-emerald-300">LIVE 24/7</span>
+        <i class="fa-solid fa-tower-broadcast text-amber-300" aria-hidden="true"></i><span class="hidden sm:inline">Radio Grayfall</span><span class="sm:hidden">Radio</span><span class="border-l border-amber-300/30 pl-2 font-mono text-[10px] text-amber-300">87.4 MHz</span>
     </button>
 
     <div id="lore-modal" class="hidden fixed inset-0 z-[70] flex items-center justify-center overflow-y-auto bg-black/85 p-4 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="lore-title">
@@ -2054,7 +2046,7 @@
         }
 
         async function adminRadioRequest(options = {}) {
-            const response = await fetch('/api/radio', { headers: { 'Content-Type': 'application/json' }, ...options });
+            const response = await fetch('/api/radio-chat', { headers: { 'Content-Type': 'application/json' }, ...options });
             const data = await response.json().catch(() => ({}));
             if (!response.ok) throw new Error(data.error || `Radio API zwróciło HTTP ${response.status}.`);
             return data;
@@ -2198,7 +2190,7 @@
         async function loadPublicRadio() {
             const status = document.getElementById('radio-status');
             try {
-                const response = await fetch('/api/radio');
+                const response = await fetch('/api/radio-chat');
                 const data = await response.json();
                 if (!response.ok) throw new Error(data.error || 'Brak połączenia z częstotliwością.');
                 renderPublicRadio(data.messages || []);
@@ -2262,7 +2254,7 @@
             status.textContent = 'Nadawanie transmisji...';
             status.className = 'mb-3 min-h-4 text-xs text-gray-400';
             try {
-                const response = await fetch('/api/radio', {
+                const response = await fetch('/api/radio-chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ callSign: document.getElementById('radio-callsign').value, text }),
