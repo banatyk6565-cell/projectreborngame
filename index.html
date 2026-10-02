@@ -2046,7 +2046,7 @@
         }
 
         async function adminRadioRequest(options = {}) {
-            const response = await fetch('/api/radio-chat', { headers: { 'Content-Type': 'application/json' }, ...options });
+            const response = await fetch('/api/radio', { headers: { 'Content-Type': 'application/json' }, ...options });
             const data = await response.json().catch(() => ({}));
             if (!response.ok) throw new Error(data.error || `Radio API zwróciło HTTP ${response.status}.`);
             return data;
@@ -2190,7 +2190,7 @@
         async function loadPublicRadio() {
             const status = document.getElementById('radio-status');
             try {
-                const response = await fetch('/api/radio-chat');
+                const response = await fetch('/api/radio');
                 const data = await response.json();
                 if (!response.ok) throw new Error(data.error || 'Brak połączenia z częstotliwością.');
                 renderPublicRadio(data.messages || []);
@@ -2254,7 +2254,7 @@
             status.textContent = 'Nadawanie transmisji...';
             status.className = 'mb-3 min-h-4 text-xs text-gray-400';
             try {
-                const response = await fetch('/api/radio-chat', {
+                const response = await fetch('/api/radio', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ callSign: document.getElementById('radio-callsign').value, text }),

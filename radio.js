@@ -44,8 +44,7 @@ module.exports = async function handler(req, res) {
 
   try {
     if (req.method === 'GET') {
-      const messages = await readRadioMessages();
-      return res.status(200).json({ messages });
+      return res.status(200).json({ messages: await readRadioMessages() });
     }
 
     const body = parseBody(req.body);
@@ -96,11 +95,11 @@ module.exports = async function handler(req, res) {
 
     return res.status(201).json({ message });
   } catch (error) {
-    console.error('Błąd publicznego radia:', error);
+    console.error('Błąd czatu radiowego:', error);
     return res.status(error.code === 'STORE_NOT_CONFIGURED' ? 503 : 500).json({
       error: error.code === 'STORE_NOT_CONFIGURED'
-        ? 'Radio wymaga skonfigurowanego Upstash Redis.'
-        : 'Nie udało się połączyć z radiem Grayfall.',
+        ? 'Czat radiowy wymaga skonfigurowanego Upstash Redis.'
+        : 'Nie udało się wysłać wiadomości na radio.',
     });
   }
 };
