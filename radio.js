@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const { requireAdmin } = require('../lib/admin-auth');
 const { addPublicRadioMessage, addRadioMessage, readRadioMessages } = require('../lib/radio-store');
 
-const RESERVED_CALLSIGN = 'Komunikat Radiowy 87.4 MHz — Region Zamknięty Grayfall';
+const RESERVED_CALLSIGN = 'Komunikat Nadawczy Redwood Radio Szyfrowane';
 const RADIO_CALLSIGN = RESERVED_CALLSIGN;
 
 function normalizeCallSign(value) {

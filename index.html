@@ -2105,13 +2105,13 @@
         function makeRadioMessageElement(message, ownerInbox = false) {
             const article = document.createElement('article');
             const isOperator = message.type === 'operator';
-            article.className = `rounded-lg border p-3 ${isOperator ? 'border-amber-500/25 bg-amber-950/10' : 'border-cardborder bg-cardbg/70'}`;
+            article.className = `rounded-lg border p-3 ${isOperator ? 'border-red-500/35 bg-red-950/15' : 'border-cardborder bg-cardbg/70'}`;
 
             const heading = document.createElement('div');
             heading.className = 'flex flex-wrap items-center justify-between gap-2';
             const sender = document.createElement('strong');
-            sender.className = `text-xs ${isOperator ? 'text-amber-300' : 'text-sky-300'}`;
-            sender.textContent = isOperator ? message.callSign : `Sygnał · ${message.callSign}`;
+            sender.className = `text-xs ${isOperator ? 'text-red-300' : 'text-sky-300'}`;
+            sender.textContent = isOperator ? 'Komunikat Nadawczy Redwood Radio Szyfrowane' : `Sygnał · ${message.callSign}`;
             const time = document.createElement('time');
             time.className = 'text-[10px] text-gray-600';
             time.dateTime = message.createdAt;
