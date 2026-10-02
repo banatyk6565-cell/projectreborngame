@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 const { requireAdmin } = require('../lib/admin-auth');
-const { addPublicRadioMessage, addRadioMessage, readRadioMessages, readRadioStatus } = require('../lib/radio-store');
+const { addPublicRadioMessage, addRadioMessage, readRadioMessages } = require('../lib/radio-store');
 
 const RESERVED_CALLSIGN = 'Komunikat Radiowy 87.4 MHz — Region Zamknięty Grayfall';
 const RADIO_CALLSIGN = RESERVED_CALLSIGN;
@@ -44,10 +44,8 @@ module.exports = async function handler(req, res) {
 
   try {
     if (req.method === 'GET') {
-      const status = await readRadioStatus();
-      if (req.query?.statusOnly === '1') return res.status(200).json({ status });
       const messages = await readRadioMessages();
-      return res.status(200).json({ messages, status });
+      return res.status(200).json({ messages });
     }
 
     const body = parseBody(req.body);

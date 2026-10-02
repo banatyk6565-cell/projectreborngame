@@ -21,10 +21,6 @@ async function readRadioMessages() {
   return Array.isArray(entries) ? entries.map((entry) => JSON.parse(entry)) : [];
 }
 
-async function readRadioStatus() {
-  return 'live';
-}
-
 async function addPublicRadioMessage(message, rateLimitKey) {
   const result = await redis([
     'EVAL', APPEND_PUBLIC_SCRIPT, '2', RADIO_KEY, rateLimitKey,
@@ -41,4 +37,4 @@ async function addRadioMessage(message) {
   await redis(['LTRIM', RADIO_KEY, -100, -1]);
 }
 
-module.exports = { addPublicRadioMessage, addRadioMessage, readRadioMessages, readRadioStatus };
+module.exports = { addPublicRadioMessage, addRadioMessage, readRadioMessages };
