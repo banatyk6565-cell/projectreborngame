@@ -2,10 +2,27 @@ const crypto = require('crypto');
 const { redis } = require('../lib/admin-store');
 
 const REVEAL_KEY = 'grayfall:lore:reveal-at';
+const REVEAL_VERSION_KEY = 'grayfall:lore:duration-version';
 const REVEAL_PASSWORD = 'NEW_ERA';
-const TIMER_DURATION_MS = 4 * 60 * 60 * 1000;
+const TIMER_DURATION_MS = 20 * 60 * 1000;
+const TIMER_VERSION = '20261001-20m-v1';
 const LOCK_DURATION_MS = 30 * 60 * 1000;
 const MAX_ATTEMPTS = 10;
+
+const MIGRATE_TIMER_SCRIPT = `
+local revealAt = redis.call('GET', KEYS[1])
+if not revealAt then return '' end
+
+local version = redis.call('GET', KEYS[2])
+if version == ARGV[3] then return revealAt end
+
+if tonumber(revealAt) > tonumber(ARGV[1]) then
+  revealAt = tostring(tonumber(ARGV[1]) + tonumber(ARGV[2]))
+  redis.call('SET', KEYS[1], revealAt)
+end
+redis.call('SET', KEYS[2], ARGV[3])
+return revealAt
+`;
 
 const SUBMIT_SCRIPT = `
 local now = tonumber(ARGV[1])
@@ -19,6 +36,7 @@ if ARGV[2] == ARGV[3] then
   if not revealAt then
     revealAt = tostring(now + tonumber(ARGV[4]))
     redis.call('SET', KEYS[3], revealAt)
+    redis.call('SET', KEYS[4], ARGV[7])
     redis.call('DEL', KEYS[2])
     return {'started', revealAt}
   end
@@ -96,6 +114,11 @@ module.exports = async function handler(req, res) {
   const attemptsKey = `grayfall:lore:attempts:${clientKey}`;
 
   try {
+    await redis([
+      'EVAL', MIGRATE_TIMER_SCRIPT, '2', REVEAL_KEY, REVEAL_VERSION_KEY,
+      String(Date.now()), String(TIMER_DURATION_MS), TIMER_VERSION,
+    ]);
+
     if (req.method === 'GET') {
       const [revealAt, blockedUntil] = await redis(['MGET', REVEAL_KEY, blockedKey]);
       return res.status(200).json({
@@ -111,9 +134,9 @@ module.exports = async function handler(req, res) {
 
     const now = Date.now();
     const result = await redis([
-      'EVAL', SUBMIT_SCRIPT, '3', blockedKey, attemptsKey, REVEAL_KEY,
+      'EVAL', SUBMIT_SCRIPT, '4', blockedKey, attemptsKey, REVEAL_KEY, REVEAL_VERSION_KEY,
       String(now), password, REVEAL_PASSWORD, String(TIMER_DURATION_MS),
-      String(MAX_ATTEMPTS), String(LOCK_DURATION_MS),
+      String(MAX_ATTEMPTS), String(LOCK_DURATION_MS), TIMER_VERSION,
     ]);
     const [status, value] = result;
 
