@@ -98,15 +98,6 @@
             transition: transform 1.4s cubic-bezier(0.2, 0.7, 0, 1);
         }
 
-        .hero-matrix-canvas {
-            position: absolute;
-            inset: 0;
-            z-index: 3;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
         @keyframes pulseGlow {
             0%, 100% { opacity: 0.15; transform: scale(1); }
             50% { opacity: 0.35; transform: scale(1.08); }
@@ -988,9 +979,6 @@
         <div id="hero-bg" class="hero-bg hero-bg-image absolute inset-0 -z-20" style="background-image: url('ee819ac9-e800-40e3-b6bb-5bfcba65233d.png');"></div>
         <!-- Warstwa przyciemnienia dla czytelności tekstu -->
         <div class="absolute inset-0 -z-10" style="background: linear-gradient(to bottom, rgba(8,9,10,0.25), rgba(8,9,10,0.55) 55%, rgba(8,9,10,0.95) 85%, #08090a);"></div>
-        <canvas id="hero-matrix" class="hero-matrix-canvas" aria-hidden="true"></canvas>
-        <span class="sr-only">Ra__ - __es ___N</span>
-
         <div class="hero-depth-layer ambient-glow-1"></div>
         <div class="hero-depth-layer ambient-glow-2"></div>
 
@@ -1903,155 +1891,6 @@
             });
         }
 
-        function setupHeroMatrix() {
-            const canvas = document.getElementById('hero-matrix');
-            const hero = canvas?.closest('header');
-            const context = canvas?.getContext('2d');
-            if (!canvas || !hero || !context) return;
-
-            const phrase = 'Ra__ - __es ___N';
-            const glyphs = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            const blueGlyphs = 'DIOBRIA';
-            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            let width = 0;
-            let height = 0;
-            let pixelRatio = 1;
-            let columns = [];
-            let frame = 0;
-            let startedAt = performance.now();
-            let isVisible = true;
-            let previousFrame = 0;
-            let blueDrops = [];
-            let nextBlueDrop = 0;
-
-            function resize() {
-                const bounds = hero.getBoundingClientRect();
-                width = bounds.width;
-                height = bounds.height;
-                pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
-                canvas.width = Math.round(width * pixelRatio);
-                canvas.height = Math.round(height * pixelRatio);
-                context.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-
-                const spacing = width < 640 ? 30 : 38;
-                columns = Array.from({ length: Math.ceil(width / spacing) }, (_, index) => {
-                    const trailLength = 4 + Math.floor(Math.random() * 5);
-                    return {
-                        x: index * spacing + Math.random() * 10,
-                        y: Math.random() * height,
-                        speed: 14 + Math.random() * 30,
-                        trailLength,
-                        trail: Array.from({ length: trailLength }, () => glyphs[Math.floor(Math.random() * glyphs.length)]),
-                        goldTrail: Array.from({ length: trailLength }, () => Math.random() < 0.14),
-                    };
-                });
-                blueDrops = [];
-                nextBlueDrop = performance.now() + 1200 + Math.random() * 2200;
-                startedAt = performance.now();
-                if (reduceMotion) draw(startedAt, true);
-            }
-
-            function draw(timestamp, staticFrame = false) {
-                context.clearRect(0, 0, width, height);
-                const delta = previousFrame ? Math.min(timestamp - previousFrame, 50) : 16;
-                previousFrame = timestamp;
-                const fontSize = width < 640 ? 13 : 16;
-                const cellHeight = fontSize * 1.35;
-                context.font = `${fontSize}px monospace`;
-                context.textAlign = 'center';
-                context.textBaseline = 'middle';
-                columns.forEach((column) => {
-                    if (!staticFrame) column.y = (column.y + column.speed * 0.033) % (height + column.trailLength * cellHeight);
-                    column.trail.forEach((glyph, index) => {
-                        const y = column.y - index * cellHeight;
-                        if (y > 0 && y < height) {
-                            const isGold = column.goldTrail[index];
-                            context.fillStyle = isGold ? '#f4c45e' : 'rgba(0, 0, 0, 0.78)';
-                            context.shadowColor = isGold ? 'rgba(244, 196, 94, 0.6)' : 'transparent';
-                            context.shadowBlur = isGold ? 5 : 0;
-                            context.fillText(glyph, column.x, y);
-                        }
-                    });
-                });
-
-                if (!staticFrame) {
-                    if (timestamp >= nextBlueDrop) {
-                        const trailLength = 3 + Math.floor(Math.random() * 4);
-                        blueDrops.push({
-                            x: Math.random() * width,
-                            y: -fontSize,
-                            speed: 48 + Math.random() * 42,
-                            trail: Array.from({ length: trailLength }, () => blueGlyphs[Math.floor(Math.random() * blueGlyphs.length)]),
-                        });
-                        nextBlueDrop = timestamp + 2400 + Math.random() * 3600;
-                    }
-
-                    blueDrops = blueDrops.filter((drop) => drop.y - drop.trail.length * cellHeight < height);
-                    blueDrops.forEach((drop) => {
-                        drop.y += drop.speed * delta / 1000;
-                        context.fillStyle = '#60a5fa';
-                        context.shadowColor = 'rgba(96, 165, 250, 0.7)';
-                        context.shadowBlur = 7;
-                        drop.trail.forEach((glyph, index) => {
-                            const y = drop.y - index * cellHeight;
-                            if (y > 0 && y < height) context.fillText(glyph, drop.x, y);
-                        });
-                    });
-                    context.shadowBlur = 0;
-                }
-
-                const phraseSize = Math.min(width < 640 ? 15 : 23, Math.max(12, width / (phrase.length * 0.66)));
-                context.font = `700 ${phraseSize}px monospace`;
-                const phraseWidth = context.measureText(phrase).width;
-                const phraseX = (width - phraseWidth) / 2;
-                const phraseY = Math.max(112, height * 0.22);
-                const progress = reduceMotion ? 1 : Math.min(1, (timestamp - startedAt) / 1900);
-                context.fillStyle = '#f4c45e';
-                context.shadowColor = 'rgba(244, 196, 94, 0.75)';
-                context.shadowBlur = 10;
-                for (let index = 0; index < phrase.length; index += 1) {
-                    const letterProgress = Math.max(0, Math.min(1, (progress - index * 0.012) / 0.72));
-                    if (!letterProgress) continue;
-                    const targetX = phraseX + context.measureText(phrase.slice(0, index)).width + context.measureText(phrase[index]).width / 2;
-                    const startX = targetX + Math.sin(index * 4.7) * Math.min(70, width * 0.12);
-                    const startY = phraseY + 48 + (index % 3) * 18;
-                    const x = startX + (targetX - startX) * letterProgress;
-                    const y = startY + (phraseY - startY) * letterProgress;
-                    context.globalAlpha = letterProgress;
-                    context.fillText(phrase[index], x, y);
-                }
-                context.globalAlpha = 1;
-                context.shadowBlur = 0;
-
-                if (!staticFrame && isVisible && !reduceMotion) {
-                    frame = window.requestAnimationFrame(draw);
-                }
-            }
-
-            function start() {
-                if (frame || reduceMotion) return;
-                isVisible = true;
-                startedAt = performance.now();
-                frame = window.requestAnimationFrame(draw);
-            }
-
-            function stop() {
-                isVisible = false;
-                window.cancelAnimationFrame(frame);
-                frame = 0;
-            }
-
-            resize();
-            if (!reduceMotion) {
-                start();
-                if ('IntersectionObserver' in window) {
-                    const observer = new IntersectionObserver(([entry]) => entry.isIntersecting ? start() : stop());
-                    observer.observe(hero);
-                }
-            }
-            window.addEventListener('resize', resize, { passive: true });
-        }
-
         // Jeśli okno zostanie poszerzone do widoku desktopowego, zamknij menu mobilne
         window.addEventListener('resize', () => {
             if (window.innerWidth >= 768) closeMobileMenu();
@@ -2677,7 +2516,6 @@
             loadDiscordWidget();
             setupScrollReveal();
             setupHeroDepth();
-            setupHeroMatrix();
         });
 
         // ================== LIVE WIDGET DISCORDA ==================
