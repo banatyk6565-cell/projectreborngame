@@ -802,6 +802,24 @@
                             <textarea id="admin-radio-input" maxlength="1000" required rows="2" placeholder="Nadaj komunikat jako stacja..." class="min-w-0 flex-1 resize-y rounded-xl bg-cardbg border border-cardborder px-3 py-2.5 text-xs text-white placeholder-gray-600 outline-none focus:border-amber-400/60"></textarea>
                             <button id="admin-radio-submit" type="submit" class="h-10 w-10 shrink-0 rounded-xl bg-amber-500 text-black transition hover:bg-amber-400 disabled:cursor-wait disabled:opacity-50" aria-label="Nadaj komunikat radiowy"><i class="fa-solid fa-tower-broadcast"></i></button>
                         </form>
+                        <form id="admin-radio-settings-form" class="mt-5 grid grid-cols-1 gap-3 border-t border-cardborder pt-4 md:grid-cols-[160px_minmax(0,1fr)_minmax(0,1fr)]">
+                            <label class="flex flex-col gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-400">
+                                Kolor treści
+                                <input id="admin-radio-color" type="color" value="#f87171" class="h-11 w-full cursor-pointer rounded-lg border border-cardborder bg-cardbg p-1">
+                            </label>
+                            <label class="flex flex-col gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-400">
+                                Tytuł nadawcy
+                                <input id="admin-radio-sender" maxlength="120" placeholder="Komunikat Nadawczy Redwood Radio Szyfrowane" class="rounded-xl border border-cardborder bg-cardbg px-3 py-2.5 text-xs text-white placeholder-gray-600 outline-none focus:border-amber-400/60">
+                            </label>
+                            <label class="flex flex-col gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-400">
+                                Lokalizacja
+                                <input id="admin-radio-location" maxlength="120" placeholder="Redwood Radio" class="rounded-xl border border-cardborder bg-cardbg px-3 py-2.5 text-xs text-white placeholder-gray-600 outline-none focus:border-amber-400/60">
+                            </label>
+                            <div class="md:col-span-3 flex items-center justify-between gap-3 pt-1">
+                                <p class="text-[10px] text-gray-500">Zmiany wpływają na komunikaty nadawane z panelu administracyjnego.</p>
+                                <button type="submit" class="rounded-xl bg-amber-500 hover:bg-amber-400 text-black px-4 py-2.5 text-[11px] font-bold transition">Zapisz wygląd</button>
+                            </div>
+                        </form>
                         <p id="admin-radio-status" class="mt-2 min-h-4 text-xs text-gray-500" role="status" aria-live="polite"></p>
                     </section>
 
@@ -2073,6 +2091,7 @@
         async function loadAdminPanel() {
             const canManageTeam = !!adminAccess?.canManageTeam;
             document.getElementById('admin-radio-section').classList.toggle('hidden', !canManageTeam);
+            if (canManageTeam) hydrateRadioDisplaySettingsForm();
             const radioRequest = canManageTeam ? loadAdminRadio() : Promise.resolve();
             try {
                 const requests = [adminRequest('/api/admin/news'), adminRequest('/api/admin/chat'), adminRequest('/api/admin/whitelist')];
@@ -2102,22 +2121,65 @@
             }
         }
 
+        const DEFAULT_RADIO_DISPLAY_SETTINGS = {
+            messageColor: '#f87171',
+            senderTitle: 'Komunikat Nadawczy Redwood Radio Szyfrowane',
+            location: 'Redwood Radio',
+        };
+
+        function getRadioDisplaySettings() {
+            try {
+                const saved = JSON.parse(localStorage.getItem('grayfall:radio-display-settings') || 'null');
+                return {
+                    ...DEFAULT_RADIO_DISPLAY_SETTINGS,
+                    ...(saved && typeof saved === 'object' ? saved : {}),
+                };
+            } catch {
+                return { ...DEFAULT_RADIO_DISPLAY_SETTINGS };
+            }
+        }
+
+        function saveRadioDisplaySettings(nextSettings = {}) {
+            const settings = {
+                ...getRadioDisplaySettings(),
+                ...nextSettings,
+            };
+            localStorage.setItem('grayfall:radio-display-settings', JSON.stringify(settings));
+            return settings;
+        }
+
+        function hydrateRadioDisplaySettingsForm() {
+            const settings = getRadioDisplaySettings();
+            document.getElementById('admin-radio-color').value = settings.messageColor || DEFAULT_RADIO_DISPLAY_SETTINGS.messageColor;
+            document.getElementById('admin-radio-sender').value = settings.senderTitle || DEFAULT_RADIO_DISPLAY_SETTINGS.senderTitle;
+            document.getElementById('admin-radio-location').value = settings.location || DEFAULT_RADIO_DISPLAY_SETTINGS.location;
+        }
+
         function makeRadioMessageElement(message, ownerInbox = false) {
             const article = document.createElement('article');
             const isOperator = message.type === 'operator';
+            const radioSettings = getRadioDisplaySettings();
             article.className = `rounded-lg border p-3 ${isOperator ? 'border-red-500/35 bg-red-950/15' : 'border-cardborder bg-cardbg/70'}`;
 
             const heading = document.createElement('div');
             heading.className = 'flex flex-wrap items-center justify-between gap-2';
             const sender = document.createElement('strong');
-            sender.className = `text-xs ${isOperator ? 'text-red-300' : 'text-sky-300'}`;
-            sender.textContent = isOperator ? 'Komunikat Nadawczy Redwood Radio Szyfrowane' : `Sygnał · ${message.callSign}`;
+            sender.className = `text-xs ${isOperator ? 'font-semibold' : 'text-sky-300'}`;
+            sender.style.color = isOperator ? (radioSettings.messageColor || DEFAULT_RADIO_DISPLAY_SETTINGS.messageColor) : '';
+            sender.textContent = isOperator ? (radioSettings.senderTitle || DEFAULT_RADIO_DISPLAY_SETTINGS.senderTitle) : `Sygnał · ${message.callSign}`;
             const time = document.createElement('time');
             time.className = 'text-[10px] text-gray-600';
             time.dateTime = message.createdAt;
             time.textContent = formatAdminDate(message.createdAt);
             heading.append(sender, time);
             article.append(heading);
+
+            if (isOperator) {
+                const location = document.createElement('p');
+                location.className = 'mt-2 text-[10px] uppercase tracking-[0.14em] text-gray-400';
+                location.textContent = `Lokalizacja · ${radioSettings.location || DEFAULT_RADIO_DISPLAY_SETTINGS.location}`;
+                article.append(location);
+            }
 
             if (message.replyToCallSign) {
                 const reply = document.createElement('p');
@@ -2128,6 +2190,7 @@
 
             const text = document.createElement('p');
             text.className = 'mt-2 whitespace-pre-wrap break-words text-sm leading-relaxed text-gray-200';
+            if (isOperator) text.style.color = radioSettings.messageColor || DEFAULT_RADIO_DISPLAY_SETTINGS.messageColor;
             text.textContent = message.text;
             article.append(text);
 
@@ -2277,6 +2340,18 @@
             if (button) setRadioReplyTarget(button.dataset.radioReplyId, button.dataset.radioCallSign);
         });
         document.getElementById('admin-radio-reply-cancel').addEventListener('click', clearRadioReplyTarget);
+        document.getElementById('admin-radio-settings-form').addEventListener('submit', (event) => {
+            event.preventDefault();
+            saveRadioDisplaySettings({
+                messageColor: document.getElementById('admin-radio-color').value,
+                senderTitle: document.getElementById('admin-radio-sender').value.trim() || DEFAULT_RADIO_DISPLAY_SETTINGS.senderTitle,
+                location: document.getElementById('admin-radio-location').value.trim() || DEFAULT_RADIO_DISPLAY_SETTINGS.location,
+            });
+            document.getElementById('admin-radio-status').textContent = 'Zapisano wygląd komunikatów radiowych.';
+            document.getElementById('admin-radio-status').className = 'mt-2 min-h-4 text-xs text-amber-300';
+            loadPublicRadio();
+            loadAdminRadio();
+        });
         document.getElementById('admin-radio-form').addEventListener('submit', async (event) => {
             event.preventDefault();
             const submit = document.getElementById('admin-radio-submit');
