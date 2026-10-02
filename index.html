@@ -2362,7 +2362,7 @@
             submit.disabled = true;
             status.textContent = 'Nadawanie komunikatu...';
             try {
-                await adminRadioRequest({
+                const { message } = await adminRadioRequest({
                     method: 'POST',
                     body: JSON.stringify({
                         action: 'broadcast',
@@ -2371,6 +2371,9 @@
                         ...getRadioDisplaySettings(),
                     }),
                 });
+                if (message?.type !== 'operator') {
+                    throw new Error('Serwer radia nie obsługuje komunikatów stacji. Wdróż aktualny plik api/radio.js i spróbuj ponownie.');
+                }
                 document.getElementById('admin-radio-input').value = '';
                 clearRadioReplyTarget();
                 status.textContent = 'Komunikat nadany jako stacja Grayfall.';
