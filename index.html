@@ -862,15 +862,15 @@
         <section class="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-lg border border-amber-500/35 bg-[#101214] shadow-2xl shadow-black/70">
             <header class="flex items-start justify-between gap-4 border-b border-cardborder bg-black/25 p-5 sm:p-6">
                 <div>
-                    <p class="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em]"><span id="radio-mode-dot" class="h-2 w-2 rounded-full bg-gray-500"></span><span id="radio-mode-label" class="text-gray-400">Offline · brak nasłuchu</span></p>
+                    <p class="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em]"><span id="radio-mode-dot" class="h-2 w-2 animate-pulse rounded-full bg-emerald-400"></span><span id="radio-mode-label" class="text-emerald-300">LIVE 24/7 · kanał otwarty</span></p>
                     <h2 id="radio-title" class="font-cinzel text-2xl font-black text-white sm:text-3xl">Radio Grayfall <span class="text-amber-300">87.4 MHz</span></h2>
                     <p class="mt-1 text-xs text-gray-500">Region Zamknięty Grayfall</p>
                 </div>
                 <button id="radio-close" type="button" class="flex h-9 w-9 shrink-0 items-center justify-center text-gray-400 transition hover:text-white" aria-label="Zamknij radio"><i class="fa-solid fa-xmark"></i></button>
             </header>
-            <div id="radio-console" class="radio-console is-offline" role="img" aria-label="Monitor odbiornika radiowego 87.4 MHz">
+            <div id="radio-console" class="radio-console is-live" role="img" aria-label="Monitor odbiornika radiowego 87.4 MHz">
                 <div class="radio-console-screen">
-                    <div class="radio-console-topline"><span>GRAYFALL / RX-04</span><span id="radio-console-state" class="radio-console-state">STANDBY</span></div>
+                    <div class="radio-console-topline"><span>GRAYFALL / RX-04</span><span id="radio-console-state" class="radio-console-state">RECEIVING</span></div>
                     <div class="radio-console-frequency">87.4<small>MHz · FM</small></div>
                     <div class="radio-wave-display" aria-hidden="true">
                         <i class="radio-wave-bar"></i><i class="radio-wave-bar"></i><i class="radio-wave-bar"></i><i class="radio-wave-bar"></i><i class="radio-wave-bar"></i><i class="radio-wave-bar"></i>
@@ -879,7 +879,7 @@
                         <i class="radio-wave-bar"></i><i class="radio-wave-bar"></i><i class="radio-wave-bar"></i><i class="radio-wave-bar"></i><i class="radio-wave-bar"></i><i class="radio-wave-bar"></i>
                         <i class="radio-wave-sweep"></i>
                     </div>
-                    <div class="radio-console-readout"><span>RF</span><span class="radio-level-track"><span id="radio-signal-fill" class="radio-level-fill"></span></span><span id="radio-signal-label">NO SIGNAL</span></div>
+                    <div class="radio-console-readout"><span>RF</span><span class="radio-level-track"><span id="radio-signal-fill" class="radio-level-fill"></span></span><span id="radio-signal-label">SIGNAL 82%</span></div>
                     <div class="radio-console-bottomline"><span>REGION ZAMKNIĘTY</span><span>CH 87.4</span></div>
                 </div>
                 <div class="radio-console-dials" aria-hidden="true">
@@ -899,16 +899,16 @@
                     </div>
                     <div class="flex items-end gap-2">
                         <label class="sr-only" for="radio-message">Treść transmisji</label>
-                        <textarea id="radio-message" maxlength="500" rows="2" required disabled placeholder="Stacja jest offline" class="min-w-0 flex-1 resize-y rounded-lg border border-cardborder bg-cardbg px-3 py-2.5 text-sm text-white outline-none placeholder:text-gray-600 focus:border-amber-400/60 disabled:cursor-not-allowed disabled:opacity-50"></textarea>
-                        <button id="radio-send" type="submit" disabled class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-amber-500 text-black transition hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-40" aria-label="Nadaj wiadomość"><i class="fa-solid fa-tower-broadcast"></i></button>
+                        <textarea id="radio-message" maxlength="500" rows="2" required placeholder="Nadaj wiadomość na otwartym kanale..." class="min-w-0 flex-1 resize-y rounded-lg border border-cardborder bg-cardbg px-3 py-2.5 text-sm text-white outline-none placeholder:text-gray-600 focus:border-amber-400/60"></textarea>
+                        <button id="radio-send" type="submit" class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-amber-500 text-black transition hover:bg-amber-400" aria-label="Nadaj wiadomość"><i class="fa-solid fa-tower-broadcast"></i></button>
                     </div>
-                    <p id="radio-submit-help" class="text-[10px] text-gray-500">Stacja offline. Poczekaj na sygnał operatora.</p>
+                    <p id="radio-submit-help" class="text-[10px] text-gray-500">Kanał LIVE 24/7. Wiadomości publiczne, maksymalnie 3 transmisje na 5 minut.</p>
                 </form>
             </footer>
         </section>
     </div>
     <button id="radio-open" type="button" class="fixed bottom-5 left-3 z-[60] inline-flex items-center gap-2 rounded-lg border border-amber-300/50 bg-[#101214]/95 px-3 py-3 text-xs font-bold text-amber-100 shadow-lg shadow-amber-950/20 backdrop-blur transition hover:border-amber-300 hover:bg-amber-950/50 sm:bottom-5 sm:left-5 sm:px-4 sm:text-sm" aria-haspopup="dialog" aria-label="Otwórz publiczne Radio Grayfall 87.4 MHz">
-        <i class="fa-solid fa-tower-broadcast text-amber-300" aria-hidden="true"></i><span class="hidden sm:inline">Radio Grayfall</span><span class="sm:hidden">Radio</span><span class="hidden border-l border-amber-300/30 pl-2 font-mono text-[10px] text-amber-300 sm:inline">87.4 MHz</span><span id="radio-button-status" class="border-l border-gray-700 pl-2 font-mono text-[9px] font-black tracking-wider text-gray-400">OFFLINE</span>
+        <i class="fa-solid fa-tower-broadcast text-amber-300" aria-hidden="true"></i><span class="hidden sm:inline">Radio Grayfall</span><span class="sm:hidden">Radio</span><span class="hidden border-l border-amber-300/30 pl-2 font-mono text-[10px] text-amber-300 sm:inline">87.4 MHz</span><span id="radio-button-status" class="border-l border-emerald-400/40 pl-2 font-mono text-[9px] font-black tracking-wider text-emerald-300">LIVE 24/7</span>
     </button>
 
     <div id="lore-modal" class="hidden fixed inset-0 z-[70] flex items-center justify-center overflow-y-auto bg-black/85 p-4 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="lore-title">
@@ -1903,9 +1903,7 @@
         let adminChatTimer = null;
         let adminRadioTimer = null;
         let publicRadioTimer = null;
-        let publicRadioStatusTimer = null;
         let radioReplyTarget = null;
-        let publicRadioStatus = 'offline';
 
         function buildDiscordAuthUrl() {
             const params = new URLSearchParams({
@@ -2105,8 +2103,8 @@
 
         async function loadAdminRadio() {
             try {
-                const { messages, status } = await adminRadioRequest();
-                renderAdminRadio(messages, status);
+                const { messages } = await adminRadioRequest();
+                renderAdminRadio(messages);
             } catch (error) {
                 showAdminError(error.message);
             }
@@ -2154,41 +2152,14 @@
             return article;
         }
 
-        function updatePublicRadioStatus(status = 'offline') {
-            publicRadioStatus = status === 'live' ? 'live' : 'offline';
-            const isLive = publicRadioStatus === 'live';
-            const statusDot = document.getElementById('radio-mode-dot');
-            const statusLabel = document.getElementById('radio-mode-label');
-            const buttonStatus = document.getElementById('radio-button-status');
-            statusDot.className = `h-2 w-2 rounded-full ${isLive ? 'bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.8)] animate-pulse' : 'bg-gray-500'}`;
-            statusLabel.textContent = isLive ? 'LIVE · kanał otwarty' : 'OFFLINE · brak nasłuchu';
-            statusLabel.className = isLive ? 'text-emerald-300' : 'text-gray-400';
-            const radioConsole = document.getElementById('radio-console');
-            radioConsole.classList.toggle('is-live', isLive);
-            radioConsole.classList.toggle('is-offline', !isLive);
-            document.getElementById('radio-console-state').textContent = isLive ? 'RECEIVING' : 'STANDBY';
-            document.getElementById('radio-signal-label').textContent = isLive ? 'SIGNAL 82%' : 'NO SIGNAL';
-            buttonStatus.textContent = isLive ? 'LIVE' : 'OFFLINE';
-            buttonStatus.className = `border-l pl-2 font-mono text-[9px] font-black tracking-wider ${isLive ? 'border-emerald-400/40 text-emerald-300' : 'border-gray-700 text-gray-400'}`;
-            document.getElementById('radio-message').disabled = !isLive;
-            document.getElementById('radio-send').disabled = !isLive;
-            document.getElementById('radio-message').placeholder = isLive ? 'Nadaj wiadomość na otwartym kanale...' : 'Stacja jest offline';
-            document.getElementById('radio-submit-help').textContent = isLive
-                ? 'Wiadomości są publiczne. Maksymalnie 3 transmisje na 5 minut.'
-                : 'Stacja offline. Poczekaj na sygnał operatora.';
-        }
-
-        function renderPublicRadio(messages, status = 'offline') {
-            updatePublicRadioStatus(status);
+        function renderPublicRadio(messages) {
             const feed = document.getElementById('radio-feed');
             const wasNearBottom = feed.scrollHeight - feed.scrollTop - feed.clientHeight < 80;
             feed.replaceChildren();
             if (!messages.length) {
                 const empty = document.createElement('p');
                 empty.className = 'py-12 text-center text-sm text-gray-500';
-                empty.textContent = publicRadioStatus === 'live'
-                    ? 'Częstotliwość jest cicha. Nadaj pierwszy sygnał.'
-                    : 'Stacja jest offline. Nasłuchuj sygnału operatora.';
+                empty.textContent = 'Częstotliwość jest otwarta. Nadaj pierwszy sygnał.';
                 feed.append(empty);
                 return;
             }
@@ -2196,17 +2167,7 @@
             if (wasNearBottom) feed.scrollTop = feed.scrollHeight;
         }
 
-        function renderAdminRadio(messages, status = 'offline') {
-            const isLive = status === 'live';
-            const liveButton = document.getElementById('admin-radio-live');
-            const offlineButton = document.getElementById('admin-radio-offline');
-            liveButton.setAttribute('aria-pressed', String(isLive));
-            offlineButton.setAttribute('aria-pressed', String(!isLive));
-            liveButton.className = `inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-[10px] font-bold transition ${isLive ? 'bg-emerald-500/15 text-emerald-300' : 'text-gray-500 hover:text-emerald-200'}`;
-            offlineButton.className = `inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-[10px] font-bold transition ${!isLive ? 'bg-gray-700/50 text-gray-200' : 'text-gray-500 hover:text-gray-200'}`;
-            liveButton.querySelector('span').className = `h-1.5 w-1.5 rounded-full ${isLive ? 'bg-emerald-400' : 'bg-gray-600'}`;
-            offlineButton.querySelector('span').className = `h-1.5 w-1.5 rounded-full ${!isLive ? 'bg-gray-400' : 'bg-gray-600'}`;
-
+        function renderAdminRadio(messages) {
             const inbox = document.getElementById('admin-radio-inbox');
             const wasNearBottom = inbox.scrollHeight - inbox.scrollTop - inbox.clientHeight < 80;
             inbox.replaceChildren();
@@ -2240,21 +2201,11 @@
                 const response = await fetch('/api/radio');
                 const data = await response.json();
                 if (!response.ok) throw new Error(data.error || 'Brak połączenia z częstotliwością.');
-                renderPublicRadio(data.messages || [], data.status);
+                renderPublicRadio(data.messages || []);
                 status.textContent = '';
             } catch (error) {
                 status.textContent = error.message;
                 status.className = 'mb-3 min-h-4 text-xs text-amber-300';
-            }
-        }
-
-        async function loadPublicRadioStatus() {
-            try {
-                const response = await fetch('/api/radio?statusOnly=1');
-                const data = await response.json();
-                if (response.ok) updatePublicRadioStatus(data.status);
-            } catch (error) {
-                console.error('Nie udało się sprawdzić statusu radia:', error);
             }
         }
 
@@ -2325,7 +2276,7 @@
                 status.textContent = error.message;
                 status.className = 'mb-3 min-h-4 text-xs text-amber-300';
             } finally {
-                send.disabled = publicRadioStatus !== 'live';
+                send.disabled = false;
             }
         });
 
@@ -2481,8 +2432,6 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadLoreState();
             window.setInterval(loadLoreState, 30000);
-            loadPublicRadioStatus();
-            publicRadioStatusTimer = window.setInterval(loadPublicRadioStatus, 30000);
             checkSession();
             checkLoginError();
             loadPublicNews();
