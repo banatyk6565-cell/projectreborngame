@@ -33,11 +33,17 @@ Bez tych dwóch zmiennych panel pozostanie niedostępny, zamiast zapisywać dane
 
 ## Odliczanie do ujawnienia lore
 
-Na stronie głównej pojawia się modal z polem hasła. Hasło `NEW_ERA` jest jednym z animowanych nicków w Kronice projektu. Pierwsze poprawne wpisanie uruchamia wspólny, zapisany w Redisie licznik 4 godzin. Błędne hasła są liczone per adres IP; po 10 błędach kolejne próby są blokowane na 30 minut. Funkcja wymaga tych samych zmiennych `UPSTASH_REDIS_REST_URL` i `UPSTASH_REDIS_REST_TOKEN` co panel administracyjny.
+Na stronie głównej pojawia się modal z polem hasła. Hasło `NEW_ERA` jest jednym z animowanych nicków w Kronice projektu. Pierwsze poprawne wpisanie uruchamia wspólny, zapisany w Redisie licznik 20 minut. Błędne hasła są liczone per adres IP; po 10 błędach kolejne próby są blokowane na 30 minut. Funkcja wymaga tych samych zmiennych `UPSTASH_REDIS_REST_URL` i `UPSTASH_REDIS_REST_TOKEN` co panel administracyjny.
 
 Po zakończeniu odliczania strona pokazuje odnośnik do Discorda; publikację lore trzeba wykonać ręcznie. Hasło jest elementem zagadki, a nie zabezpieczeniem: tekst widoczny na stronie można odczytać w kodzie lub narzędziach przeglądarki.
 
 Przy pierwszym poprawnym haśle endpoint wysyła na Discorda jedną wiadomość z pingiem `@everyone`. Utwórz webhook w kanale alertów (osobnym od zgłoszeń whitelisty), dodaj jego URL w Vercel jako `DISCORD_LORE_WEBHOOK_URL` i wykonaj redeploy. Kanał musi pozwalać na wzmianki `@everyone`. Brak lub błąd webhooka nie zatrzymuje licznika; osoba uruchamiająca zobaczy informację o nieudanym powiadomieniu.
+
+## Radio Grayfall 87.4 MHz
+
+Publiczny kanał radia pozwala gościom nadawać pod znakiem wywoławczym zapamiętanym w ich przeglądarce, gdy stacja jest w trybie LIVE. Domyślnie radio jest OFFLINE; Owner przełącza status przyciskami w panelu radiowym. W trybie OFFLINE formularz nadawania jest zablokowany, a API odrzuca transmisje. Widocznych jest 100 ostatnich transmisji, a limit nadawania wynosi 3 wiadomości na 5 minut z jednego adresu IP. Owner może odpowiadać w panelu administracyjnym; jego prawdziwe konto ani nick nie są zapisywane przy publicznej transmisji — wszystkie odpowiedzi mają nadawcę `Komunikat Radiowy 87.4 MHz — Region Zamknięty Grayfall`. Odpowiedzi są publiczne i mogą wskazywać transmisję, której dotyczą.
+
+Radio korzysta z istniejącego Upstash Redis. Publiczny endpoint obsługuje odczyt i nadawanie, natomiast odpisywanie jest chronione istniejącą sesją Discord Ownera.
 
 ---
 

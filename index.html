@@ -688,6 +688,27 @@
                         <div id="admin-news-list" class="mt-6 space-y-3"></div>
                     </section>
 
+                    <section id="admin-radio-section" class="hidden bg-darkbg/60 border border-amber-500/25 rounded-2xl p-5 mt-6">
+                        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                            <div><h3 class="font-cinzel text-lg font-bold text-white">Radio Grayfall · 87.4 MHz</h3><p class="text-xs text-gray-500">Publiczne transmisje i odpowiedzi jako Komunikat Radiowy.</p></div>
+                            <div class="inline-flex shrink-0 rounded-lg border border-cardborder bg-black/30 p-1" role="group" aria-label="Status radia Grayfall">
+                                <button id="admin-radio-live" type="button" class="inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-[10px] font-bold text-gray-500 transition hover:text-emerald-200" aria-pressed="false"><span class="h-1.5 w-1.5 rounded-full bg-gray-600"></span>LIVE</button>
+                                <button id="admin-radio-offline" type="button" class="inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-[10px] font-bold text-gray-500 transition hover:text-gray-200" aria-pressed="true"><span class="h-1.5 w-1.5 rounded-full bg-gray-600"></span>OFFLINE</button>
+                            </div>
+                        </div>
+                        <div id="admin-radio-reply-context" class="hidden mb-3 flex items-center justify-between gap-3 border-l-2 border-amber-400 bg-amber-950/20 px-3 py-2 text-xs text-amber-100">
+                            <span id="admin-radio-reply-label" class="min-w-0 truncate"></span>
+                            <button id="admin-radio-reply-cancel" type="button" class="shrink-0 text-gray-400 hover:text-white" aria-label="Anuluj odpowiedź"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <div id="admin-radio-inbox" class="max-h-[420px] min-h-[150px] space-y-3 overflow-y-auto border-y border-cardborder py-4" role="log" aria-live="polite"></div>
+                        <form id="admin-radio-form" class="mt-4 flex items-end gap-2">
+                            <label class="sr-only" for="admin-radio-input">Treść komunikatu radiowego</label>
+                            <textarea id="admin-radio-input" maxlength="1000" required rows="2" placeholder="Nadaj komunikat jako stacja..." class="min-w-0 flex-1 resize-y rounded-xl bg-cardbg border border-cardborder px-3 py-2.5 text-xs text-white placeholder-gray-600 outline-none focus:border-amber-400/60"></textarea>
+                            <button id="admin-radio-submit" type="submit" class="h-10 w-10 shrink-0 rounded-xl bg-amber-500 text-black transition hover:bg-amber-400 disabled:cursor-wait disabled:opacity-50" aria-label="Nadaj komunikat radiowy"><i class="fa-solid fa-tower-broadcast"></i></button>
+                        </form>
+                        <p id="admin-radio-status" class="mt-2 min-h-4 text-xs text-gray-500" role="status" aria-live="polite"></p>
+                    </section>
+
                     <section id="admin-whitelist-section" class="bg-darkbg/60 border border-cardborder rounded-2xl p-5 mt-6">
                         <div class="flex items-center justify-between gap-3 mb-4">
                             <div><h3 class="font-cinzel text-lg font-bold text-white">Wstępny panel whitelisty</h3><p class="text-xs text-gray-500">Podgląd zgłoszeń bez akceptowania, odrzucania i historii decyzji.</p></div>
@@ -732,6 +753,40 @@
             <div id="whitelist-modal-body"></div>
         </div>
     </div>
+
+    <div id="radio-modal" class="hidden fixed inset-0 z-[65] flex items-center justify-center overflow-y-auto bg-black/85 p-4 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="radio-title">
+        <section class="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-lg border border-amber-500/35 bg-[#101214] shadow-2xl shadow-black/70">
+            <header class="flex items-start justify-between gap-4 border-b border-cardborder bg-black/25 p-5 sm:p-6">
+                <div>
+                    <p class="mb-2 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em]"><span id="radio-mode-dot" class="h-2 w-2 rounded-full bg-gray-500"></span><span id="radio-mode-label" class="text-gray-400">Offline · brak nasłuchu</span></p>
+                    <h2 id="radio-title" class="font-cinzel text-2xl font-black text-white sm:text-3xl">Radio Grayfall <span class="text-amber-300">87.4 MHz</span></h2>
+                    <p class="mt-1 text-xs text-gray-500">Region Zamknięty Grayfall</p>
+                </div>
+                <button id="radio-close" type="button" class="flex h-9 w-9 shrink-0 items-center justify-center text-gray-400 transition hover:text-white" aria-label="Zamknij radio"><i class="fa-solid fa-xmark"></i></button>
+            </header>
+            <div id="radio-feed" class="min-h-[220px] flex-1 space-y-3 overflow-y-auto bg-black/20 p-4 sm:p-5" role="log" aria-live="polite">
+                <p class="py-12 text-center text-sm text-gray-500">Łączenie z częstotliwością 87.4 MHz...</p>
+            </div>
+            <footer class="border-t border-cardborder bg-black/25 p-4 sm:p-5">
+                <p id="radio-status" class="mb-3 min-h-4 text-xs text-gray-500" role="status" aria-live="polite"></p>
+                <form id="radio-form" class="space-y-3">
+                    <div class="flex items-center gap-3">
+                        <label for="radio-callsign" class="shrink-0 text-xs font-semibold text-gray-400">Znak wywoławczy</label>
+                        <input id="radio-callsign" maxlength="32" required class="min-w-0 flex-1 rounded-lg border border-cardborder bg-cardbg px-3 py-2 text-sm text-white outline-none focus:border-amber-400/60">
+                    </div>
+                    <div class="flex items-end gap-2">
+                        <label class="sr-only" for="radio-message">Treść transmisji</label>
+                        <textarea id="radio-message" maxlength="500" rows="2" required disabled placeholder="Stacja jest offline" class="min-w-0 flex-1 resize-y rounded-lg border border-cardborder bg-cardbg px-3 py-2.5 text-sm text-white outline-none placeholder:text-gray-600 focus:border-amber-400/60 disabled:cursor-not-allowed disabled:opacity-50"></textarea>
+                        <button id="radio-send" type="submit" disabled class="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-amber-500 text-black transition hover:bg-amber-400 disabled:cursor-not-allowed disabled:opacity-40" aria-label="Nadaj wiadomość"><i class="fa-solid fa-tower-broadcast"></i></button>
+                    </div>
+                    <p id="radio-submit-help" class="text-[10px] text-gray-500">Stacja offline. Poczekaj na sygnał operatora.</p>
+                </form>
+            </footer>
+        </section>
+    </div>
+    <button id="radio-open" type="button" class="fixed bottom-5 left-3 z-[60] inline-flex items-center gap-2 rounded-lg border border-amber-300/50 bg-[#101214]/95 px-3 py-3 text-xs font-bold text-amber-100 shadow-lg shadow-amber-950/20 backdrop-blur transition hover:border-amber-300 hover:bg-amber-950/50 sm:bottom-5 sm:left-5 sm:px-4 sm:text-sm" aria-haspopup="dialog" aria-label="Otwórz publiczne Radio Grayfall 87.4 MHz">
+        <i class="fa-solid fa-tower-broadcast text-amber-300" aria-hidden="true"></i><span class="hidden sm:inline">Radio Grayfall</span><span class="sm:hidden">Radio</span><span class="hidden border-l border-amber-300/30 pl-2 font-mono text-[10px] text-amber-300 sm:inline">87.4 MHz</span><span id="radio-button-status" class="border-l border-gray-700 pl-2 font-mono text-[9px] font-black tracking-wider text-gray-400">OFFLINE</span>
+    </button>
 
     <div id="lore-modal" class="hidden fixed inset-0 z-[70] flex items-center justify-center overflow-y-auto bg-black/85 p-4 backdrop-blur-md" role="dialog" aria-modal="true" aria-labelledby="lore-title">
         <div class="relative w-full max-w-xl border border-red-700/50 bg-[#101214] p-6 shadow-2xl shadow-red-950/40 sm:p-10">
@@ -1723,6 +1778,11 @@
         let currentUser = null;
         let adminAccess = null;
         let adminChatTimer = null;
+        let adminRadioTimer = null;
+        let publicRadioTimer = null;
+        let publicRadioStatusTimer = null;
+        let radioReplyTarget = null;
+        let publicRadioStatus = 'offline';
 
         function buildDiscordAuthUrl() {
             const params = new URLSearchParams({
@@ -1872,6 +1932,13 @@
             return data;
         }
 
+        async function adminRadioRequest(options = {}) {
+            const response = await fetch('/api/admin/radio', { headers: { 'Content-Type': 'application/json' }, ...options });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(data.error || 'Nie udało się połączyć z radiem.');
+            return data;
+        }
+
         async function openAdminPanel() {
             if (!adminAccess?.canUseChat) return;
             document.getElementById('player-panel').classList.add('hidden');
@@ -1880,11 +1947,14 @@
             await loadAdminPanel();
             window.clearInterval(adminChatTimer);
             adminChatTimer = window.setInterval(loadAdminChat, 15000);
+            window.clearInterval(adminRadioTimer);
+            if (adminAccess?.canManageTeam) adminRadioTimer = window.setInterval(loadAdminRadio, 15000);
         }
 
         function closeAdminPanel() {
             document.getElementById('admin-panel').classList.add('hidden');
             window.clearInterval(adminChatTimer);
+            window.clearInterval(adminRadioTimer);
         }
 
         async function loadAdminPanel() {
@@ -1897,6 +1967,8 @@
                 renderAdminWhitelist(whitelistData.applications);
                 if (teamData) renderAdminTeam(teamData.team);
                 document.getElementById('admin-team-section').classList.toggle('hidden', !adminAccess?.canManageTeam);
+                document.getElementById('admin-radio-section').classList.toggle('hidden', !adminAccess?.canManageTeam);
+                if (adminAccess?.canManageTeam) await loadAdminRadio();
             } catch (error) {
                 showAdminError(error.message);
             }
@@ -1904,6 +1976,201 @@
 
         async function loadAdminChat() {
             try { renderAdminChat((await adminRequest('/api/admin/chat')).messages); } catch (error) { showAdminError(error.message); }
+        }
+
+        async function loadAdminRadio() {
+            try {
+                const { messages, status } = await adminRadioRequest();
+                renderAdminRadio(messages, status);
+            } catch (error) {
+                showAdminError(error.message);
+            }
+        }
+
+        function makeRadioMessageElement(message, ownerInbox = false) {
+            const article = document.createElement('article');
+            const isOperator = message.type === 'operator';
+            article.className = `rounded-lg border p-3 ${isOperator ? 'border-amber-500/25 bg-amber-950/10' : 'border-cardborder bg-cardbg/70'}`;
+
+            const heading = document.createElement('div');
+            heading.className = 'flex flex-wrap items-center justify-between gap-2';
+            const sender = document.createElement('strong');
+            sender.className = `text-xs ${isOperator ? 'text-amber-300' : 'text-sky-300'}`;
+            sender.textContent = isOperator ? message.callSign : `Sygnał · ${message.callSign}`;
+            const time = document.createElement('time');
+            time.className = 'text-[10px] text-gray-600';
+            time.dateTime = message.createdAt;
+            time.textContent = formatAdminDate(message.createdAt);
+            heading.append(sender, time);
+            article.append(heading);
+
+            if (message.replyToCallSign) {
+                const reply = document.createElement('p');
+                reply.className = 'mt-2 border-l border-amber-400/50 pl-2 text-[10px] text-amber-100/70';
+                reply.textContent = `Odpowiedź do: ${message.replyToCallSign}`;
+                article.append(reply);
+            }
+
+            const text = document.createElement('p');
+            text.className = 'mt-2 whitespace-pre-wrap break-words text-sm leading-relaxed text-gray-200';
+            text.textContent = message.text;
+            article.append(text);
+
+            if (ownerInbox && !isOperator) {
+                const replyButton = document.createElement('button');
+                replyButton.type = 'button';
+                replyButton.dataset.radioReplyId = message.id;
+                replyButton.dataset.radioCallSign = message.callSign;
+                replyButton.className = 'mt-3 inline-flex items-center gap-1.5 text-[11px] font-semibold text-amber-300 transition hover:text-amber-200';
+                replyButton.innerHTML = '<i class="fa-solid fa-reply" aria-hidden="true"></i> Odpowiedz publicznie';
+                article.append(replyButton);
+            }
+
+            return article;
+        }
+
+        function updatePublicRadioStatus(status = 'offline') {
+            publicRadioStatus = status === 'live' ? 'live' : 'offline';
+            const isLive = publicRadioStatus === 'live';
+            const statusDot = document.getElementById('radio-mode-dot');
+            const statusLabel = document.getElementById('radio-mode-label');
+            const buttonStatus = document.getElementById('radio-button-status');
+            statusDot.className = `h-2 w-2 rounded-full ${isLive ? 'bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.8)] animate-pulse' : 'bg-gray-500'}`;
+            statusLabel.textContent = isLive ? 'LIVE · kanał otwarty' : 'OFFLINE · brak nasłuchu';
+            statusLabel.className = isLive ? 'text-emerald-300' : 'text-gray-400';
+            buttonStatus.textContent = isLive ? 'LIVE' : 'OFFLINE';
+            buttonStatus.className = `border-l pl-2 font-mono text-[9px] font-black tracking-wider ${isLive ? 'border-emerald-400/40 text-emerald-300' : 'border-gray-700 text-gray-400'}`;
+            document.getElementById('radio-message').disabled = !isLive;
+            document.getElementById('radio-send').disabled = !isLive;
+            document.getElementById('radio-message').placeholder = isLive ? 'Nadaj wiadomość na otwartym kanale...' : 'Stacja jest offline';
+            document.getElementById('radio-submit-help').textContent = isLive
+                ? 'Wiadomości są publiczne. Maksymalnie 3 transmisje na 5 minut.'
+                : 'Stacja offline. Poczekaj na sygnał operatora.';
+        }
+
+        function renderPublicRadio(messages, status = 'offline') {
+            updatePublicRadioStatus(status);
+            const feed = document.getElementById('radio-feed');
+            const wasNearBottom = feed.scrollHeight - feed.scrollTop - feed.clientHeight < 80;
+            feed.replaceChildren();
+            if (!messages.length) {
+                const empty = document.createElement('p');
+                empty.className = 'py-12 text-center text-sm text-gray-500';
+                empty.textContent = publicRadioStatus === 'live'
+                    ? 'Częstotliwość jest cicha. Nadaj pierwszy sygnał.'
+                    : 'Stacja jest offline. Nasłuchuj sygnału operatora.';
+                feed.append(empty);
+                return;
+            }
+            messages.forEach((message) => feed.append(makeRadioMessageElement(message)));
+            if (wasNearBottom) feed.scrollTop = feed.scrollHeight;
+        }
+
+        function renderAdminRadio(messages, status = 'offline') {
+            const isLive = status === 'live';
+            const liveButton = document.getElementById('admin-radio-live');
+            const offlineButton = document.getElementById('admin-radio-offline');
+            liveButton.setAttribute('aria-pressed', String(isLive));
+            offlineButton.setAttribute('aria-pressed', String(!isLive));
+            liveButton.className = `inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-[10px] font-bold transition ${isLive ? 'bg-emerald-500/15 text-emerald-300' : 'text-gray-500 hover:text-emerald-200'}`;
+            offlineButton.className = `inline-flex items-center gap-1.5 rounded-md px-3 py-2 text-[10px] font-bold transition ${!isLive ? 'bg-gray-700/50 text-gray-200' : 'text-gray-500 hover:text-gray-200'}`;
+            liveButton.querySelector('span').className = `h-1.5 w-1.5 rounded-full ${isLive ? 'bg-emerald-400' : 'bg-gray-600'}`;
+            offlineButton.querySelector('span').className = `h-1.5 w-1.5 rounded-full ${!isLive ? 'bg-gray-400' : 'bg-gray-600'}`;
+
+            const inbox = document.getElementById('admin-radio-inbox');
+            const wasNearBottom = inbox.scrollHeight - inbox.scrollTop - inbox.clientHeight < 80;
+            inbox.replaceChildren();
+            if (!messages.length) {
+                const empty = document.createElement('p');
+                empty.className = 'py-10 text-center text-xs text-gray-600';
+                empty.textContent = 'Brak transmisji. Kanał oczekuje na sygnał.';
+                inbox.append(empty);
+                return;
+            }
+            messages.forEach((message) => inbox.append(makeRadioMessageElement(message, true)));
+            if (wasNearBottom) inbox.scrollTop = inbox.scrollHeight;
+        }
+
+        function getRadioCallSign() {
+            const storageKey = 'grayfall:radio:call-sign';
+            try {
+                const saved = localStorage.getItem(storageKey);
+                if (saved) return saved;
+                const callSign = `Ocalały-${Math.floor(1000 + Math.random() * 9000)}`;
+                localStorage.setItem(storageKey, callSign);
+                return callSign;
+            } catch {
+                return `Ocalały-${Math.floor(1000 + Math.random() * 9000)}`;
+            }
+        }
+
+        async function loadPublicRadio() {
+            const status = document.getElementById('radio-status');
+            try {
+                const response = await fetch('/api/radio');
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Brak połączenia z częstotliwością.');
+                renderPublicRadio(data.messages || [], data.status);
+                status.textContent = '';
+            } catch (error) {
+                status.textContent = error.message;
+                status.className = 'mb-3 min-h-4 text-xs text-amber-300';
+            }
+        }
+
+        async function loadPublicRadioStatus() {
+            try {
+                const response = await fetch('/api/radio?statusOnly=1');
+                const data = await response.json();
+                if (response.ok) updatePublicRadioStatus(data.status);
+            } catch (error) {
+                console.error('Nie udało się sprawdzić statusu radia:', error);
+            }
+        }
+
+        function openRadio() {
+            document.getElementById('radio-modal').classList.remove('hidden');
+            document.getElementById('radio-callsign').value = getRadioCallSign();
+            loadPublicRadio();
+            window.clearInterval(publicRadioTimer);
+            publicRadioTimer = window.setInterval(loadPublicRadio, 12000);
+        }
+
+        function closeRadio() {
+            document.getElementById('radio-modal').classList.add('hidden');
+            window.clearInterval(publicRadioTimer);
+        }
+
+        function setRadioReplyTarget(id, callSign) {
+            radioReplyTarget = { id, callSign };
+            document.getElementById('admin-radio-reply-label').textContent = `Odpowiedź będzie publiczna · do: ${callSign}`;
+            document.getElementById('admin-radio-reply-context').classList.remove('hidden');
+            document.getElementById('admin-radio-input').focus();
+        }
+
+        function clearRadioReplyTarget() {
+            radioReplyTarget = null;
+            document.getElementById('admin-radio-reply-context').classList.add('hidden');
+        }
+
+        async function setAdminRadioStatus(status) {
+            const liveButton = document.getElementById('admin-radio-live');
+            const offlineButton = document.getElementById('admin-radio-offline');
+            const statusLabel = document.getElementById('admin-radio-status');
+            liveButton.disabled = true;
+            offlineButton.disabled = true;
+            statusLabel.textContent = 'Zmiana statusu radia...';
+            try {
+                await adminRadioRequest({ method: 'POST', body: JSON.stringify({ action: 'set-status', status }) });
+                statusLabel.textContent = status === 'live' ? 'Radio nadaje na żywo.' : 'Radio przełączone w tryb offline.';
+                await Promise.all([loadAdminRadio(), loadPublicRadio()]);
+            } catch (error) {
+                statusLabel.textContent = error.message;
+                statusLabel.className = 'mt-2 min-h-4 text-xs text-amber-300';
+            } finally {
+                liveButton.disabled = false;
+                offlineButton.disabled = false;
+            }
         }
 
         function renderAdminNews(news) {
@@ -1918,6 +2185,69 @@
             list.innerHTML = messages.length ? messages.map((message) => `<div class="flex gap-2"><img src="${escapeAdminHtml(message.avatar)}" alt="" class="w-7 h-7 rounded-full shrink-0"><div class="min-w-0"><p class="text-[11px] text-emerald-300 font-semibold">${escapeAdminHtml(message.author)} <span class="text-[9px] text-gray-600 font-normal">${formatAdminDate(message.createdAt)}</span></p><p class="text-xs text-gray-300 break-words">${escapeAdminHtml(message.text)}</p></div></div>`).join('') : '<p class="text-xs text-gray-600 text-center py-8">Czat jest jeszcze pusty.</p>';
             list.scrollTop = list.scrollHeight;
         }
+
+        document.getElementById('radio-open').addEventListener('click', openRadio);
+        document.getElementById('radio-close').addEventListener('click', closeRadio);
+        document.getElementById('radio-modal').addEventListener('click', (event) => {
+            if (event.target.id === 'radio-modal') closeRadio();
+        });
+
+        document.getElementById('radio-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const send = document.getElementById('radio-send');
+            const status = document.getElementById('radio-status');
+            const text = document.getElementById('radio-message').value;
+            send.disabled = true;
+            status.textContent = 'Nadawanie transmisji...';
+            status.className = 'mb-3 min-h-4 text-xs text-gray-400';
+            try {
+                const response = await fetch('/api/radio', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ callSign: document.getElementById('radio-callsign').value, text }),
+                });
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Nie udało się nadać wiadomości.');
+                document.getElementById('radio-message').value = '';
+                status.textContent = 'Transmisja wysłana. Kanał jest publiczny.';
+                await loadPublicRadio();
+            } catch (error) {
+                status.textContent = error.message;
+                status.className = 'mb-3 min-h-4 text-xs text-amber-300';
+            } finally {
+                send.disabled = publicRadioStatus !== 'live';
+            }
+        });
+
+        document.getElementById('admin-radio-inbox').addEventListener('click', (event) => {
+            const button = event.target.closest('[data-radio-reply-id]');
+            if (button) setRadioReplyTarget(button.dataset.radioReplyId, button.dataset.radioCallSign);
+        });
+        document.getElementById('admin-radio-live').addEventListener('click', () => setAdminRadioStatus('live'));
+        document.getElementById('admin-radio-offline').addEventListener('click', () => setAdminRadioStatus('offline'));
+        document.getElementById('admin-radio-reply-cancel').addEventListener('click', clearRadioReplyTarget);
+        document.getElementById('admin-radio-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const submit = document.getElementById('admin-radio-submit');
+            const status = document.getElementById('admin-radio-status');
+            submit.disabled = true;
+            status.textContent = 'Nadawanie komunikatu...';
+            try {
+                await adminRadioRequest({
+                    method: 'POST',
+                    body: JSON.stringify({ text: document.getElementById('admin-radio-input').value, replyTo: radioReplyTarget?.id || '' }),
+                });
+                document.getElementById('admin-radio-input').value = '';
+                clearRadioReplyTarget();
+                status.textContent = 'Komunikat nadany jako stacja Grayfall.';
+                await Promise.all([loadAdminRadio(), loadPublicRadio()]);
+            } catch (error) {
+                status.textContent = error.message;
+                status.className = 'mt-2 min-h-4 text-xs text-amber-300';
+            } finally {
+                submit.disabled = false;
+            }
+        });
 
         function renderAdminWhitelist(applications) {
             const list = document.getElementById('admin-whitelist-list');
@@ -2043,6 +2373,8 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadLoreState();
             window.setInterval(loadLoreState, 30000);
+            loadPublicRadioStatus();
+            publicRadioStatusTimer = window.setInterval(loadPublicRadioStatus, 30000);
             checkSession();
             checkLoginError();
             loadPublicNews();
