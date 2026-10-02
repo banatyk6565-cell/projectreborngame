@@ -2084,20 +2084,22 @@
         }
 
         async function loadAdminPanel() {
+            const canManageTeam = !!adminAccess?.canManageTeam;
+            document.getElementById('admin-radio-section').classList.toggle('hidden', !canManageTeam);
+            const radioRequest = canManageTeam ? loadAdminRadio() : Promise.resolve();
             try {
                 const requests = [adminRequest('/api/admin/news'), adminRequest('/api/admin/chat'), adminRequest('/api/admin/whitelist')];
-                if (adminAccess?.canManageTeam) requests.push(adminRequest('/api/admin/team'));
+                if (canManageTeam) requests.push(adminRequest('/api/admin/team'));
                 const [newsData, chatData, whitelistData, teamData] = await Promise.all(requests);
                 renderAdminNews(newsData.news);
                 renderAdminChat(chatData.messages);
                 renderAdminWhitelist(whitelistData.applications);
                 if (teamData) renderAdminTeam(teamData.team);
-                document.getElementById('admin-team-section').classList.toggle('hidden', !adminAccess?.canManageTeam);
-                document.getElementById('admin-radio-section').classList.toggle('hidden', !adminAccess?.canManageTeam);
-                if (adminAccess?.canManageTeam) await loadAdminRadio();
+                document.getElementById('admin-team-section').classList.toggle('hidden', !canManageTeam);
             } catch (error) {
                 showAdminError(error.message);
             }
+            await radioRequest;
         }
 
         async function loadAdminChat() {
