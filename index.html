@@ -606,7 +606,7 @@
     </style>
 </head>
 <body class="antialiased selection:bg-red-600 selection:text-white">
-    <audio id="grayfall-background-audio" src="codename-grayfall.mp3" preload="auto" loop></audio>
+    <audio id="grayfall-background-audio" src="codename-grayfall.mp3" preload="auto" autoplay loop></audio>
 
     <!-- Navbar -->
     <nav class="fixed top-0 left-0 right-0 z-50 bg-darkbg/85 backdrop-blur-md border-b border-cardborder transition-all duration-300">
@@ -1918,22 +1918,15 @@
             button.addEventListener('click', async () => {
                 if (!audio.paused) {
                     audio.pause();
-                    localStorage.setItem('grayfall:background-audio-muted', 'true');
                     return;
                 }
 
-                localStorage.setItem('grayfall:background-audio-muted', 'false');
                 try {
                     await audio.play();
                 } catch {
                     updateAudioControl(false, 'Nie udało się odtworzyć muzyki');
                 }
             });
-
-            if (localStorage.getItem('grayfall:background-audio-muted') === 'true') {
-                updateAudioControl(false, 'Muzyka w tle wyciszona');
-                return;
-            }
 
             audio.play().catch(() => {
                 updateAudioControl(false, 'Kliknij ikonę głośnika, aby włączyć muzykę');
