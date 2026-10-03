@@ -664,7 +664,7 @@
         .grayfall-map-vanguard-icon { color: #f87171; font-size: 12px; }
         .grayfall-map-scout { position: absolute; z-index: 4; left: 82%; top: 61%; display: grid; width: 30px; height: 30px; place-items: center; transform: translate(-50%, -50%); border: 2px solid rgba(96, 165, 250, 0.9); border-radius: 50%; background: rgba(8, 20, 34, 0.96); color: #93c5fd; box-shadow: 0 0 17px rgba(59, 130, 246, 0.55), inset 0 0 9px rgba(59, 130, 246, 0.22); }
         .grayfall-map-scout:hover, .grayfall-map-scout[aria-pressed="true"] { border-color: #bfdbfe; box-shadow: 0 0 22px rgba(59, 130, 246, 0.75); }
-        .grayfall-map-scout-name { position: absolute; top: 50%; right: calc(100% + 6px); width: 108px; transform: translateY(-50%); border: 1px solid rgba(96, 165, 250, 0.45); background: rgba(7, 15, 26, 0.92); padding: 4px 5px; color: #bfdbfe; font-family: monospace; font-size: 7px; font-weight: 800; line-height: 1.35; text-align: right; }
+        .grayfall-map-scout-name { position: absolute; bottom: calc(100% + 4px); left: 50%; width: 108px; transform: translateX(-50%); border: 1px solid rgba(96, 165, 250, 0.45); background: rgba(7, 15, 26, 0.92); padding: 4px 5px; color: #bfdbfe; font-family: monospace; font-size: 7px; font-weight: 800; line-height: 1.35; text-align: center; }
         .grayfall-map-tactical-icon { position: absolute; z-index: 3; display: grid; width: 25px; height: 25px; place-items: center; transform: translate(-50%, -50%); border: 1px solid currentColor; border-radius: 50%; background: rgba(7, 12, 12, 0.94); box-shadow: 0 0 13px currentColor; pointer-events: none; }
         .grayfall-map-tactical-icon--defense { left: 34%; top: 49%; color: #86efac; }
         .grayfall-map-tactical-icon--ambush { left: 61%; top: 72%; color: #93c5fd; }
@@ -2080,14 +2080,17 @@
             function updateTacticalRoutes() {
                 const redwood = getMarkerBounds('[data-map-point="redwood"]');
                 const meridian = getMarkerBounds('[data-map-point="meridian"]');
-                const scout = getMarkerBounds('[data-map-point="scout"]');
                 const vanguard = getMarkerBounds('[data-map-point="vanguard"]');
+                const scoutMarker = map.querySelector('[data-map-point="scout"]');
+                scoutMarker.style.left = `${vanguard.left + (vanguard.right - vanguard.left) * 0.7}px`;
+                scoutMarker.style.top = `${vanguard.top - 40}px`;
+                const scout = getMarkerBounds('[data-map-point="scout"]');
                 const defenseStart = { x: (meridian.left + meridian.right) / 2, y: (meridian.top + meridian.bottom) / 2 };
                 const defenseEnd = { x: redwood.right + 4, y: (redwood.top + redwood.bottom) / 2 };
                 const scoutStart = { x: (scout.left + scout.right) / 2, y: (scout.top + scout.bottom) / 2 };
                 const scoutEnd = { x: vanguard.right + 5, y: vanguard.top + 8 };
                 defenseRoute = createRoute(defenseStart, defenseEnd, -height * 0.12);
-                scoutRoute = createRoute(scoutStart, scoutEnd, height * 0.13);
+                scoutRoute = createRoute(scoutStart, scoutEnd, -height * 0.04);
                 positionRouteIcon('.grayfall-map-tactical-icon--defense', defenseRoute);
                 positionRouteIcon('.grayfall-map-tactical-icon--ambush', scoutRoute);
             }
