@@ -606,6 +606,7 @@
     </style>
 </head>
 <body class="antialiased selection:bg-red-600 selection:text-white">
+    <audio id="grayfall-background-audio" src="codename-grayfall.mp3" preload="auto" loop></audio>
 
     <!-- Navbar -->
     <nav class="fixed top-0 left-0 right-0 z-50 bg-darkbg/85 backdrop-blur-md border-b border-cardborder transition-all duration-300">
@@ -648,6 +649,9 @@
                         <div id="top-widget-avatars" class="flex -space-x-1.5 shrink-0"></div>
                     </div>
                 </div>
+                <button id="background-audio-toggle" type="button" class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-cardborder text-gray-300 transition hover:border-amber-400/60 hover:text-amber-200" aria-label="Włącz muzykę w tle" title="Włącz muzykę w tle" aria-pressed="false">
+                    <i id="background-audio-icon" class="fa-solid fa-volume-xmark" aria-hidden="true"></i>
+                </button>
                 <button onclick="toggleMobileMenu()" id="mobile-menu-btn" aria-label="Otwórz menu" aria-expanded="false" class="md:hidden text-gray-200 hover:text-red-500 transition text-xl w-10 h-10 flex items-center justify-center rounded-lg border border-cardborder">
                     <i class="fa-solid fa-bars" id="mobile-menu-icon"></i>
                 </button>
@@ -1891,6 +1895,51 @@
             });
         }
 
+        function setupBackgroundAudio() {
+            const audio = document.getElementById('grayfall-background-audio');
+            const button = document.getElementById('background-audio-toggle');
+            const icon = document.getElementById('background-audio-icon');
+            if (!audio || !button || !icon) return;
+
+            audio.loop = true;
+            audio.volume = 0.32;
+
+            function updateAudioControl(isPlaying, message) {
+                button.setAttribute('aria-pressed', String(isPlaying));
+                button.setAttribute('aria-label', isPlaying ? 'Wycisz muzykę w tle' : 'Włącz muzykę w tle');
+                button.title = isPlaying ? 'Wycisz muzykę w tle' : 'Włącz muzykę w tle';
+                icon.className = `fa-solid ${isPlaying ? 'fa-volume-high text-amber-300' : 'fa-volume-xmark'}`;
+                if (message) button.dataset.audioStatus = message;
+            }
+
+            audio.addEventListener('play', () => updateAudioControl(true, 'Muzyka w tle odtwarzana'));
+            audio.addEventListener('pause', () => updateAudioControl(false, 'Muzyka w tle wyciszona'));
+
+            button.addEventListener('click', async () => {
+                if (!audio.paused) {
+                    audio.pause();
+                    localStorage.setItem('grayfall:background-audio-muted', 'true');
+                    return;
+                }
+
+                localStorage.setItem('grayfall:background-audio-muted', 'false');
+                try {
+                    await audio.play();
+                } catch {
+                    updateAudioControl(false, 'Nie udało się odtworzyć muzyki');
+                }
+            });
+
+            if (localStorage.getItem('grayfall:background-audio-muted') === 'true') {
+                updateAudioControl(false, 'Muzyka w tle wyciszona');
+                return;
+            }
+
+            audio.play().catch(() => {
+                updateAudioControl(false, 'Kliknij ikonę głośnika, aby włączyć muzykę');
+            });
+        }
+
         // Jeśli okno zostanie poszerzone do widoku desktopowego, zamknij menu mobilne
         window.addEventListener('resize', () => {
             if (window.innerWidth >= 768) closeMobileMenu();
@@ -2516,6 +2565,7 @@
             loadDiscordWidget();
             setupScrollReveal();
             setupHeroDepth();
+            setupBackgroundAudio();
         });
 
         // ================== LIVE WIDGET DISCORDA ==================
