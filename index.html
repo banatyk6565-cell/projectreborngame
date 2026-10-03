@@ -662,6 +662,13 @@
         .grayfall-map-marker--vanguard { border-color: rgba(239, 68, 68, 0.5); color: #fee2e2; }
         .grayfall-map-marker--vanguard:hover, .grayfall-map-marker--vanguard[aria-pressed="true"] { border-color: rgba(248, 113, 113, 0.9); background: rgba(55, 13, 17, 0.96); box-shadow: 0 0 20px rgba(239, 68, 68, 0.2); }
         .grayfall-map-vanguard-icon { color: #f87171; font-size: 12px; }
+        .grayfall-map-scout { position: absolute; z-index: 4; left: 82%; top: 61%; display: grid; width: 30px; height: 30px; place-items: center; transform: translate(-50%, -50%); border: 2px solid rgba(96, 165, 250, 0.9); border-radius: 50%; background: rgba(8, 20, 34, 0.96); color: #93c5fd; box-shadow: 0 0 17px rgba(59, 130, 246, 0.55), inset 0 0 9px rgba(59, 130, 246, 0.22); }
+        .grayfall-map-scout:hover, .grayfall-map-scout[aria-pressed="true"] { border-color: #bfdbfe; box-shadow: 0 0 22px rgba(59, 130, 246, 0.75); }
+        .grayfall-map-scout-name { position: absolute; top: 50%; right: calc(100% + 6px); width: 108px; transform: translateY(-50%); border: 1px solid rgba(96, 165, 250, 0.45); background: rgba(7, 15, 26, 0.92); padding: 4px 5px; color: #bfdbfe; font-family: monospace; font-size: 7px; font-weight: 800; line-height: 1.35; text-align: right; }
+        .grayfall-map-tactical-icon { position: absolute; z-index: 3; display: grid; width: 25px; height: 25px; place-items: center; transform: translate(-50%, -50%); border: 1px solid currentColor; border-radius: 50%; background: rgba(7, 12, 12, 0.94); box-shadow: 0 0 13px currentColor; pointer-events: none; }
+        .grayfall-map-tactical-icon--defense { left: 34%; top: 49%; color: #86efac; }
+        .grayfall-map-tactical-icon--ambush { left: 61%; top: 72%; color: #93c5fd; }
+        .grayfall-map-tactical-icon i { font-size: 11px; }
         .grayfall-map-battle { position: absolute; z-index: 3; left: 29.5%; top: 70%; display: grid; width: 27px; height: 27px; place-items: center; transform: translate(-50%, -50%); border: 1px solid rgba(248, 113, 113, 0.85); border-radius: 50%; background: rgba(36, 7, 10, 0.94); color: #fca5a5; box-shadow: 0 0 15px rgba(239, 68, 68, 0.5), inset 0 0 8px rgba(239, 68, 68, 0.2); pointer-events: none; animation: mapBattlePulse 1.1s ease-in-out infinite; }
         .grayfall-map-battle i { font-size: 12px; }
         @keyframes mapBattlePulse { 50% { border-color: #fbbf24; color: #fbbf24; box-shadow: 0 0 21px rgba(239, 68, 68, 0.75), inset 0 0 10px rgba(251, 191, 36, 0.2); } }
@@ -1059,16 +1066,6 @@
             </div>
         </div>
     </div>
-    <div id="lore-home-countdown" class="hidden fixed bottom-[5.5rem] right-5 z-50 min-w-[190px] border border-amber-400/60 bg-[#101214]/95 px-4 py-3 text-right shadow-[0_0_20px_rgba(251,191,36,0.3)] backdrop-blur" role="status" aria-live="off">
-        <p id="lore-home-countdown-label" class="text-[10px] font-bold uppercase tracking-widest text-amber-300">Ujawnienie lore za</p>
-        <p id="lore-home-countdown-time" class="lore-live-clock mt-1 font-mono text-xl font-bold tabular-nums text-white">00:20:00</p>
-    </div>
-    <button id="lore-open" type="button" class="fixed bottom-5 right-5 z-[60] inline-flex items-center gap-2 rounded-lg border border-red-200 bg-red-600 px-4 py-3 text-[11px] font-black text-white shadow-[0_0_28px_rgba(239,68,68,0.95)] backdrop-blur transition hover:bg-red-500 animate-pulse sm:text-sm" aria-haspopup="dialog" aria-label="Otwórz Tajne Akta Grayfall">
-        <i class="fa-solid fa-bell animate-bounce" aria-hidden="true"></i>
-        <span class="whitespace-nowrap">Tajne Akta Grayfall</span>
-        <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
-    </button>
-
     <!-- Hero Section -->
     <header class="relative min-h-screen flex flex-col justify-end pt-20 pb-16 sm:pb-24 px-4 overflow-hidden">
         <!-- Warstwa tła: grafika z powolnym efektem Ken Burns -->
@@ -1289,6 +1286,9 @@
                         <span class="grayfall-map-battle" role="img" aria-label="Kierunek natarcia Vanguard Force na Redwood" title="Natarcie Vanguard Force → Redwood"><i class="fa-solid fa-crosshairs" aria-hidden="true"></i></span>
                         <span class="grayfall-map-unknown-label" aria-hidden="true">STREFA UNKNOWN</span>
                         <button type="button" class="grayfall-map-marker grayfall-map-marker--meridian" data-map-point="meridian" style="left:47%;top:35%" aria-pressed="false" aria-label="Odczytaj dane o Ekspedycji Meridian"><span class="grayfall-map-marker-dot"></span><span class="grayfall-map-marker-copy"><span class="grayfall-map-marker-name">MERIDIAN</span><span class="grayfall-map-marker-kind">EKSPEDYCJA</span></span></button>
+                        <span class="grayfall-map-tactical-icon grayfall-map-tactical-icon--defense" role="img" aria-label="Linia obrony Redwood"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></span>
+                        <button type="button" class="grayfall-map-scout" data-map-point="scout" aria-pressed="false" aria-label="Odczytaj dane o Meridian Scout Group"><i class="fa-solid fa-binoculars" aria-hidden="true"></i><span class="grayfall-map-scout-name">MERIDIAN<br>SCOUT GROUP</span></button>
+                        <span class="grayfall-map-tactical-icon grayfall-map-tactical-icon--ambush" role="img" aria-label="Zwiad i kierunek zasadzki na Vanguard Force"><i class="fa-solid fa-eye" aria-hidden="true"></i></span>
                         <button type="button" class="grayfall-map-marker grayfall-map-marker--sentinel" data-map-point="sentinel" style="left:78%;top:49%" aria-pressed="false" aria-label="Odczytaj dane o węźle nasłuchowym SentinelGate"><i class="fa-solid fa-satellite-dish grayfall-map-satellite-icon" aria-hidden="true"></i><span class="grayfall-map-marker-copy"><span class="grayfall-map-marker-name">SENTINELGATE</span><span class="grayfall-map-marker-kind">WĘZEŁ NASŁUCHU</span></span></button>
                         <button type="button" class="grayfall-map-marker grayfall-map-marker--sector" data-map-point="sector7" style="left:76%;top:72%" aria-pressed="false" aria-label="Odczytaj dane o Strefie 7"><i class="fa-solid fa-radiation grayfall-map-radiation-icon" aria-hidden="true"></i><span class="grayfall-map-marker-copy"><span class="grayfall-map-marker-name">STREFA 7</span><span class="grayfall-map-marker-kind">BURZA · PROMIENIOWANIE</span></span></button>
                     </div>
@@ -1296,6 +1296,9 @@
                         <span class="inline-flex items-center gap-2"><i class="h-2 w-2 rounded-full bg-amber-300"></i>Osada</span>
                         <span class="inline-flex items-center gap-2"><i class="fa-solid fa-user-secret text-red-400"></i>Jednostki specjalne</span>
                         <span class="inline-flex items-center gap-2"><i class="h-2 w-2 rounded-full bg-cyan-300"></i>Ekspedycja</span>
+                        <span class="inline-flex items-center gap-2"><i class="fa-solid fa-shield-halved text-green-300"></i>Obrona Redwood</span>
+                        <span class="inline-flex items-center gap-2"><i class="fa-solid fa-binoculars text-blue-300"></i>Meridian Scout Group</span>
+                        <span class="inline-flex items-center gap-2"><i class="fa-solid fa-eye text-blue-300"></i>Zwiad / zasadzka</span>
                         <span class="inline-flex items-center gap-2"><i class="fa-solid fa-satellite-dish text-cyan-300"></i>Węzeł nasłuchu</span>
                         <span class="inline-flex items-center gap-2"><i class="h-2 w-2 rounded-full bg-red-400"></i>Strefa zakłóceń</span>
                         <span class="ml-auto font-mono text-gray-600">SIATKA ORIENTACYJNA · BEZ SKALI</span>
@@ -1876,7 +1879,6 @@
                 if (effects.playAlarm) showLoreActivationEffects(true);
                 passwordPanel.classList.add('hidden');
                 countdownPanel.classList.remove('hidden');
-                document.getElementById('lore-home-countdown').classList.remove('hidden');
                 window.clearInterval(loreCountdownTimer);
                 window.clearInterval(loreLockTimer);
                 loreCountdownTimer = window.setInterval(updateLoreCountdown, 1000);
@@ -1916,25 +1918,14 @@
             document.getElementById('lore-countdown-label').textContent = expired
                 ? 'Czas minął. Lore pojawi się na Discordzie.'
                 : 'Ujawnienie lore za';
-            updateAnimatedClock('lore-home-countdown-time', formattedTime);
             updateAnimatedClock('lore-launch-countdown', formattedTime);
-            document.getElementById('lore-home-countdown-label').textContent = expired
-                ? 'Lore dostępne na Discordzie'
-                : 'Ujawnienie lore za';
             if (expired) {
                 window.clearInterval(loreCountdownTimer);
             }
         }
 
-        function openLoreModal() {
-            document.getElementById('lore-modal').classList.remove('hidden');
-            document.getElementById('lore-open').classList.add('hidden');
-            if (!loreRevealAt) document.getElementById('lore-password').focus();
-        }
-
         function closeLoreModal() {
             document.getElementById('lore-modal').classList.add('hidden');
-            document.getElementById('lore-open').classList.remove('hidden');
         }
 
         async function loadLoreState() {
@@ -1989,7 +1980,6 @@
         });
 
         document.getElementById('lore-close').addEventListener('click', closeLoreModal);
-        document.getElementById('lore-open').addEventListener('click', openLoreModal);
         document.getElementById('lore-modal').addEventListener('click', (event) => {
             if (event.target.id === 'lore-modal') closeLoreModal();
         });
@@ -2055,6 +2045,78 @@
             let pixelRatio = 1;
             let animationFrame = 0;
             let visible = true;
+            let defenseRoute = null;
+            let scoutRoute = null;
+
+            function getMarkerBounds(selector) {
+                const marker = map.querySelector(selector);
+                const markerBounds = marker.getBoundingClientRect();
+                const mapBounds = map.getBoundingClientRect();
+                return {
+                    left: markerBounds.left - mapBounds.left,
+                    right: markerBounds.right - mapBounds.left,
+                    top: markerBounds.top - mapBounds.top,
+                    bottom: markerBounds.bottom - mapBounds.top,
+                };
+            }
+
+            function createRoute(start, end, curveOffset) {
+                return {
+                    start,
+                    end,
+                    control: {
+                        x: (start.x + end.x) / 2,
+                        y: (start.y + end.y) / 2 + curveOffset,
+                    },
+                };
+            }
+
+            function positionRouteIcon(selector, route) {
+                const icon = map.querySelector(selector);
+                icon.style.left = `${route.start.x * 0.25 + route.control.x * 0.5 + route.end.x * 0.25}px`;
+                icon.style.top = `${route.start.y * 0.25 + route.control.y * 0.5 + route.end.y * 0.25}px`;
+            }
+
+            function updateTacticalRoutes() {
+                const redwood = getMarkerBounds('[data-map-point="redwood"]');
+                const meridian = getMarkerBounds('[data-map-point="meridian"]');
+                const scout = getMarkerBounds('[data-map-point="scout"]');
+                const vanguard = getMarkerBounds('[data-map-point="vanguard"]');
+                const defenseStart = { x: (meridian.left + meridian.right) / 2, y: (meridian.top + meridian.bottom) / 2 };
+                const defenseEnd = { x: redwood.right + 4, y: (redwood.top + redwood.bottom) / 2 };
+                const scoutStart = { x: (scout.left + scout.right) / 2, y: (scout.top + scout.bottom) / 2 };
+                const scoutEnd = { x: vanguard.right + 5, y: vanguard.top + 8 };
+                defenseRoute = createRoute(defenseStart, defenseEnd, -height * 0.12);
+                scoutRoute = createRoute(scoutStart, scoutEnd, height * 0.13);
+                positionRouteIcon('.grayfall-map-tactical-icon--defense', defenseRoute);
+                positionRouteIcon('.grayfall-map-tactical-icon--ambush', scoutRoute);
+            }
+
+            function drawTacticalArrow(route, color, pulse, dashOffset) {
+                context.save();
+                context.beginPath();
+                context.moveTo(route.start.x, route.start.y);
+                context.quadraticCurveTo(route.control.x, route.control.y, route.end.x, route.end.y);
+                context.setLineDash([8, 6]);
+                context.lineDashOffset = dashOffset;
+                context.lineWidth = 2.5;
+                context.globalAlpha = 0.72 + pulse * 0.24;
+                context.strokeStyle = color;
+                context.shadowColor = color;
+                context.shadowBlur = 7 + pulse * 6;
+                context.stroke();
+                context.setLineDash([]);
+                const angle = Math.atan2(route.end.y - route.control.y, route.end.x - route.control.x);
+                const arrowSize = Math.min(12, Math.max(8, width * 0.025));
+                context.beginPath();
+                context.moveTo(route.end.x, route.end.y);
+                context.lineTo(route.end.x - arrowSize * Math.cos(angle - 0.48), route.end.y - arrowSize * Math.sin(angle - 0.48));
+                context.lineTo(route.end.x - arrowSize * Math.cos(angle + 0.48), route.end.y - arrowSize * Math.sin(angle + 0.48));
+                context.closePath();
+                context.fillStyle = color;
+                context.fill();
+                context.restore();
+            }
 
             function draw(timestamp, staticFrame = false) {
                 context.clearRect(0, 0, width, height);
@@ -2175,11 +2237,16 @@
                 context.strokeStyle = 'rgba(103, 232, 249, 0.65)';
                 context.lineWidth = 1.5;
                 context.beginPath();
-                context.moveTo(width * 0.17, height * 0.69);
-                context.quadraticCurveTo(width * 0.32, height * 0.36, width * 0.49, height * 0.35);
+                context.moveTo(width * 0.49, height * 0.35);
                 context.quadraticCurveTo(width * 0.67, height * 0.34, width * 0.79, height * 0.69);
                 context.stroke();
                 context.restore();
+
+                const defensePulse = staticFrame ? 0.65 : (Math.sin(timestamp * 0.004) + 1) / 2;
+                drawTacticalArrow(defenseRoute, '#4ade80', defensePulse, staticFrame ? 0 : timestamp * 0.016);
+
+                const scoutPulse = staticFrame ? 0.65 : (Math.sin(timestamp * 0.0045 + 1) + 1) / 2;
+                drawTacticalArrow(scoutRoute, '#60a5fa', scoutPulse, staticFrame ? 0 : -timestamp * 0.02);
 
                 const assaultStart = { x: width * 0.35, y: height * 0.78 };
                 const assaultControlOne = { x: width * 0.33, y: height * 0.7 };
@@ -2248,6 +2315,7 @@
                 const bounds = map.getBoundingClientRect();
                 width = bounds.width;
                 height = bounds.height;
+                updateTacticalRoutes();
                 pixelRatio = Math.min(window.devicePixelRatio || 1, 1.5);
                 canvas.width = Math.round(width * pixelRatio);
                 canvas.height = Math.round(height * pixelRatio);
@@ -2271,6 +2339,7 @@
                 redwood: { title: 'Redwood', category: 'OSADA · ZNANY PUNKT', copy: 'Redwood — osada znana społeczności Grayfall.', source: 'Odczyt mapy · Redwood' },
                 vanguard: { title: 'Vanguard Force', category: 'US GOV · JEDNOSTKI SPECJALNE', copy: 'Vanguard Force — jednostki specjalne rządu USA, powiązane ze Strefą Unknown.', source: 'Odczyt mapy · Strefa Unknown' },
                 meridian: { title: 'Ekspedycja Meridian', category: 'GRUPA · OBECNOŚĆ POTWIERDZONA', copy: 'Grupa Ekspedycyjna Meridian jest znana w regionie. Dokładne położenie pozostaje nieustalone.', source: 'Odczyt mapy · Meridian' },
+                scout: { title: 'Meridian Scout Group', category: 'ZWIAD · ZASADZKA', copy: 'Wysunięty oddział zwiadowczy Meridian obserwuje ruchy Vanguard Force i przygotowuje zasadzkę.', source: 'Przechwycony meldunek · Meridian' },
                 sentinel: { title: 'SentinelGate', category: 'WĘZEŁ NASŁUCHU · 87.4 MHz', copy: 'Węzeł antenowy zbiera sygnały z przybliżonych lokalizacji w regionie.', source: 'Odczyt radiowy · SentinelGate' },
                 sector7: { title: 'Strefa 7', category: 'SEKTOR · BURZA MAGNETYCZNA', copy: 'Burza magnetyczna i promieniowanie zakłócają odczyty ze Strefy 7.', source: 'Zakłócenia · Strefa 7' },
             };
