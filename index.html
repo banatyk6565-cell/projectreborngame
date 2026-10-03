@@ -2304,9 +2304,15 @@
             const icon = document.getElementById('background-audio-icon');
             if (!audio || !button || !icon) return;
 
+            audio.autoplay = true;
             audio.loop = true;
-            audio.volume = 0.32;
             let manuallyPaused = false;
+
+            async function playBackgroundAudio() {
+                audio.volume = 1;
+                audio.muted = false;
+                await audio.play();
+            }
 
             function removeAutoplayRetry() {
                 window.removeEventListener('pointerdown', retryAutoplayAfterInteraction, true);
@@ -2318,7 +2324,7 @@
                 if (event.target instanceof Element && event.target.closest('#background-audio-toggle')) return;
 
                 try {
-                    await audio.play();
+                    await playBackgroundAudio();
                     removeAutoplayRetry();
                 } catch {
                     updateAudioControl(false, 'Kliknij ikonę głośnika, aby włączyć muzykę');
@@ -2339,6 +2345,14 @@
             audio.addEventListener('play', () => updateAudioControl(true, 'Muzyka w tle odtwarzana'));
             audio.addEventListener('pause', () => updateAudioControl(false, 'Muzyka w tle wyciszona'));
 
+            window.addEventListener('pageshow', (event) => {
+                if (!event.persisted) return;
+                manuallyPaused = false;
+                playBackgroundAudio().then(removeAutoplayRetry).catch(() => {
+                    updateAudioControl(false, 'Kliknij ikonę głośnika, aby włączyć muzykę');
+                });
+            });
+
             button.addEventListener('click', async () => {
                 if (!audio.paused) {
                     manuallyPaused = true;
@@ -2348,14 +2362,14 @@
 
                 manuallyPaused = false;
                 try {
-                    await audio.play();
+                    await playBackgroundAudio();
                     removeAutoplayRetry();
                 } catch {
                     updateAudioControl(false, 'Nie udało się odtworzyć muzyki');
                 }
             });
 
-            audio.play().catch(() => {
+            playBackgroundAudio().catch(() => {
                 updateAudioControl(false, 'Kliknij ikonę głośnika, aby włączyć muzykę');
             });
         }
