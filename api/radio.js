@@ -1,7 +1,14 @@
 const crypto = require('crypto');
-const { addPublicRadioMessage, readRadioMessages, readRadioStatus } = require('../lib/radio-store');
+const { requireAdmin } = require('../lib/admin-auth');
+const { addPublicRadioMessage, addRadioMessage, readRadioMessages } = require('../lib/radio-store');
 
-const RESERVED_CALLSIGN = 'Komunikat Radiowy 87.4 MHz — Region Zamknięty Grayfall';
+const RESERVED_CALLSIGN = 'Komunikat Nadawczy Redwood Radio Szyfrowane';
+const RADIO_CALLSIGN = RESERVED_CALLSIGN;
+const DEFAULT_RADIO_DISPLAY_SETTINGS = {
+  messageColor: '#f87171',
+  senderTitle: RADIO_CALLSIGN,
+  location: 'Redwood Radio',
+};
 
 function normalizeCallSign(value) {
   return value.toLocaleLowerCase('pl-PL').normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/[^a-z0-9]/g, '');
@@ -42,13 +49,43 @@ module.exports = async function handler(req, res) {
 
   try {
     if (req.method === 'GET') {
-      const status = await readRadioStatus();
-      if (req.query?.statusOnly === '1') return res.status(200).json({ status });
-      const messages = await readRadioMessages();
-      return res.status(200).json({ messages, status });
+      return res.status(200).json({ messages: await readRadioMessages() });
     }
 
     const body = parseBody(req.body);
+    if (body.action === 'broadcast') {
+      const admin = requireAdmin(req, res, 'canManageTeam');
+      if (!admin) return;
+
+      const text = clean(body.text, 1000, true);
+      if (text.length < 2) return res.status(400).json({ error: 'Komunikat musi mieć co najmniej 2 znaki.' });
+      const requestedColor = clean(body.messageColor, 7);
+      const messageColor = /^#[0-9a-fA-F]{6}$/.test(requestedColor)
+        ? requestedColor
+        : DEFAULT_RADIO_DISPLAY_SETTINGS.messageColor;
+      const senderTitle = clean(body.senderTitle, 120) || DEFAULT_RADIO_DISPLAY_SETTINGS.senderTitle;
+      const location = clean(body.location, 120) || DEFAULT_RADIO_DISPLAY_SETTINGS.location;
+      const messages = await readRadioMessages();
+      const replyTo = typeof body.replyTo === 'string' ? body.replyTo : '';
+      const target = replyTo ? messages.find((message) => message.id === replyTo && message.type === 'listener') : null;
+      if (replyTo && !target) return res.status(404).json({ error: 'Nie znaleziono transmisji, na którą odpowiadasz.' });
+
+      const message = {
+        id: makeId(),
+        type: 'operator',
+        callSign: RADIO_CALLSIGN,
+        text,
+        messageColor,
+        senderTitle,
+        location,
+        replyTo: target?.id || null,
+        replyToCallSign: target?.callSign || null,
+        createdAt: new Date().toISOString(),
+      };
+      await addRadioMessage(message);
+      return res.status(201).json({ message });
+    }
+
     const submittedCallSign = clean(body.callSign, 100).replace(/\s+/g, ' ');
     const text = clean(body.text, 500, true);
     if (text.length < 2) return res.status(400).json({ error: 'Wiadomość musi mieć co najmniej 2 znaki.' });
@@ -65,9 +102,6 @@ module.exports = async function handler(req, res) {
       createdAt: new Date().toISOString(),
     };
     const result = await addPublicRadioMessage(message, getRateLimitKey(req));
-    if (result.offline) {
-      return res.status(409).json({ error: 'Stacja jest offline. Spróbuj ponownie, gdy wróci na częstotliwość.' });
-    }
     if (!result.accepted) {
       res.setHeader('Retry-After', String(result.retryAfter));
       return res.status(429).json({ error: 'Nadajesz zbyt często. Odczekaj chwilę przed kolejną transmisją.', retryAfter: result.retryAfter });
@@ -75,11 +109,11 @@ module.exports = async function handler(req, res) {
 
     return res.status(201).json({ message });
   } catch (error) {
-    console.error('Błąd publicznego radia:', error);
+    console.error('Błąd czatu radiowego:', error);
     return res.status(error.code === 'STORE_NOT_CONFIGURED' ? 503 : 500).json({
       error: error.code === 'STORE_NOT_CONFIGURED'
-        ? 'Radio wymaga skonfigurowanego Upstash Redis.'
-        : 'Nie udało się połączyć z radiem Grayfall.',
+        ? 'Czat radiowy wymaga skonfigurowanego Upstash Redis.'
+        : 'Nie udało się wysłać wiadomości na radio.',
     });
   }
 };

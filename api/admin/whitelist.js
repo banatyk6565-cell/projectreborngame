@@ -1,4 +1,4 @@
-const { requireAdmin } = require('./_auth');
+const { requireAdmin } = require('../../lib/admin-auth');
 const { readJson } = require('../../lib/admin-store');
 
 module.exports = async function handler(req, res) {

@@ -1,4 +1,4 @@
-const { requireAdmin } = require('./_auth');
+const { requireAdmin } = require('../../lib/admin-auth');
 const { readJson, writeJson } = require('../../lib/admin-store');
 
 const NEWS_KEY = 'grayfall:admin:news';
