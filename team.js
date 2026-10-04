@@ -35,7 +35,7 @@ module.exports = async function handler(req, res) {
     if (body.action === 'advance-to-phase-five-end') {
       const admin = requireAdmin(req, res, 'canManageTeam');
       if (!admin) return;
-      const phaseFiveEnd = 5 * 30 * 60 * 1000 - 60 * 1000;
+      const phaseFiveEnd = 5 * 10 * 60 * 1000 - 60 * 1000;
       const state = {
         startedAt: new Date(Date.now() - phaseFiveEnd).toISOString(),
         updatedAt: new Date().toISOString(),

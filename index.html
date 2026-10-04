@@ -2745,7 +2745,7 @@
             else window.addEventListener('resize', resize, { passive: true });
         }
 
-        const BATTLE_PHASE_DURATIONS = [1800000, 1800000, 1800000, 1800000, 1800000, 1800000, 1800000, Infinity];
+        const BATTLE_PHASE_DURATIONS = [600000, 600000, 600000, 600000, 600000, 600000, 600000, Infinity];
         const BATTLE_PHASES = [
             { title: 'Kontakt i rozpoznanie', meridian: 23, vanguard: 77, report: 'Posterunki Vanguard wykryły ruch na skraju przedmieść.' },
             { title: 'Desant Echo Vanguard', meridian: 31, vanguard: 69, report: 'Echo Vanguard schodzi na spadochronach do wschodnich kwartałów Ekron; Alpha i Bravo przesuwają linię.' },
@@ -3286,7 +3286,7 @@
                 status.className = 'mt-2 min-h-4 text-xs text-emerald-300';
             } catch (error) {
                 if (window.location.protocol === 'file:') {
-                    battleState = { startedAt: new Date(Date.now() - (5 * 30 * 60 * 1000 - 60 * 1000)).toISOString() };
+                    battleState = { startedAt: new Date(Date.now() - (5 * 10 * 60 * 1000 - 60 * 1000)).toISOString() };
                     localStorage.setItem('grayfall:battle-state', JSON.stringify(battleState));
                     updateBattleSimulation();
                     status.textContent = 'Podgląd lokalny ustawiony na fazę 5 · zmiana nie dotyczy grayfall.pl.';
