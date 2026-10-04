@@ -3259,9 +3259,18 @@
             return data;
         }
 
-        document.getElementById('admin-battle-advance-phase-five').addEventListener('click', async () => {
-            if (!window.confirm('Ustawić wspólną bitwę na ostatnią minutę fazy 5? Faza 6 rozpocznie się za około minutę.')) return;
-            const button = document.getElementById('admin-battle-advance-phase-five');
+        let battlePhaseAdvanceTimeout = null;
+        const advanceBattlePhaseButton = document.getElementById('admin-battle-advance-phase-five');
+        const advanceBattlePhaseDefaultLabel = advanceBattlePhaseButton.innerHTML;
+
+        function resetBattlePhaseAdvanceConfirmation() {
+            window.clearTimeout(battlePhaseAdvanceTimeout);
+            advanceBattlePhaseButton.dataset.confirming = 'false';
+            advanceBattlePhaseButton.innerHTML = advanceBattlePhaseDefaultLabel;
+        }
+
+        async function advanceBattleToPhaseFiveEnd() {
+            const button = advanceBattlePhaseButton;
             const status = document.getElementById('admin-battle-report-status');
             button.disabled = true;
             status.textContent = 'Przewijanie wspólnej osi czasu...';
@@ -3288,6 +3297,19 @@
             } finally {
                 button.disabled = false;
             }
+        }
+
+        advanceBattlePhaseButton.addEventListener('click', () => {
+            if (advanceBattlePhaseButton.dataset.confirming !== 'true') {
+                advanceBattlePhaseButton.dataset.confirming = 'true';
+                advanceBattlePhaseButton.innerHTML = '<i class="fa-solid fa-check mr-1" aria-hidden="true"></i>Kliknij ponownie, aby potwierdzić';
+                document.getElementById('admin-battle-report-status').textContent = 'Potwierdzenie ważne przez 5 sekund.';
+                battlePhaseAdvanceTimeout = window.setTimeout(resetBattlePhaseAdvanceConfirmation, 5000);
+                return;
+            }
+
+            resetBattlePhaseAdvanceConfirmation();
+            window.setTimeout(advanceBattleToPhaseFiveEnd, 0);
         });
 
         async function openAdminPanel() {
