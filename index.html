@@ -662,6 +662,16 @@
         .grayfall-map-marker--vanguard { border-color: rgba(239, 68, 68, 0.5); color: #fee2e2; }
         .grayfall-map-marker--vanguard:hover, .grayfall-map-marker--vanguard[aria-pressed="true"] { border-color: rgba(248, 113, 113, 0.9); background: rgba(55, 13, 17, 0.96); box-shadow: 0 0 20px rgba(239, 68, 68, 0.2); }
         .grayfall-map-vanguard-icon { color: #f87171; font-size: 12px; }
+        .grayfall-map-blackwater { position: absolute; z-index: 5; left: 18%; top: 18%; display: flex; width: 112px; height: 68px; flex-direction: column; align-items: center; justify-content: center; gap: 4px; transform: translate(-50%, -50%); border: 1px solid rgba(251, 191, 36, 0.8); border-radius: 7px; background: linear-gradient(150deg, rgba(48, 38, 17, 0.96), rgba(9, 15, 13, 0.97)); color: #fef3c7; box-shadow: 0 0 24px rgba(245, 158, 11, 0.28), inset 0 0 18px rgba(245, 158, 11, 0.1); }
+        .grayfall-map-blackwater::before { position: absolute; inset: -7px; border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 10px; content: ''; pointer-events: none; animation: blackwaterRadar 2.8s ease-out infinite; }
+        .grayfall-map-blackwater-icon { color: #fbbf24; font-size: 23px; filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.8)); animation: blackwaterBeacon 2s ease-in-out infinite; }
+        .grayfall-map-blackwater-name { font-family: monospace; font-size: 11px; font-weight: 900; letter-spacing: 0.12em; text-shadow: 0 0 9px rgba(251, 191, 36, 0.65); }
+        .grayfall-map-trade-jeep { position: absolute; z-index: 5; left: 30%; top: 68%; display: flex; min-height: 30px; align-items: center; gap: 6px; transform: translate(-50%, -50%); border: 1px solid rgba(251, 191, 36, 0.66); border-radius: 5px; background: rgba(29, 23, 9, 0.96); padding: 4px 6px; color: #fcd34d; box-shadow: 0 0 13px rgba(245, 158, 11, 0.26); }
+        .grayfall-map-trade-jeep-icon { display: grid; width: 24px; height: 24px; flex: 0 0 auto; place-items: center; border-radius: 50%; background: #fbbf24; color: #08090a; font-size: 14px; filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.7)); animation: tradeJeepDrive 0.55s ease-in-out infinite; }
+        .grayfall-map-trade-label { position: absolute; left: calc(100% + 5px); top: 50%; width: 104px; transform: translateY(-50%); border: 1px solid rgba(251, 191, 36, 0.35); background: rgba(17, 14, 8, 0.94); padding: 3px 4px; color: #fde68a; font-family: monospace; font-size: 7px; font-weight: 900; line-height: 1.35; text-align: left; }
+        @keyframes blackwaterRadar { 0% { opacity: 0.8; transform: scale(0.94); } 100% { opacity: 0; transform: scale(1.18); } }
+        @keyframes blackwaterBeacon { 50% { opacity: 0.66; transform: translateY(-2px) scale(1.08); } }
+        @keyframes tradeJeepDrive { 50% { transform: translateY(-1.5px) rotate(-2deg); } }
         .grayfall-map-scout { position: absolute; z-index: 4; left: 82%; top: 61%; display: grid; width: 30px; height: 30px; place-items: center; transform: translate(-50%, -50%); border: 2px solid rgba(96, 165, 250, 0.9); border-radius: 50%; background: rgba(8, 20, 34, 0.96); color: #93c5fd; box-shadow: 0 0 17px rgba(59, 130, 246, 0.55), inset 0 0 9px rgba(59, 130, 246, 0.22); }
         .grayfall-map-scout:hover, .grayfall-map-scout[aria-pressed="true"] { border-color: #bfdbfe; box-shadow: 0 0 22px rgba(59, 130, 246, 0.75); }
         .grayfall-map-scout-name { position: absolute; bottom: calc(100% + 4px); left: 50%; width: 108px; transform: translateX(-50%); border: 1px solid rgba(96, 165, 250, 0.45); background: rgba(7, 15, 26, 0.92); padding: 4px 5px; color: #bfdbfe; font-family: monospace; font-size: 7px; font-weight: 800; line-height: 1.35; text-align: center; }
@@ -688,6 +698,8 @@
             .grayfall-map { min-height: 350px; aspect-ratio: 0.94; }
             .grayfall-map-marker { gap: 5px; max-width: 46%; padding: 5px 6px; font-size: 9px; }
             .grayfall-map-marker-kind { font-size: 7px; }
+            .grayfall-map-blackwater { width: 96px; height: 60px; }
+            .grayfall-map-blackwater-icon { font-size: 20px; }
             .grayfall-map-readout { min-height: 0; }
         }
 
@@ -1281,7 +1293,9 @@
                 <div class="min-w-0">
                     <div id="grayfall-map" class="grayfall-map" aria-label="Schematyczna mapa Regionu Zamkniętego">
                         <canvas id="grayfall-map-canvas" class="grayfall-map-canvas" aria-hidden="true"></canvas>
+                        <button type="button" class="grayfall-map-blackwater" data-map-point="blackwater" aria-pressed="false" aria-label="Odczytaj raport o mieście Blackwater"><i class="fa-solid fa-city grayfall-map-blackwater-icon" aria-hidden="true"></i><span class="grayfall-map-blackwater-name">BLACKWATER</span></button>
                         <button type="button" class="grayfall-map-marker grayfall-map-marker--redwood" data-map-point="redwood" style="left:14%;top:69%" aria-pressed="true" aria-label="Odczytaj dane o osadzie Redwood"><span class="grayfall-map-marker-dot"></span><span class="grayfall-map-marker-copy"><span class="grayfall-map-marker-name">REDWOOD</span><span class="grayfall-map-marker-kind">OSADA</span></span></button>
+                        <button type="button" class="grayfall-map-trade-jeep" data-map-point="trade" aria-pressed="false" aria-label="Odczytaj raport Greyline Trade Company"><i class="fa-solid fa-truck-pickup grayfall-map-trade-jeep-icon" aria-hidden="true"></i><span class="grayfall-map-trade-label">GREYLINE<br>TRADE COMPANY</span></button>
                         <button type="button" class="grayfall-map-marker grayfall-map-marker--vanguard" data-map-point="vanguard" style="left:28%;top:82%" aria-pressed="false" aria-label="Odczytaj dane o Vanguard Force"><span class="grayfall-map-us-flag" role="img" aria-label="USA">🇺🇸</span><span class="grayfall-map-marker-copy"><span class="grayfall-map-marker-name">VANGUARD FORCE</span><span class="grayfall-map-marker-kind">US GOV · SPECIAL UNITS</span></span><i class="fa-solid fa-user-secret grayfall-map-vanguard-icon" aria-hidden="true"></i></button>
                         <span class="grayfall-map-battle" role="img" aria-label="Kierunek natarcia Vanguard Force na Redwood" title="Natarcie Vanguard Force → Redwood"><i class="fa-solid fa-crosshairs" aria-hidden="true"></i></span>
                         <span class="grayfall-map-unknown-label" aria-hidden="true">STREFA UNKNOWN</span>
@@ -1299,6 +1313,8 @@
                         <span class="inline-flex items-center gap-2"><i class="fa-solid fa-shield-halved text-green-300"></i>Obrona Redwood</span>
                         <span class="inline-flex items-center gap-2"><i class="fa-solid fa-binoculars text-blue-300"></i>Meridian Scout Group</span>
                         <span class="inline-flex items-center gap-2"><i class="fa-solid fa-eye text-blue-300"></i>Zwiad / zasadzka</span>
+                        <span class="inline-flex items-center gap-2"><i class="fa-solid fa-biohazard text-lime-300"></i>Strefa 4 · Nalot ACC</span>
+                        <span class="inline-flex items-center gap-2"><i class="fa-solid fa-truck-pickup text-amber-300"></i>Greyline Trade Company</span>
                         <span class="inline-flex items-center gap-2"><i class="fa-solid fa-satellite-dish text-cyan-300"></i>Węzeł nasłuchu</span>
                         <span class="inline-flex items-center gap-2"><i class="h-2 w-2 rounded-full bg-red-400"></i>Strefa zakłóceń</span>
                         <span class="ml-auto font-mono text-gray-600">SIATKA ORIENTACYJNA · BEZ SKALI</span>
@@ -2047,6 +2063,7 @@
             let visible = true;
             let defenseRoute = null;
             let scoutRoute = null;
+            let tradeRoute = null;
 
             function getMarkerBounds(selector) {
                 const marker = map.querySelector(selector);
@@ -2081,6 +2098,11 @@
                 const redwood = getMarkerBounds('[data-map-point="redwood"]');
                 const meridian = getMarkerBounds('[data-map-point="meridian"]');
                 const vanguard = getMarkerBounds('[data-map-point="vanguard"]');
+                const blackwater = getMarkerBounds('[data-map-point="blackwater"]');
+                const tradeMarker = map.querySelector('[data-map-point="trade"]');
+                tradeMarker.style.left = `${(redwood.left + redwood.right) / 2}px`;
+                tradeMarker.style.top = `${redwood.top - 40}px`;
+                const trade = getMarkerBounds('[data-map-point="trade"]');
                 const scoutMarker = map.querySelector('[data-map-point="scout"]');
                 scoutMarker.style.left = `${vanguard.left + (vanguard.right - vanguard.left) * 0.7}px`;
                 scoutMarker.style.top = `${vanguard.top - 40}px`;
@@ -2091,6 +2113,9 @@
                 const scoutEnd = { x: vanguard.right + 5, y: vanguard.top + 8 };
                 defenseRoute = createRoute(defenseStart, defenseEnd, -height * 0.12);
                 scoutRoute = createRoute(scoutStart, scoutEnd, -height * 0.04);
+                const tradeStart = { x: (trade.left + trade.right) / 2, y: (trade.top + trade.bottom) / 2 };
+                const tradeEnd = { x: (blackwater.left + blackwater.right) / 2, y: blackwater.bottom + 5 };
+                tradeRoute = createRoute(tradeStart, tradeEnd, -height * 0.08);
                 positionRouteIcon('.grayfall-map-tactical-icon--defense', defenseRoute);
                 positionRouteIcon('.grayfall-map-tactical-icon--ambush', scoutRoute);
             }
@@ -2118,6 +2143,124 @@
                 context.closePath();
                 context.fillStyle = color;
                 context.fill();
+                context.restore();
+            }
+
+            function drawAircraft(x, y, scale, opacity) {
+                context.save();
+                context.translate(x, y);
+                context.scale(scale, scale);
+                context.globalAlpha = opacity;
+                context.shadowColor = 'rgba(190, 255, 203, 0.85)';
+                context.shadowBlur = 7;
+                context.fillStyle = '#d1fae5';
+                context.beginPath();
+                context.moveTo(16, 0);
+                context.lineTo(3, -2);
+                context.lineTo(-3, -11);
+                context.lineTo(-6, -12);
+                context.lineTo(-5, -2);
+                context.lineTo(-11, -2);
+                context.lineTo(-15, -6);
+                context.lineTo(-17, -6);
+                context.lineTo(-15, 0);
+                context.lineTo(-17, 6);
+                context.lineTo(-15, 6);
+                context.lineTo(-11, 2);
+                context.lineTo(-5, 2);
+                context.lineTo(-6, 12);
+                context.lineTo(-3, 11);
+                context.lineTo(3, 2);
+                context.closePath();
+                context.fill();
+                context.restore();
+            }
+
+            function drawZone4(timestamp, staticFrame) {
+                const side = Math.min(width * 0.38, height * 0.48);
+                const left = width * 0.12;
+                const top = height * 0.69 - side / 2;
+                const pulse = staticFrame ? 0.55 : (Math.sin(timestamp * 0.002) + 1) / 2;
+                context.save();
+                context.beginPath();
+                context.rect(left, top, side, side);
+                context.clip();
+                context.fillStyle = 'rgba(38, 112, 43, 0.28)';
+                context.fillRect(left, top, side, side);
+
+                const toxicWash = context.createLinearGradient(left, top, left + side, top + side);
+                toxicWash.addColorStop(0, `rgba(74, 222, 128, ${0.13 + pulse * 0.08})`);
+                toxicWash.addColorStop(0.52, 'rgba(132, 204, 22, 0.18)');
+                toxicWash.addColorStop(1, 'rgba(20, 83, 45, 0.35)');
+                context.fillStyle = toxicWash;
+                context.fillRect(left, top, side, side);
+
+                for (let plume = 0; plume < 5; plume += 1) {
+                    const drift = staticFrame ? 0 : Math.sin(timestamp * 0.0008 + plume * 1.7) * side * 0.035;
+                    const plumeX = left + side * (0.18 + plume * 0.16) + drift;
+                    const plumeY = top + side * (0.48 + (plume % 2) * 0.18);
+                    const radius = side * (0.17 + pulse * 0.035);
+                    const gas = context.createRadialGradient(plumeX, plumeY, 1, plumeX, plumeY, radius);
+                    gas.addColorStop(0, 'rgba(190, 242, 100, 0.27)');
+                    gas.addColorStop(0.58, 'rgba(74, 222, 128, 0.16)');
+                    gas.addColorStop(1, 'rgba(34, 197, 94, 0)');
+                    context.fillStyle = gas;
+                    context.beginPath();
+                    context.ellipse(plumeX, plumeY, radius * 1.25, radius * 0.82, 0, 0, Math.PI * 2);
+                    context.fill();
+                }
+
+                context.strokeStyle = 'rgba(190, 242, 100, 0.13)';
+                context.lineWidth = 1;
+                for (let hatch = -side; hatch < side * 2; hatch += 12) {
+                    context.beginPath();
+                    context.moveTo(left + hatch, top);
+                    context.lineTo(left + hatch + side, top + side);
+                    context.stroke();
+                }
+
+                context.font = `bold ${Math.max(7, Math.min(9, width * 0.01))}px monospace`;
+                context.textBaseline = 'top';
+                context.fillStyle = `rgba(217, 249, 157, ${0.82 + pulse * 0.18})`;
+                context.fillText('STREFA 4 // ACC', left + 7, top + 6);
+                context.font = `${Math.max(6, Math.min(7, width * 0.008))}px monospace`;
+                context.fillStyle = 'rgba(217, 249, 157, 0.7)';
+                context.fillText('AIRBORNE CONTAINMENT COMMAND', left + 7, top + side - 14);
+
+                for (let aircraft = 0; aircraft < 2; aircraft += 1) {
+                    const phase = staticFrame ? 0.34 + aircraft * 0.38 : (timestamp / 7600 + aircraft * 0.48) % 1;
+                    const planeX = left + side * (phase * 1.18 - 0.08);
+                    const planeY = top + side * (0.3 + aircraft * 0.34) + (staticFrame ? 0 : Math.sin(timestamp * 0.0018 + aircraft) * side * 0.025);
+                    if (planeX > left - 24 && planeX < left + side + 24) drawAircraft(planeX, planeY, Math.max(0.66, Math.min(0.9, side / 240)), 0.88);
+
+                    const dropPhase = staticFrame ? 0.62 : (timestamp / 1750 + aircraft * 0.47) % 1;
+                    const dropX = left + side * (0.34 + aircraft * 0.32);
+                    const dropY = top + side * (0.22 + dropPhase * 0.48);
+                    context.save();
+                    context.setLineDash([2, 4]);
+                    context.strokeStyle = 'rgba(217, 249, 157, 0.55)';
+                    context.beginPath();
+                    context.moveTo(dropX, top + side * 0.25);
+                    context.lineTo(dropX, dropY);
+                    context.stroke();
+                    context.translate(dropX, dropY);
+                    context.rotate(0.18);
+                    context.fillStyle = '#d9f99d';
+                    context.fillRect(-2, -5, 4, 10);
+                    context.fillStyle = '#65a30d';
+                    context.fillRect(-3, 2, 6, 3);
+                    context.restore();
+                }
+                context.restore();
+
+                context.save();
+                context.setLineDash([7, 5]);
+                context.lineDashOffset = staticFrame ? 0 : -timestamp * 0.012;
+                context.lineWidth = 2;
+                context.strokeStyle = `rgba(163, 230, 53, ${0.72 + pulse * 0.24})`;
+                context.shadowColor = 'rgba(132, 204, 22, 0.75)';
+                context.shadowBlur = 7 + pulse * 5;
+                context.strokeRect(left, top, side, side);
                 context.restore();
             }
 
@@ -2169,6 +2312,8 @@
                         context.stroke();
                     }
                 });
+
+                drawZone4(timestamp, staticFrame);
 
                 const zoneX = width * 0.68;
                 const zoneY = height * 0.43;
@@ -2250,6 +2395,9 @@
 
                 const scoutPulse = staticFrame ? 0.65 : (Math.sin(timestamp * 0.0045 + 1) + 1) / 2;
                 drawTacticalArrow(scoutRoute, '#60a5fa', scoutPulse, staticFrame ? 0 : -timestamp * 0.02);
+
+                const tradePulse = staticFrame ? 0.65 : (Math.sin(timestamp * 0.0035 + 2) + 1) / 2;
+                drawTacticalArrow(tradeRoute, '#fbbf24', tradePulse, staticFrame ? 0 : timestamp * 0.014);
 
                 const assaultStart = { x: width * 0.35, y: height * 0.78 };
                 const assaultControlOne = { x: width * 0.33, y: height * 0.7 };
@@ -2340,6 +2488,8 @@
 
             const reports = {
                 redwood: { title: 'Redwood', category: 'OSADA · ZNANY PUNKT', copy: 'Redwood — osada znana społeczności Grayfall.', source: 'Odczyt mapy · Redwood' },
+                blackwater: { title: 'Blackwater', category: 'DUŻE MIASTO · SZLAK HANDLOWY', copy: 'Brak informacji o lokacji bądź nie odkryto jeszcze po komunikatach radiowych', source: 'Brak potwierdzonego meldunku radiowego' },
+                trade: { title: 'Greyline Trade Company', category: 'KONWÓJ · SZLAK REDWOOD–BLACKWATER', copy: 'Greyline Trade Company utrzymuje regularny szlak zaopatrzeniowy między Redwood i Blackwater.', source: 'Transponder pojazdu · Greyline Trade Company' },
                 vanguard: { title: 'Vanguard Force', category: 'US GOV · JEDNOSTKI SPECJALNE', copy: 'Vanguard Force — jednostki specjalne rządu USA, powiązane ze Strefą Unknown.', source: 'Odczyt mapy · Strefa Unknown' },
                 meridian: { title: 'Ekspedycja Meridian', category: 'GRUPA · OBECNOŚĆ POTWIERDZONA', copy: 'Grupa Ekspedycyjna Meridian jest znana w regionie. Dokładne położenie pozostaje nieustalone.', source: 'Odczyt mapy · Meridian' },
                 scout: { title: 'Meridian Scout Group', category: 'ZWIAD · ZASADZKA', copy: 'Wysunięty oddział zwiadowczy Meridian obserwuje ruchy Vanguard Force i przygotowuje zasadzkę.', source: 'Przechwycony meldunek · Meridian' },
