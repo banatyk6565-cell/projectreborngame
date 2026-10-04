@@ -726,6 +726,18 @@
         .battle-vector--red { color: #fb7185; stroke: #fb7185; marker-end: url(#battle-arrow-red); }
         .battle-vector--ambush { color: #67e8f9; stroke: #67e8f9; marker-end: url(#battle-arrow-cyan); }
         .battle-vector--support { color: #60a5fa; stroke: #60a5fa; marker-end: url(#battle-arrow-blue); }
+        .battle-vector--escape { stroke-dasharray: 10 7; stroke-width: 2.8; }
+        .battle-vector--phase { display: none; }
+        .battle-map.is-phase-six .battle-vector--phase-six, .battle-map.is-phase-seven .battle-vector--phase-seven, .battle-map.is-phase-eight .battle-vector--phase-eight { display: block; }
+        .battle-zombie-vector { display: none; color: #86efac; stroke: #86efac; marker-end: url(#battle-arrow-toxic); opacity: 0.78; stroke-width: 2; }
+        .battle-map.is-horde .battle-zombie-vector { display: block; }
+        .battle-zombie-layer { position: absolute; z-index: 3; inset: 0; display: none; pointer-events: none; }
+        .battle-map.is-horde .battle-zombie-layer { display: block; }
+        .battle-zombie { position: absolute; display: grid; width: 18px; height: 22px; place-items: center; transform: translate(-50%, -50%); color: #86efac; filter: drop-shadow(0 0 5px rgba(74, 222, 128, 0.84)); animation: zombieAdvance 0.8s steps(2, end) infinite; }
+        .battle-zombie > .fa-person-walking { font-size: 17px; }
+        .battle-zombie > .fa-skull { position: absolute; top: -3px; left: 5px; color: #d9f99d; font-size: 8px; }
+        .battle-zombie:nth-child(3n) { color: #4ade80; animation-delay: -0.35s; }
+        .battle-zombie:nth-child(3n) > .fa-skull { color: #86efac; }
         .battle-shot-path { fill: none; stroke-width: 1.5; stroke-dasharray: 3 8; stroke-linecap: round; opacity: 0; }
         .battle-shot-path--red { stroke: #fb7185; }
         .battle-shot-path--blue { stroke: #7dd3fc; }
@@ -738,6 +750,17 @@
         .battle-impact::before { background: radial-gradient(circle, rgba(255, 245, 157, 0.95) 0 8%, rgba(251, 146, 60, 0.8) 22%, rgba(239, 68, 68, 0.46) 42%, transparent 72%); animation: battleBlast 1.8s ease-out infinite; }
         .battle-impact::after { inset: 4px; border: 2px solid rgba(251, 146, 60, 0.8); box-shadow: 0 0 16px rgba(249, 115, 22, 0.8); animation: battleBlastRing 1.8s ease-out infinite; }
         .battle-defense-indicator { display: inline-grid; width: 14px; height: 14px; flex: 0 0 auto; place-items: center; margin-left: 2px; border: 1px solid rgba(248, 113, 113, 0.8); border-radius: 3px; background: rgba(127, 29, 29, 0.6); color: #fecaca; font-size: 8px; animation: battleShield 1.8s ease-in-out infinite; }
+        .battle-unit.is-routed { border-style: dashed; animation: battlePanic 0.34s ease-in-out infinite; }
+        .battle-unit--meridian.is-routed { color: #a5f3fc; }
+        .battle-unit--vanguard.is-routed { color: #fca5a5; }
+        .battle-unit.is-captured { border-color: #fda4af; background: rgba(63, 12, 22, 0.96); color: #fecdd3; filter: grayscale(0.42); animation: none; }
+        .battle-unit.is-captured .battle-unit-copy small::after { content: ' · POJMANY'; color: #fda4af; }
+        .battle-capture-zone { position: absolute; z-index: 3; display: none; width: 112px; height: 84px; transform: translate(-50%, -50%); border: 2px dashed rgba(251, 113, 133, 0.88); border-radius: 50%; background: repeating-linear-gradient(135deg, rgba(244, 63, 94, 0.1) 0 4px, transparent 4px 10px); box-shadow: 0 0 18px rgba(244, 63, 94, 0.28), inset 0 0 16px rgba(244, 63, 94, 0.16); pointer-events: none; }
+        .battle-map.is-capturing .battle-capture-zone { display: grid; place-items: center; animation: captureContain 1.15s ease-in-out infinite alternate; }
+        .battle-capture-zone i { border: 1px solid rgba(253, 164, 175, 0.82); border-radius: 50%; background: rgba(44, 9, 15, 0.95); padding: 7px; color: #fecdd3; font-size: 15px; }
+        .battle-capture-zone span { position: absolute; bottom: -14px; border: 1px solid rgba(251, 113, 133, 0.56); background: #210a0d; padding: 2px 5px; color: #fecdd3; font: 800 7px monospace; letter-spacing: 0.08em; white-space: nowrap; }
+        .battle-map.is-vanguard-halted .battle-frontline { opacity: 0.28; box-shadow: none; }
+        .battle-map.is-vanguard-halted .battle-unit--vanguard { animation: none; }
         .battle-foxrot { left: 20%; top: 87%; width: 124px; min-width: 0; min-height: 36px; justify-content: center; border-color: rgba(248, 113, 113, 0.88); background: rgba(45, 10, 14, 0.97); }
         .battle-foxrot > i { color: #fb7185; font-size: 17px; filter: drop-shadow(0 0 6px rgba(248, 113, 113, 0.8)); }
         .battle-foxrot-copy { color: #fecaca; font: 800 7px/1.2 monospace; letter-spacing: 0.04em; }
@@ -761,9 +784,12 @@
         @keyframes battleRain { to { background-position: 0 74px; } }
         @keyframes battleLightning { 0%, 82%, 84%, 91%, 100% { opacity: 0; } 83%, 92% { opacity: 0.78; } }
         @keyframes battleVectorFlow { to { stroke-dashoffset: -30; } }
+        @keyframes zombieAdvance { 0%, 100% { transform: translate(-50%, -50%) rotate(-5deg); } 50% { transform: translate(-50%, -50%) rotate(5deg) translateY(-2px); } }
         @keyframes battleBlast { 0%, 100% { transform: scale(0.25); opacity: 0; } 12% { transform: scale(1.15); opacity: 1; } 55% { transform: scale(0.8); opacity: 0.7; } }
         @keyframes battleBlastRing { 0%, 100% { transform: scale(0.25); opacity: 0; } 14% { transform: scale(0.62); opacity: 0.9; } 62% { transform: scale(1.1); opacity: 0; } }
         @keyframes battleShield { 50% { box-shadow: 0 0 9px rgba(248, 113, 113, 0.65); } }
+        @keyframes battlePanic { 0%, 100% { transform: translate(-50%, -50%) rotate(-1deg); } 50% { transform: translate(-50%, -50%) rotate(1deg) translateX(-2px); } }
+        @keyframes captureContain { from { transform: translate(-50%, -50%) scale(0.9); } to { transform: translate(-50%, -50%) scale(1.08); } }
         @keyframes echoDrop { 0% { opacity: 0; transform: translate(-50%, -220%) scale(0.82); } 18% { opacity: 1; } 82% { transform: translate(-50%, -50%) scale(1); } 100% { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
         @keyframes battleUnitSignal { 50% { box-shadow: 0 0 17px currentColor; } }
         @keyframes battleUnitPing { 0% { transform: scale(0.94); opacity: 0.5; } 100% { transform: scale(1.24); opacity: 0; } }
@@ -780,7 +806,7 @@
             .battle-drop i { font-size: 13px; }
         }
         @media (prefers-reduced-motion: reduce) {
-            .battle-fog, .battle-unit, .battle-unit::before, .battle-rain, .battle-lightning, .battle-vector, .battle-impact::before, .battle-impact::after, .battle-defense-indicator, .battle-drop { animation: none !important; }
+            .battle-fog, .battle-unit, .battle-unit::before, .battle-rain, .battle-lightning, .battle-vector, .battle-impact::before, .battle-impact::after, .battle-defense-indicator, .battle-drop, .battle-capture-zone, .battle-zombie { animation: none !important; }
             .battle-unit { transition: none !important; }
             .battle-projectile { display: none; }
         }
@@ -1473,6 +1499,7 @@
                                 <marker id="battle-arrow-blue" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 4 L0 8 Z" fill="#38bdf8"></path></marker>
                                 <marker id="battle-arrow-red" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 4 L0 8 Z" fill="#fb7185"></path></marker>
                                 <marker id="battle-arrow-cyan" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 4 L0 8 Z" fill="#67e8f9"></path></marker>
+                                <marker id="battle-arrow-toxic" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 4 L0 8 Z" fill="#86efac"></path></marker>
                             </defs>
                             <path id="battle-path-snipers-alpha" class="battle-vector battle-vector--blue"></path>
                             <path id="battle-path-snipers-bravo" class="battle-vector battle-vector--blue"></path>
@@ -1481,6 +1508,18 @@
                             <path id="battle-path-ambush-charlie" class="battle-vector battle-vector--ambush"></path>
                             <path id="battle-path-caldwell-delta" class="battle-vector battle-vector--support"></path>
                             <path id="battle-path-foxrot-caldwell" class="battle-vector battle-vector--red"></path>
+                            <path id="battle-path-caldwell-escape" class="battle-vector battle-vector--support battle-vector--escape battle-vector--phase battle-vector--phase-six"></path>
+                            <path id="battle-path-alpha-escape" class="battle-vector battle-vector--red battle-vector--escape battle-vector--phase battle-vector--phase-seven"></path>
+                            <path id="battle-path-snipers-escape" class="battle-vector battle-vector--blue battle-vector--escape battle-vector--phase battle-vector--phase-eight"></path>
+                            <path id="battle-path-caldwell-final-escape" class="battle-vector battle-vector--blue battle-vector--escape battle-vector--phase battle-vector--phase-eight"></path>
+                            <path class="battle-vector battle-zombie-vector" d="M 110 0 Q 315 75 470 270"></path>
+                            <path class="battle-vector battle-zombie-vector" d="M 0 105 Q 190 180 445 290"></path>
+                            <path class="battle-vector battle-zombie-vector" d="M 45 510 Q 235 435 455 325"></path>
+                            <path class="battle-vector battle-zombie-vector" d="M 1000 60 Q 795 145 560 255"></path>
+                            <path class="battle-vector battle-zombie-vector" d="M 1000 315 Q 790 300 565 305"></path>
+                            <path class="battle-vector battle-zombie-vector" d="M 930 600 Q 760 455 555 360"></path>
+                            <path class="battle-vector battle-zombie-vector" d="M 535 0 Q 520 120 505 255"></path>
+                            <path class="battle-vector battle-zombie-vector" d="M 0 340 Q 205 330 445 315"></path>
                             <path id="battle-fire-to-delta" class="battle-shot-path battle-shot-path--red"></path>
                             <path id="battle-fire-to-caldwell" class="battle-shot-path battle-shot-path--blue"></path>
                             <circle class="battle-projectile battle-projectile--red" r="4"><animateMotion dur="0.9s" repeatCount="indefinite"><mpath href="#battle-fire-to-delta"></mpath></animateMotion></circle>
@@ -1491,6 +1530,13 @@
                         <span class="battle-drop battle-drop--one" data-battle-drop="echo-one" aria-label="Echo Vanguard spadochroniarz"><i class="fa-solid fa-parachute-box" aria-hidden="true"></i></span>
                         <span class="battle-drop battle-drop--two" data-battle-drop="echo-two" aria-label="Echo Vanguard spadochroniarz"><i class="fa-solid fa-parachute-box" aria-hidden="true"></i></span>
                         <span class="battle-drop battle-drop--three" data-battle-drop="echo-three" aria-label="Echo Vanguard spadochroniarz"><i class="fa-solid fa-parachute-box" aria-hidden="true"></i></span>
+                        <span id="battle-jimmie-capture" class="battle-capture-zone" aria-label="Grupa zasadzki Jimmiego Brait'a otoczona i pojmana"><i class="fa-solid fa-handcuffs" aria-hidden="true"></i><span>POJMANA · JIMMIE BRAIT</span></span>
+                        <div class="battle-zombie-layer" aria-label="Horda zombie napływa do Ekron">
+                            <span class="battle-zombie" style="left:4%;top:12%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:11%;top:28%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:5%;top:49%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:9%;top:77%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span>
+                            <span class="battle-zombie" style="left:96%;top:14%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:92%;top:34%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:97%;top:57%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:91%;top:81%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span>
+                            <span class="battle-zombie" style="left:25%;top:8%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:55%;top:7%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:27%;top:91%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:72%;top:93%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span>
+                            <span class="battle-zombie" style="left:19%;top:39%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:81%;top:46%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:23%;top:67%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:77%;top:70%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span>
+                        </div>
                         <span id="battle-charlie-impact" class="battle-impact" aria-label="Uderzenie przy Charlie"><i class="fa-solid fa-burst" aria-hidden="true"></i></span>
                         <div class="battle-unit battle-unit--vanguard" data-battle-unit="alpha"><span class="battle-unit-flag" aria-hidden="true">US</span><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span class="battle-unit-copy">VANGUARD / ALPHA<small>US PLATOON</small></span></div>
                         <div class="battle-unit battle-unit--vanguard" data-battle-unit="bravo"><span class="battle-unit-flag" aria-hidden="true">US</span><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span class="battle-unit-copy">VANGUARD / BRAVO<small>US PLATOON</small></span></div>
@@ -2699,27 +2745,39 @@
             else window.addEventListener('resize', resize, { passive: true });
         }
 
-        const BATTLE_PHASE_DURATION = 180000;
+        const BATTLE_PHASE_DURATIONS = [1800000, 1800000, 1800000, 1800000, 1800000, 1800000, 1800000, Infinity];
         const BATTLE_PHASES = [
             { title: 'Kontakt i rozpoznanie', meridian: 23, vanguard: 77, report: 'Posterunki Vanguard wykryły ruch na skraju przedmieść.' },
             { title: 'Desant Echo Vanguard', meridian: 31, vanguard: 69, report: 'Echo Vanguard schodzi na spadochronach do wschodnich kwartałów Ekron; Alpha i Bravo przesuwają linię.' },
             { title: 'Zasadzka Meridian', meridian: 46, vanguard: 54, report: 'Grupa Jimmiego Brait’a zamyka korytarz między ruinami.' },
             { title: 'Kontratak Vanguard', meridian: 38, vanguard: 62, report: 'Charlie i Delta próbują obejść pozycje zwiadowców.' },
             { title: 'Przegrupowanie', meridian: 52, vanguard: 48, report: 'Caldwell wyznacza nową linię; obie strony utrzymują kontakt.' },
+            { title: 'Odwrót grupy uderzeniowej', meridian: 19, vanguard: 81, report: 'Grupa uderzeniowa Caldwella zostaje otoczona i wycofuje się w panice na zachód.' },
+            { title: 'Horda w Ekron · Alpha rozbita', meridian: 12, vanguard: 88, report: 'Hałas starcia ściąga do Ekron hordę zombie. Rozbita Alpha ucieka, a grupa Jimmiego Brait’a zostaje otoczona i pojmana.' },
+            { title: 'Koniec starcia', meridian: 8, vanguard: 64, report: 'Resztki Meridian wycofują się. Vanguard wstrzymuje marsz na Redwood z powodu poniesionych strat.' },
         ];
         const BATTLE_UNIT_POSITIONS = {
-            alpha: [[76, 24], [72, 27], [68, 31], [63, 33], [66, 35]],
-            bravo: [[79, 43], [76, 44], [69, 47], [64, 48], [70, 47]],
-            charlie: [[75, 63], [72, 61], [66, 59], [61, 62], [67, 60]],
-            delta: [[82, 79], [78, 75], [73, 70], [68, 73], [73, 69]],
-            snipers: [[23, 25], [27, 23], [31, 22], [35, 25], [38, 24]],
-            jimmie: [[27, 49], [33, 47], [39, 45], [43, 49], [46, 46]],
-            caldwell: [[23, 76], [29, 72], [36, 68], [42, 69], [47, 65]],
-            foxrot: [[20, 87], [17, 83], [15, 80], [17, 77], [20, 78]],
+            alpha: [[76, 24], [72, 27], [68, 31], [63, 33], [66, 35], [63, 23], [6, 18], [6, 18]],
+            bravo: [[79, 43], [76, 44], [69, 47], [64, 48], [70, 47], [76, 43], [77, 43], [77, 43]],
+            charlie: [[75, 63], [72, 61], [66, 59], [61, 62], [67, 60], [68, 62], [69, 63], [69, 63]],
+            delta: [[82, 79], [78, 75], [73, 70], [68, 73], [73, 69], [82, 80], [82, 80], [82, 80]],
+            snipers: [[23, 25], [27, 23], [31, 22], [35, 25], [38, 24], [34, 24], [29, 27], [4, 29]],
+            jimmie: [[27, 49], [33, 47], [39, 45], [43, 49], [46, 46], [53, 50], [53, 50], [53, 50]],
+            caldwell: [[23, 76], [29, 72], [36, 68], [42, 69], [47, 65], [16, 78], [11, 81], [4, 83]],
+            foxrot: [[20, 87], [17, 83], [15, 80], [17, 77], [20, 78], [42, 89], [44, 90], [44, 90]],
         };
         const BATTLE_MOBILE_POSITIONS = {
             3: { alpha: [66, 20], bravo: [76, 42], charlie: [66, 60], delta: [82, 82] },
             4: { alpha: [70, 16], bravo: [78, 42], charlie: [78, 56], delta: [82, 82], snipers: [38, 24], jimmie: [46, 46], caldwell: [40, 76], foxrot: [18, 92] },
+            5: { alpha: [65, 22], bravo: [80, 42], charlie: [67, 60], delta: [82, 81], snipers: [32, 25], jimmie: [52, 50], caldwell: [16, 79], foxrot: [42, 91] },
+            6: { alpha: [4, 19], bravo: [80, 42], charlie: [70, 63], delta: [82, 82], snipers: [28, 28], jimmie: [53, 50], caldwell: [12, 82], foxrot: [44, 91] },
+            7: { alpha: [4, 18], bravo: [78, 42], charlie: [69, 63], delta: [82, 82], snipers: [4, 29], jimmie: [53, 50], caldwell: [4, 83], foxrot: [44, 91] },
+        };
+        const BATTLE_EXIT_POSITIONS = {
+            escapeCaldwell: [0, 79],
+            escapeAlpha: [0, 18],
+            escapeSnipers: [0, 29],
+            escapeMeridian: [0, 83],
         };
         const BATTLE_VECTORS = [
             ['battle-path-snipers-alpha', 'snipers', 'alpha', 16],
@@ -2729,6 +2787,10 @@
             ['battle-path-ambush-charlie', 'jimmie', 'charlie', -12],
             ['battle-path-caldwell-delta', 'caldwell', 'delta', 12],
             ['battle-path-foxrot-caldwell', 'foxrot', 'caldwell', -16],
+            ['battle-path-caldwell-escape', 'caldwell', 'escapeCaldwell', -12],
+            ['battle-path-alpha-escape', 'alpha', 'escapeAlpha', 8],
+            ['battle-path-snipers-escape', 'snipers', 'escapeSnipers', -10],
+            ['battle-path-caldwell-final-escape', 'caldwell', 'escapeMeridian', 12],
             ['battle-fire-to-delta', 'caldwell', 'delta', -8],
             ['battle-fire-to-caldwell', 'delta', 'caldwell', 8],
         ];
@@ -2738,6 +2800,7 @@
         let battlePollTimer = null;
 
         function getBattleUnitPosition(unit, phaseIndex) {
+            if (BATTLE_EXIT_POSITIONS[unit]) return BATTLE_EXIT_POSITIONS[unit];
             const mobilePosition = window.innerWidth <= 767 ? BATTLE_MOBILE_POSITIONS[phaseIndex]?.[unit] : null;
             return mobilePosition || BATTLE_UNIT_POSITIONS[unit][phaseIndex];
         }
@@ -2759,13 +2822,27 @@
             return `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
         }
 
+        function getBattlePhaseTiming(elapsed) {
+            let phaseElapsed = Math.max(0, elapsed);
+            for (let phaseIndex = 0; phaseIndex < BATTLE_PHASES.length - 1; phaseIndex += 1) {
+                const duration = BATTLE_PHASE_DURATIONS[phaseIndex];
+                if (phaseElapsed < duration) return { phaseIndex, remaining: duration - phaseElapsed };
+                phaseElapsed -= duration;
+            }
+            return { phaseIndex: BATTLE_PHASES.length - 1, remaining: 0 };
+        }
+
+        function getBattlePhaseStartOffset(phaseIndex) {
+            return BATTLE_PHASE_DURATIONS.slice(0, phaseIndex).reduce((total, duration) => total + duration, 0);
+        }
+
         function renderBattleReports(phaseIndex, startedAt) {
             const reportsElement = document.getElementById('battle-reports');
             const startTime = Date.parse(startedAt);
             const automaticReports = BATTLE_PHASES.slice(0, phaseIndex + 1).map((phase, index) => ({
                 unit: index === 0 ? 'DOWÓDZTWO' : 'MELDUNEK SYSTEMOWY',
                 text: phase.report,
-                createdAt: new Date(startTime + index * BATTLE_PHASE_DURATION).toISOString(),
+                createdAt: new Date(startTime + getBattlePhaseStartOffset(index)).toISOString(),
                 automatic: true,
             }));
             const reports = [...automaticReports, ...battleAdminReports]
@@ -2818,25 +2895,35 @@
             impact.style.top = `${charlie[1]}%`;
             impact.classList.toggle('is-active', phaseIndex === 2);
             const battleMap = document.getElementById('battle-map');
+            const jimmie = getBattleUnitPosition('jimmie', phaseIndex);
+            const captureZone = document.getElementById('battle-jimmie-capture');
+            captureZone.style.left = `${jimmie[0]}%`;
+            captureZone.style.top = `${jimmie[1]}%`;
+            captureZone.classList.toggle('is-capturing', phaseIndex >= 6);
             battleMap.classList.toggle('is-engaged', phaseIndex >= 3);
             battleMap.classList.toggle('is-airborne', phaseIndex >= 1);
+            battleMap.classList.toggle('is-phase-six', phaseIndex === 5);
+            battleMap.classList.toggle('is-phase-seven', phaseIndex === 6);
+            battleMap.classList.toggle('is-phase-eight', phaseIndex === 7);
+            battleMap.classList.toggle('is-horde', phaseIndex === 6);
+            battleMap.classList.toggle('is-capturing', phaseIndex >= 6);
+            battleMap.classList.toggle('is-vanguard-halted', phaseIndex === 7);
         }
 
         function updateBattleSimulation() {
             if (!battleState?.startedAt) return;
             const startTime = Date.parse(battleState.startedAt);
             const elapsed = Math.max(0, Date.now() - startTime);
-            const phaseIndex = Math.min(Math.floor(elapsed / BATTLE_PHASE_DURATION), BATTLE_PHASES.length - 1);
+            const { phaseIndex, remaining } = getBattlePhaseTiming(elapsed);
             const phase = BATTLE_PHASES[phaseIndex];
             document.getElementById('battle-phase').textContent = phase.title;
             document.getElementById('battle-meridian-value').textContent = `${phase.meridian}%`;
             document.getElementById('battle-vanguard-value').textContent = `${phase.vanguard}%`;
             document.getElementById('battle-meridian-bar').style.width = `${phase.meridian}%`;
             document.getElementById('battle-vanguard-bar').style.width = `${phase.vanguard}%`;
-            document.getElementById('battle-cycle').textContent = `FAZA ${String(phaseIndex + 1).padStart(2, '0')} / 05`;
+            document.getElementById('battle-cycle').textContent = `FAZA ${String(phaseIndex + 1).padStart(2, '0')} / 08`;
 
             const finalPhase = phaseIndex === BATTLE_PHASES.length - 1;
-            const remaining = BATTLE_PHASE_DURATION - (elapsed % BATTLE_PHASE_DURATION);
             document.getElementById('battle-next-phase').textContent = finalPhase ? 'Stanowiska utrzymane' : 'Następna faza za';
             document.getElementById('battle-countdown').textContent = finalPhase ? 'HOLD' : formatBattleClock(remaining);
 
@@ -2845,26 +2932,39 @@
                 const [x, y] = getBattleUnitPosition(unit, phaseIndex);
                 marker.style.left = `${x}%`;
                 marker.style.top = `${y}%`;
+                const isRouted = (unit === 'caldwell' && phaseIndex >= 5)
+                    || (unit === 'alpha' && phaseIndex >= 6)
+                    || (['snipers', 'caldwell'].includes(unit) && phaseIndex >= 7);
+                marker.classList.toggle('is-routed', isRouted);
+                marker.classList.toggle('is-captured', unit === 'jimmie' && phaseIndex >= 6);
             });
             updateBattleTacticalEffects(phaseIndex);
             renderBattleReports(phaseIndex, battleState.startedAt);
         }
 
         async function loadBattleData() {
+            let serverSynced = false;
             try {
-                const response = await fetch('/api/radio?channel=battle', { cache: 'no-store' });
-                const data = await response.json();
-                if (!response.ok || !data.state?.startedAt) throw new Error(data.error || 'Brak synchronizacji starcia.');
+                const response = await fetch('/api/team?channel=battle', { cache: 'no-store' });
+                const data = await response.json().catch(() => ({}));
+                if (!response.ok) throw new Error(data.error || 'Nie udało się pobrać meldunków starcia.');
+                if (!data.state?.startedAt || !Array.isArray(data.messages)) {
+                    throw new Error('API nie obsługuje kanału starcia. Wdróż aktualny plik api/team.js.');
+                }
                 battleState = data.state;
                 battleAdminReports = Array.isArray(data.messages) ? data.messages : [];
                 localStorage.setItem('grayfall:battle-state', JSON.stringify(battleState));
                 document.getElementById('battle-status').textContent = '';
-            } catch {
+                serverSynced = true;
+            } catch (error) {
                 battleState = readLocalBattleState();
                 try { battleAdminReports = JSON.parse(localStorage.getItem('grayfall:battle-reports') || '[]'); } catch { battleAdminReports = []; }
-                document.getElementById('battle-status').textContent = 'Podgląd lokalny · meldunki wspólne wymagają połączenia z serwerem.';
+                document.getElementById('battle-status').textContent = window.location.protocol === 'file:'
+                    ? 'Podgląd lokalny · wpisy są widoczne tylko w tej przeglądarce.'
+                    : error.message || 'Brak synchronizacji meldunków starcia.';
             }
             updateBattleSimulation();
+            return serverSynced;
         }
 
         function openBattleWindow() {
@@ -3147,6 +3247,14 @@
             const response = await fetch('/api/radio', { headers: { 'Content-Type': 'application/json' }, ...options });
             const data = await response.json().catch(() => ({}));
             if (!response.ok) throw new Error(data.error || `Radio API zwróciło HTTP ${response.status}.`);
+            return data;
+        }
+
+        async function battleApiRequest(options = {}) {
+            const path = options.method === 'POST' ? '/api/team' : '/api/team?channel=battle';
+            const response = await fetch(path, { headers: { 'Content-Type': 'application/json' }, ...options });
+            const data = await response.json().catch(() => ({}));
+            if (!response.ok) throw new Error(data.error || `Battle API zwróciło HTTP ${response.status}.`);
             return data;
         }
 
@@ -3574,7 +3682,7 @@
             submit.disabled = true;
             status.textContent = 'Nadawanie meldunku...';
             try {
-                const { message } = await adminRadioRequest({
+                const { message } = await battleApiRequest({
                     method: 'POST',
                     body: JSON.stringify({
                         action: 'battle-report',
@@ -3582,13 +3690,40 @@
                         text: text.value,
                     }),
                 });
-                battleAdminReports.push(message);
+                if (message?.type !== 'battle' || !message.id) {
+                    throw new Error('Serwer nie zapisał wpisu jako meldunku bitwy. Wdróż aktualny plik api/team.js.');
+                }
+                const serverSynced = await loadBattleData();
+                if (!serverSynced || !battleAdminReports.some((report) => report.id === message.id)) {
+                    throw new Error('Meldunek wysłano, ale nie wrócił ze wspólnej listy starcia. Sprawdź wdrożenie API i Redis.');
+                }
                 text.value = '';
                 status.textContent = 'Meldunek widoczny w oknie starcia.';
                 status.className = 'mt-2 min-h-4 text-xs text-emerald-300';
                 updateBattleSimulation();
             } catch (error) {
-                status.textContent = error.message;
+                if (window.location.protocol === 'file:') {
+                    try {
+                        const report = {
+                            id: `local-${Date.now()}`,
+                            type: 'battle',
+                            unit: document.getElementById('admin-battle-unit').value,
+                            text: text.value.trim(),
+                            author: currentUser?.globalName || 'Administracja',
+                            createdAt: new Date().toISOString(),
+                        };
+                        const localReports = JSON.parse(localStorage.getItem('grayfall:battle-reports') || '[]');
+                        battleAdminReports = [...localReports, report].slice(-100);
+                        localStorage.setItem('grayfall:battle-reports', JSON.stringify(battleAdminReports));
+                        text.value = '';
+                        updateBattleSimulation();
+                        status.textContent = 'Zapisano lokalnie — meldunek nie jest widoczny dla innych osób.';
+                    } catch (storageError) {
+                        status.textContent = storageError.message || error.message;
+                    }
+                } else {
+                    status.textContent = error.message;
+                }
                 status.className = 'mt-2 min-h-4 text-xs text-amber-300';
             } finally {
                 submit.disabled = false;
