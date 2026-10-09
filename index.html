@@ -666,6 +666,13 @@
         .grayfall-map-blackwater::before { position: absolute; inset: -7px; border: 1px solid rgba(251, 191, 36, 0.3); border-radius: 10px; content: ''; pointer-events: none; animation: blackwaterRadar 2.8s ease-out infinite; }
         .grayfall-map-blackwater-icon { color: #fbbf24; font-size: 23px; filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.8)); animation: blackwaterBeacon 2s ease-in-out infinite; }
         .grayfall-map-blackwater-name { font-family: monospace; font-size: 11px; font-weight: 900; letter-spacing: 0.12em; text-shadow: 0 0 9px rgba(251, 191, 36, 0.65); }
+        .grayfall-map-oakland { position: absolute; z-index: 5; left: 86%; top: 19%; display: flex; width: 98px; height: 58px; flex-direction: column; align-items: center; justify-content: center; gap: 3px; transform: translate(-50%, -50%); border: 1px solid rgba(147, 197, 253, 0.85); border-radius: 6px; background: linear-gradient(145deg, rgba(16, 37, 57, 0.97), rgba(8, 15, 23, 0.97)); color: #dbeafe; box-shadow: 0 0 18px rgba(96, 165, 250, 0.25), inset 0 0 12px rgba(96, 165, 250, 0.1); }
+        .grayfall-map-oakland-icon { color: #bfdbfe; font-size: 19px; filter: drop-shadow(0 0 7px rgba(96, 165, 250, 0.8)); animation: oaklandBeacon 2.4s ease-in-out infinite; }
+        .grayfall-map-oakland-name { font: 900 9px monospace; letter-spacing: 0.12em; text-shadow: 0 0 8px rgba(147, 197, 253, 0.55); }
+        .grayfall-map-cold-label { position: absolute; z-index: 2; border: 1px solid rgba(196, 181, 253, 0.5); background: rgba(13, 12, 31, 0.86); padding: 4px 6px; color: #ddd6fe; font: 800 7px monospace; letter-spacing: 0.08em; pointer-events: none; }
+        .grayfall-map-cold-label--one { right: 2%; top: 4%; color: #bfdbfe; border-color: rgba(147, 197, 253, 0.5); }
+        .grayfall-map-cold-label--two { left: 53%; top: 4%; }
+        @keyframes oaklandBeacon { 50% { opacity: 0.72; transform: translateY(-1px) scale(1.08); } }
         .grayfall-map-trade-jeep { position: absolute; z-index: 5; left: 30%; top: 68%; display: flex; min-height: 30px; align-items: center; gap: 6px; transform: translate(-50%, -50%); border: 1px solid rgba(251, 191, 36, 0.66); border-radius: 5px; background: rgba(29, 23, 9, 0.96); padding: 4px 6px; color: #fcd34d; box-shadow: 0 0 13px rgba(245, 158, 11, 0.26); }
         .grayfall-map-trade-jeep-icon { display: grid; width: 24px; height: 24px; flex: 0 0 auto; place-items: center; border-radius: 50%; background: #fbbf24; color: #08090a; font-size: 14px; filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.7)); animation: tradeJeepDrive 0.55s ease-in-out infinite; }
         .grayfall-map-trade-label { position: absolute; top: calc(100% + 3px); left: 50%; width: 104px; transform: translateX(-50%); border: 1px solid rgba(251, 191, 36, 0.35); background: rgba(17, 14, 8, 0.94); padding: 3px 4px; color: #fde68a; font-family: monospace; font-size: 7px; font-weight: 900; line-height: 1.35; text-align: center; }
@@ -681,6 +688,10 @@
         .grayfall-map-prison { position: absolute; z-index: 4; left: 64%; top: 88%; display: flex; min-height: 32px; align-items: center; gap: 6px; transform: translate(-50%, -50%); border: 1px solid rgba(248, 113, 113, 0.58); border-radius: 4px; background: rgba(27, 12, 14, 0.96); padding: 4px 7px; color: #fecaca; box-shadow: 0 0 12px rgba(239, 68, 68, 0.2); }
         .grayfall-map-prison > i { color: #fb7185; font-size: 14px; }
         .grayfall-map-prison-name { font: 800 8px monospace; letter-spacing: 0.05em; white-space: nowrap; }
+        .grayfall-map-winter-merc { position: absolute; z-index: 5; left: 61%; top: 22%; display: grid; width: 38px; height: 38px; place-items: center; transform: translate(-50%, -50%); border: 1px solid rgba(125, 211, 252, 0.8); border-radius: 50%; background: rgba(9, 25, 37, 0.96); color: #bae6fd; box-shadow: 0 0 16px rgba(56, 189, 248, 0.38), inset 0 0 9px rgba(56, 189, 248, 0.15); }
+        .grayfall-map-winter-merc > i { font-size: 16px; filter: drop-shadow(0 0 5px rgba(125, 211, 252, 0.65)); }
+        .grayfall-map-winter-snow { position: absolute; top: -4px; right: -4px; color: #e0f2fe; font-size: 10px; filter: drop-shadow(0 0 4px #38bdf8); }
+        .grayfall-map-winter-merc-name { position: absolute; bottom: calc(100% + 3px); left: 50%; transform: translateX(-50%); color: #e0f2fe; font: 900 8px monospace; letter-spacing: 0.12em; text-shadow: 0 0 7px rgba(56, 189, 248, 0.7); }
         .grayfall-map-us-flag { font-family: 'Segoe UI Emoji', sans-serif; font-size: 13px; }
         .grayfall-map-marker--sector .grayfall-map-marker-dot { background: #ef4444; }
         .grayfall-map-marker--sector { border-color: rgba(239, 68, 68, 0.38); }
@@ -815,6 +826,9 @@
             .grayfall-map-marker-kind { font-size: 7px; }
             .grayfall-map-blackwater { width: 96px; height: 60px; }
             .grayfall-map-blackwater-icon { font-size: 20px; }
+            .grayfall-map-oakland { width: 82px; height: 50px; }
+            .grayfall-map-oakland-icon { font-size: 16px; }
+            .grayfall-map-cold-label { font-size: 6px; padding: 3px 4px; }
             .grayfall-map-scout-name { display: none; }
             .grayfall-map-prison-name { font-size: 7px; }
             .grayfall-map-readout { min-height: 0; }
@@ -1417,17 +1431,20 @@
                 </div>
             </div>
             <div class="mb-4 flex justify-end">
-                <button id="battle-open" type="button" class="battle-entry inline-flex min-h-11 items-center gap-3 rounded-md px-4 py-2.5 text-left transition" aria-haspopup="dialog" aria-controls="battle-modal">
-                    <i class="fa-solid fa-tower-broadcast animate-pulse text-red-300" aria-hidden="true"></i>
-                    <span><strong class="block text-xs font-black uppercase tracking-wider">Starcie w toku</strong><span class="block text-[9px] font-semibold uppercase tracking-wider text-red-200/75">Kliknij, by przejść</span></span>
-                    <i class="fa-solid fa-arrow-up-right-from-square text-xs" aria-hidden="true"></i>
-                </button>
+                <div id="battle-open" class="battle-entry inline-flex min-h-11 items-center gap-3 rounded-md px-4 py-2.5 text-left opacity-70" role="status" aria-live="polite">
+                    <i class="fa-solid fa-tower-broadcast text-gray-500" aria-hidden="true"></i>
+                    <span><strong class="block text-xs font-black uppercase tracking-wider text-gray-300">Brak aktywnego starcia</strong><span class="block text-[9px] font-semibold uppercase tracking-wider text-gray-500">Miejsce na kolejną operację</span></span>
+                </div>
             </div>
             <div class="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_310px]">
                 <div class="min-w-0">
                     <div id="grayfall-map" class="grayfall-map" aria-label="Schematyczna mapa Regionu Zamkniętego">
                         <canvas id="grayfall-map-canvas" class="grayfall-map-canvas" aria-hidden="true"></canvas>
                         <button type="button" class="grayfall-map-blackwater" data-map-point="blackwater" aria-pressed="false" aria-label="Odczytaj raport o mieście Blackwater"><i class="fa-solid fa-city grayfall-map-blackwater-icon" aria-hidden="true"></i><span class="grayfall-map-blackwater-name">BLACKWATER</span></button>
+                        <button type="button" class="grayfall-map-oakland" data-map-point="oakland" aria-pressed="false" aria-label="Odczytaj raport o mieście Oakland"><i class="fa-solid fa-city grayfall-map-oakland-icon" aria-hidden="true"></i><span class="grayfall-map-oakland-name">OAKLAND</span></button>
+                        <span class="grayfall-map-cold-label grayfall-map-cold-label--one">STREFA 1 · ODCIĘTA · −70°C</span>
+                        <span class="grayfall-map-cold-label grayfall-map-cold-label--two">STREFA 2</span>
+                        <button type="button" class="grayfall-map-winter-merc" data-map-point="winterMerc" aria-pressed="false" aria-label="???? — nieznana grupa najemnicza, specjalizacja zimowa"><i class="fa-solid fa-user-secret" aria-hidden="true"></i><i class="fa-solid fa-snowflake grayfall-map-winter-snow" aria-hidden="true"></i><span class="grayfall-map-winter-merc-name">????</span></button>
                         <button type="button" class="grayfall-map-marker grayfall-map-marker--redwood" data-map-point="redwood" style="left:14%;top:69%" aria-pressed="true" aria-label="Odczytaj dane o osadzie Redwood"><span class="grayfall-map-marker-dot"></span><span class="grayfall-map-marker-copy"><span class="grayfall-map-marker-name">REDWOOD</span><span class="grayfall-map-marker-kind">OSADA</span></span></button>
                         <button type="button" class="grayfall-map-trade-jeep" data-map-point="trade" aria-pressed="false" aria-label="Odczytaj raport Greyline Trade Company"><i class="fa-solid fa-truck-pickup grayfall-map-trade-jeep-icon" aria-hidden="true"></i><span class="grayfall-map-trade-label">GREYLINE<br>TRADE COMPANY</span></button>
                         <button type="button" class="grayfall-map-marker grayfall-map-marker--vanguard" data-map-point="vanguard" style="left:28%;top:82%" aria-pressed="false" aria-label="Odczytaj dane o Vanguard Force"><span class="grayfall-map-us-flag" role="img" aria-label="USA">🇺🇸</span><span class="grayfall-map-marker-copy"><span class="grayfall-map-marker-name">VANGUARD FORCE</span><span class="grayfall-map-marker-kind">US GOV · SPECIAL UNITS</span></span><i class="fa-solid fa-user-secret grayfall-map-vanguard-icon" aria-hidden="true"></i></button>
@@ -1442,11 +1459,15 @@
                     <div class="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-[10px] font-semibold uppercase tracking-wider text-gray-500">
                         <span class="inline-flex items-center gap-2"><i class="h-2 w-2 rounded-full bg-amber-300"></i>Osada</span>
                         <span class="inline-flex items-center gap-2"><i class="fa-solid fa-user-secret text-red-400"></i>Jednostki specjalne</span>
+                        <span class="inline-flex items-center gap-2"><i class="fa-solid fa-arrow-left text-red-400"></i>Marsz Vanguard na Redwood</span>
                         <span class="inline-flex items-center gap-2"><i class="h-2 w-2 rounded-full bg-cyan-300"></i>Ekspedycja</span>
                         <span class="inline-flex items-center gap-2"><i class="fa-solid fa-shield-halved text-green-300"></i>Obrona Redwood</span>
                         <span class="inline-flex items-center gap-2"><i class="fa-solid fa-binoculars text-blue-300"></i>Meridian Scout Group</span>
                         <span class="inline-flex items-center gap-2"><i class="fa-solid fa-eye text-blue-300"></i>Zwiad / zasadzka</span>
                         <span class="inline-flex items-center gap-2"><i class="fa-solid fa-biohazard text-lime-300"></i>Strefa 4 · Nalot ACC</span>
+                        <span class="inline-flex items-center gap-2"><i class="fa-solid fa-snowflake text-blue-200"></i>Strefa 1 · zamieć −70°C</span>
+                        <span class="inline-flex items-center gap-2"><i class="fa-solid fa-city text-blue-300"></i>Oakland · Strefa 2</span>
+                        <span class="inline-flex items-center gap-2"><i class="fa-solid fa-user-secret text-sky-200"></i>???? · najemnicy zimowi</span>
                         <span class="inline-flex items-center gap-2"><i class="fa-solid fa-building text-red-300"></i>Vanguard Prison</span>
                         <span class="inline-flex items-center gap-2"><i class="fa-solid fa-truck-pickup text-amber-300"></i>Greyline Trade Company</span>
                         <span class="inline-flex items-center gap-2"><i class="fa-solid fa-satellite-dish text-cyan-300"></i>Węzeł nasłuchu</span>
@@ -2289,6 +2310,7 @@
             let visible = true;
             let defenseRoute = null;
             let tradeRoute = null;
+            let vanguardAdvanceRoute = null;
 
             function getMarkerBounds(selector) {
                 const marker = map.querySelector(selector);
@@ -2322,10 +2344,11 @@
             function updateTacticalRoutes() {
                 const redwood = getMarkerBounds('[data-map-point="redwood"]');
                 const meridian = getMarkerBounds('[data-map-point="meridian"]');
+                const vanguard = getMarkerBounds('[data-map-point="vanguard"]');
                 const blackwater = getMarkerBounds('[data-map-point="blackwater"]');
                 const tradeMarker = map.querySelector('[data-map-point="trade"]');
-                tradeMarker.style.left = `${blackwater.right + 30}px`;
-                tradeMarker.style.top = `${blackwater.bottom + (height <= 400 ? 46 : 35)}px`;
+                tradeMarker.style.left = `${blackwater.right + 21}px`;
+                tradeMarker.style.top = `${blackwater.bottom + 20}px`;
                 const trade = getMarkerBounds('[data-map-point="trade"]');
                 const scoutMarker = map.querySelector('[data-map-point="scout"]');
                 scoutMarker.style.left = `${redwood.left + (redwood.right - redwood.left) * 0.35}px`;
@@ -2333,6 +2356,9 @@
                 const defenseStart = { x: (meridian.left + meridian.right) / 2, y: (meridian.top + meridian.bottom) / 2 };
                 const defenseEnd = { x: redwood.right + 4, y: (redwood.top + redwood.bottom) / 2 };
                 defenseRoute = createRoute(defenseStart, defenseEnd, -height * 0.12);
+                const advanceStart = { x: vanguard.left + 5, y: (vanguard.top + vanguard.bottom) / 2 };
+                const advanceEnd = { x: redwood.right + 5, y: (redwood.top + redwood.bottom) / 2 };
+                vanguardAdvanceRoute = createRoute(advanceStart, advanceEnd, height * 0.05);
                 const tradeStart = { x: (trade.left + trade.right) / 2, y: (trade.top + trade.bottom) / 2 };
                 const tradeEnd = { x: (blackwater.left + blackwater.right) / 2, y: blackwater.bottom + 5 };
                 tradeRoute = createRoute(tradeStart, tradeEnd, -height * 0.08);
@@ -2393,6 +2419,67 @@
                 context.closePath();
                 context.fill();
                 context.restore();
+            }
+
+            function drawFrozenSectors(timestamp, staticFrame) {
+                const sectors = [
+                    { x: width * 0.67, y: height * 0.035, width: width * 0.32, height: height * 0.33, flakes: 34, fill: 'rgba(56, 91, 142, 0.16)', label: 'STREFA 1 // -70°C', edge: 'rgba(196, 181, 253, 0.75)' },
+                    { x: width * 0.52, y: height * 0.09, width: width * 0.15, height: height * 0.22, flakes: 12, fill: 'rgba(72, 71, 133, 0.13)', label: 'STREFA 2', edge: 'rgba(167, 139, 250, 0.58)' },
+                ];
+
+                sectors.forEach((sector, sectorIndex) => {
+                    context.save();
+                    context.beginPath();
+                    context.moveTo(sector.x + sector.width * 0.04, sector.y);
+                    context.lineTo(sector.x + sector.width * 0.9, sector.y + sector.height * 0.04);
+                    context.lineTo(sector.x + sector.width, sector.y + sector.height * 0.77);
+                    context.lineTo(sector.x + sector.width * 0.89, sector.y + sector.height);
+                    context.lineTo(sector.x + sector.width * 0.06, sector.y + sector.height * 0.95);
+                    context.lineTo(sector.x, sector.y + sector.height * 0.18);
+                    context.closePath();
+                    context.clip();
+                    context.fillStyle = sector.fill;
+                    context.fillRect(sector.x, sector.y, sector.width, sector.height);
+
+                    for (let flake = 0; flake < sector.flakes; flake += 1) {
+                        const phase = staticFrame ? ((flake * 17 + sectorIndex * 13) % 41) / 41 : (timestamp * 0.00007 + flake * 0.137 + sectorIndex * 0.19) % 1;
+                        const across = ((flake * 37 + sectorIndex * 11) % 101) / 100;
+                        const drift = staticFrame ? 0 : Math.sin(timestamp * 0.0009 + flake * 2.1) * 5;
+                        const snowX = sector.x + across * sector.width + drift;
+                        const snowY = sector.y + phase * sector.height;
+                        const size = flake % 5 === 0 ? 2 : 1.2;
+                        context.beginPath();
+                        context.arc(snowX, snowY, size, 0, Math.PI * 2);
+                        context.fillStyle = `rgba(219, 234, 254, ${0.18 + (flake % 4) * 0.1})`;
+                        context.shadowColor = 'rgba(191, 219, 254, 0.7)';
+                        context.shadowBlur = flake % 5 === 0 ? 4 : 1;
+                        context.fill();
+                    }
+                    context.restore();
+
+                    context.save();
+                    context.beginPath();
+                    context.moveTo(sector.x + sector.width * 0.04, sector.y);
+                    context.lineTo(sector.x + sector.width * 0.9, sector.y + sector.height * 0.04);
+                    context.lineTo(sector.x + sector.width, sector.y + sector.height * 0.77);
+                    context.lineTo(sector.x + sector.width * 0.89, sector.y + sector.height);
+                    context.lineTo(sector.x + sector.width * 0.06, sector.y + sector.height * 0.95);
+                    context.lineTo(sector.x, sector.y + sector.height * 0.18);
+                    context.closePath();
+                    context.setLineDash([6, 5]);
+                    context.lineDashOffset = staticFrame ? 0 : -timestamp * 0.006;
+                    context.strokeStyle = sector.edge;
+                    context.lineWidth = 1.5;
+                    context.shadowColor = sector.edge;
+                    context.shadowBlur = staticFrame ? 2 : 4 + (Math.sin(timestamp * 0.002 + sectorIndex) + 1) * 2;
+                    context.stroke();
+                    context.setLineDash([]);
+                    context.textBaseline = 'top';
+                    context.font = `bold ${Math.max(7, Math.min(9, width * 0.01))}px monospace`;
+                    context.fillStyle = sectorIndex === 0 ? 'rgba(219, 234, 254, 0.78)' : 'rgba(221, 214, 254, 0.72)';
+                    context.fillText(sector.label, sector.x + 6, sector.y + 6);
+                    context.restore();
+                });
             }
 
             function drawZone4(timestamp, staticFrame) {
@@ -2532,6 +2619,7 @@
                     }
                 });
 
+                drawFrozenSectors(timestamp, staticFrame);
                 drawZone4(timestamp, staticFrame);
 
                 const zoneX = width * 0.68;
@@ -2612,6 +2700,9 @@
                 const defensePulse = staticFrame ? 0.65 : (Math.sin(timestamp * 0.004) + 1) / 2;
                 drawTacticalArrow(defenseRoute, '#4ade80', defensePulse, staticFrame ? 0 : timestamp * 0.016);
 
+                const advancePulse = staticFrame ? 0.7 : (Math.sin(timestamp * 0.006 + 1) + 1) / 2;
+                drawTacticalArrow(vanguardAdvanceRoute, '#f87171', advancePulse, staticFrame ? 0 : -timestamp * 0.019);
+
                 const tradePulse = staticFrame ? 0.65 : (Math.sin(timestamp * 0.0035 + 2) + 1) / 2;
                 drawTacticalArrow(tradeRoute, '#fbbf24', tradePulse, staticFrame ? 0 : timestamp * 0.014);
 
@@ -2678,8 +2769,10 @@
             const reports = {
                 redwood: { title: 'Redwood', category: 'OSADA · ZNANY PUNKT', copy: 'Redwood — osada znana społeczności Grayfall.', source: 'Odczyt mapy · Redwood' },
                 blackwater: { title: 'Blackwater', category: 'DUŻE MIASTO · SZLAK HANDLOWY', copy: 'Brak informacji o lokacji bądź nie odkryto jeszcze po komunikatach radiowych', source: 'Brak potwierdzonego meldunku radiowego' },
-                trade: { title: 'Greyline Trade Company', category: 'KONWÓJ · BLACKWATER', copy: 'Greyline Trade Company dociera do Blackwater z ostatnim transportem z Redwood.', source: 'Transponder pojazdu · Greyline Trade Company' },
-                vanguard: { title: 'Vanguard Force', category: 'US GOV · JEDNOSTKI SPECJALNE', copy: 'Vanguard Force — jednostki specjalne rządu USA, powiązane ze Strefą Unknown.', source: 'Odczyt mapy · Strefa Unknown' },
+                oakland: { title: 'Oakland', category: 'MIASTO · STREFA 2', copy: 'Oakland leży przy odciętym pasie Strefy 1. Zamiecie i temperatura −70°C uniemożliwiają potwierdzenie sytuacji radiowej.', source: 'Odczyt mapy · Strefy 1–2' },
+                winterMerc: { title: '????', category: 'NIEZNANA GRUPA NAJEMNICZA · SPECJALIZACJA ZIMOWA', copy: 'Nieznana grupa najemnicza działa w Strefie 2. Jej tożsamości nie udało się ustalić z przechwyconych komunikatów.', source: 'Sygnał nieznany · Strefa 2' },
+                trade: { title: 'Greyline Trade Company', category: 'KONWÓJ · BLACKWATER', copy: 'Greyline Trade Company dociera z ostatnim transportem do Blackwater.', source: 'Transponder pojazdu · Greyline Trade Company' },
+                vanguard: { title: 'Vanguard Force', category: 'US GOV · MARSZ WZNOWIONY', copy: 'Vanguard Force wznowiło marsz na Redwood po przegrupowaniu.', source: 'Meldunek operacyjny · Kierunek Redwood' },
                 meridian: { title: 'Ekspedycja Meridian', category: 'GRUPA · OBECNOŚĆ POTWIERDZONA', copy: 'Grupa Ekspedycyjna Meridian jest znana w regionie. Dokładne położenie pozostaje nieustalone.', source: 'Odczyt mapy · Meridian' },
                 scout: { title: 'Meridian Scout Group', category: 'OSŁONA · POZYCJA OBRONNA', copy: 'Meridian Scout osłania Redwood i utrzymuje pozycję po zakończeniu starcia z Vanguard Force.', source: 'Odczyt mapy · Redwood' },
                 sentinel: { title: 'SentinelGate', category: 'WĘZEŁ NASŁUCHU · 87.4 MHz', copy: 'Węzeł antenowy zbiera sygnały z przybliżonych lokalizacji w regionie.', source: 'Odczyt radiowy · SentinelGate' },
@@ -2951,7 +3044,6 @@
             window.clearInterval(battlePollTimer);
         }
 
-        document.getElementById('battle-open').addEventListener('click', openBattleWindow);
         document.getElementById('battle-close').addEventListener('click', closeBattleWindow);
         document.getElementById('battle-modal').addEventListener('click', (event) => {
             if (event.target.id === 'battle-modal') closeBattleWindow();
@@ -3056,7 +3148,6 @@
         let adminAccess = null;
         let adminChatTimer = null;
         let adminRadioTimer = null;
-        let adminBattleTimer = null;
         let publicRadioTimer = null;
         let radioReplyTarget = null;
 
@@ -3287,24 +3378,20 @@
             adminChatTimer = window.setInterval(loadAdminChat, 15000);
             window.clearInterval(adminRadioTimer);
             if (adminAccess?.canManageTeam) adminRadioTimer = window.setInterval(loadAdminRadio, 15000);
-            window.clearInterval(adminBattleTimer);
-            if (adminAccess?.canManageTeam) adminBattleTimer = window.setInterval(loadBattleData, 15000);
         }
 
         function closeAdminPanel() {
             document.getElementById('admin-panel').classList.add('hidden');
             window.clearInterval(adminChatTimer);
             window.clearInterval(adminRadioTimer);
-            window.clearInterval(adminBattleTimer);
         }
 
         async function loadAdminPanel() {
             const canManageTeam = !!adminAccess?.canManageTeam;
             document.getElementById('admin-radio-section').classList.toggle('hidden', !canManageTeam);
-            document.getElementById('admin-battle-report-section').classList.toggle('hidden', !canManageTeam);
+            document.getElementById('admin-battle-report-section').classList.add('hidden');
             if (canManageTeam) hydrateRadioDisplaySettingsForm();
             const radioRequest = canManageTeam ? loadAdminRadio() : Promise.resolve();
-            const battleRequest = canManageTeam ? loadBattleData() : Promise.resolve();
             try {
                 const requests = [adminRequest('/api/admin/news'), adminRequest('/api/admin/chat'), adminRequest('/api/admin/whitelist')];
                 if (canManageTeam) requests.push(adminRequest('/api/admin/team'));
@@ -3317,7 +3404,7 @@
             } catch (error) {
                 showAdminError(error.message);
             }
-            await Promise.all([radioRequest, battleRequest]);
+            await radioRequest;
         }
 
         async function loadAdminChat() {
