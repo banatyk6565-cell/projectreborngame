@@ -805,6 +805,177 @@
         @keyframes battleUnitPing { 0% { transform: scale(0.94); opacity: 0.5; } 100% { transform: scale(1.24); opacity: 0; } }
         .battle-report { border-left: 2px solid rgba(103, 232, 249, 0.5); padding: 8px 10px; background: rgba(9, 16, 15, 0.7); }
         .battle-report--command { border-color: rgba(251, 191, 36, 0.8); }
+        .battle-map--redwood { min-height: 440px; aspect-ratio: 1.42; background-color: #080d16; background-image: linear-gradient(rgba(115, 151, 176, 0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(115, 151, 176, 0.07) 1px, transparent 1px), radial-gradient(ellipse at 30% 55%, rgba(42, 64, 76, 0.26), transparent 62%); }
+        .battle-moon { position: absolute; z-index: 1; top: 7%; right: 8%; display: grid; width: 35px; height: 35px; place-items: center; border: 1px solid rgba(219, 234, 254, 0.56); border-radius: 50%; background: radial-gradient(circle at 38% 35%, #f8fafc, #cbd5e1 54%, rgba(148, 163, 184, 0.2) 72%); color: #fff; box-shadow: 0 0 34px rgba(191, 219, 254, 0.42), 0 0 90px rgba(96, 165, 250, 0.12); }
+        .battle-moon i { font-size: 17px; }
+        .battle-star { position: absolute; z-index: 1; width: 2px; height: 2px; border-radius: 50%; background: #dbeafe; box-shadow: 0 0 5px #bfdbfe; opacity: 0.72; }
+        .battle-wall { position: absolute; z-index: 2; top: 9%; left: 59%; width: 12px; height: 82%; border: 1px solid rgba(180, 196, 183, 0.64); background: repeating-linear-gradient(0deg, rgba(104, 122, 108, 0.96) 0 21px, rgba(22, 32, 27, 0.98) 21px 24px); box-shadow: 0 0 13px rgba(156, 180, 160, 0.22), inset 0 0 6px rgba(3, 8, 6, 0.9); }
+        .battle-wall::before, .battle-wall::after { position: absolute; left: -7px; width: 22px; height: 17px; border: 1px solid rgba(180, 196, 183, 0.72); background: #344238; box-shadow: 0 0 10px rgba(156, 180, 160, 0.18); content: ''; }
+        .battle-wall::before { top: 17%; }
+        .battle-wall::after { bottom: 17%; }
+        .battle-wall-label { position: absolute; z-index: 3; top: 8%; left: 60.5%; color: #cbd5c7; font: 800 7px monospace; letter-spacing: 0.12em; writing-mode: vertical-rl; text-shadow: 0 0 8px #111; }
+        .battle-gate { position: absolute; z-index: 2; top: 45%; left: 58%; width: 15px; height: 10%; border: 2px solid #d6c28a; background: repeating-linear-gradient(90deg, rgba(61, 47, 27, 0.95) 0 3px, rgba(13, 17, 15, 0.95) 3px 5px); box-shadow: 0 0 12px rgba(251, 191, 36, 0.2); }
+        .battle-night-building { position: absolute; z-index: 1; display: grid; place-items: center; border: 1px solid rgba(123, 158, 157, 0.3); background: linear-gradient(145deg, rgba(23, 43, 48, 0.94), rgba(10, 19, 25, 0.98)); color: rgba(191, 219, 219, 0.6); font: 700 7px monospace; letter-spacing: 0.1em; box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.55), 0 3px 10px rgba(0, 0, 0, 0.38); }
+        .battle-night-building--hq { left: 23%; top: 19%; width: 25%; height: 18%; border-color: rgba(74, 222, 128, 0.52); color: #bbf7d0; }
+        .battle-night-building--business { left: 12%; top: 48%; width: 24%; height: 16%; }
+        .battle-night-building--homes { left: 37%; top: 69%; width: 17%; height: 13%; }
+        .battle-night-building--homes-two { left: 15%; top: 76%; width: 19%; height: 11%; }
+        .battle-street-lamp { position: absolute; z-index: 2; width: 4px; height: 34px; border-radius: 3px; background: #75858a; box-shadow: 0 0 2px #dbeafe; }
+        .battle-street-lamp::before { position: absolute; top: 0; left: 1px; width: 15px; height: 3px; border-radius: 3px; background: #fde68a; box-shadow: 0 0 8px 3px rgba(253, 230, 138, 0.58), 0 0 30px 12px rgba(251, 191, 36, 0.16); content: ''; animation: lampFlicker 4.8s steps(1, end) infinite; }
+        .battle-street-lamp--one { left: 24%; top: 39%; }
+        .battle-street-lamp--two { left: 44%; top: 50%; animation-delay: -1.4s; }
+        .battle-street-lamp--three { left: 31%; top: 66%; animation-delay: -2.7s; }
+        .battle-city-unit--vanguard { color: #f87171; border-color: rgba(248, 113, 113, 0.8); }
+        .battle-city-unit--redwood { color: #86efac; border-color: rgba(74, 222, 128, 0.75); }
+        .battle-city-unit--meridian { color: #67e8f9; border-color: rgba(34, 211, 238, 0.78); }
+        .battle-phase-vector { fill: none; stroke-width: 2.4; stroke-dasharray: 8 6; stroke-linecap: round; opacity: 0.88; animation: battleVectorFlow 0.9s linear infinite; }
+        .battle-phase-vector--vanguard { stroke: #fb7185; marker-end: url(#redwood-arrow-vanguard); filter: drop-shadow(0 0 5px rgba(248, 113, 113, 0.62)); }
+        .battle-phase-vector--meridian { stroke: #22d3ee; marker-end: url(#redwood-arrow-meridian); filter: drop-shadow(0 0 5px rgba(34, 211, 238, 0.62)); }
+        .battle-phase-vector--redwood { stroke: #4ade80; marker-end: url(#redwood-arrow-redwood); filter: drop-shadow(0 0 5px rgba(74, 222, 128, 0.62)); }
+        .battle-phase-vector--traders { stroke: #fbbf24; marker-end: url(#redwood-arrow-traders); filter: drop-shadow(0 0 5px rgba(251, 191, 36, 0.65)); }
+        .battle-redwood-unit, .battle-redwood-vehicle { transition: left 900ms ease, top 900ms ease; }
+        .battle-redwood-unit--snipers-firing::after { position: absolute; top: 50%; right: -5px; width: 6px; height: 6px; transform: translateY(-50%); border-radius: 50%; background: #e0f2fe; box-shadow: 0 0 12px 5px rgba(34, 211, 238, 0.8); content: ''; animation: battleSniperFlash 0.5s steps(1, end) infinite; }
+        .battle-redwood-unit--sniper-targeted { animation: battleSniperTargetPulse 1.1s ease-in-out infinite; }
+        .battle-redwood-unit--broken { animation: battleUnitBreak 0.16s linear infinite; border-color: #f87171; box-shadow: 0 0 17px rgba(248, 113, 113, 0.8); }
+        .battle-redwood-unit--heavily-broken { animation: battleUnitBreak 0.1s linear infinite; border-color: #fca5a5; box-shadow: 0 0 24px rgba(248, 113, 113, 0.95), inset 0 0 13px rgba(153, 27, 27, 0.6); }
+        .battle-redwood-unit--shaken { animation: battleUnitBreak 0.2s linear infinite; }
+        .battle-unit-break { position: absolute; z-index: 2; top: -7px; right: -7px; display: none !important; width: 17px; height: 17px; place-items: center; border: 1px solid #fecaca; border-radius: 50%; background: #450a0a; color: #fecaca; font-size: 9px; }
+        .battle-redwood-unit--broken .battle-unit-break { display: grid !important; }
+        .battle-sniper-shields { position: absolute; z-index: 2; top: -8px; right: -9px; display: none; align-items: center; gap: 1px; color: #a5f3fc; font-size: 10px; filter: drop-shadow(0 0 4px rgba(34, 211, 238, 0.85)); }
+        .battle-map--phase-five .battle-sniper-shields, .battle-map--phase-six .battle-sniper-shields { display: flex; }
+        .battle-unit-flank { position: absolute; z-index: 2; top: -8px; right: -8px; display: none !important; width: 18px; height: 18px; place-items: center; border: 1px solid #fde047; border-radius: 50%; background: #422006; color: #fde047; font-size: 10px; filter: drop-shadow(0 0 5px rgba(250, 204, 21, 0.9)); }
+        .battle-unit-flank--active { display: grid !important; }
+        .battle-redwood-wall-fire { position: absolute; z-index: 4; left: -10px; display: none; color: #fb923c; font-size: 18px; filter: drop-shadow(0 0 4px #f97316) drop-shadow(0 0 10px #dc2626); animation: battleWallFlame 0.55s ease-in-out infinite alternate; }
+        .battle-redwood-wall-fire:nth-child(even) { animation-delay: -0.3s; color: #facc15; }
+        .battle-map--phase-two .battle-redwood-wall-fire, .battle-map--phase-three .battle-redwood-wall-fire, .battle-map--phase-four .battle-redwood-wall-fire, .battle-map--phase-five .battle-redwood-wall-fire, .battle-map--phase-six .battle-redwood-wall-fire { display: block; }
+        .battle-redwood-wall-fire--lower { transform: translateX(2px) scale(0.82); animation-delay: -0.2s; }
+        .battle-phase-vector--molotov { stroke: #fb923c; stroke-width: 2.8; stroke-dasharray: 4 5; filter: drop-shadow(0 0 5px rgba(249, 115, 22, 0.8)); animation-duration: 0.5s; }
+        .battle-phase-vector--grenade { stroke: #facc15; stroke-width: 2.6; stroke-dasharray: 2 4; filter: drop-shadow(0 0 6px rgba(250, 204, 21, 0.9)); animation-duration: 0.28s; }
+        .battle-phase-vector--smoke { stroke: #cbd5e1; stroke-width: 2.8; stroke-dasharray: 3 6; filter: drop-shadow(0 0 6px rgba(203, 213, 225, 0.75)); animation-duration: 1.2s; }
+        .battle-phase-vector--raid { stroke: #facc15; stroke-width: 3; stroke-dasharray: 9 5; filter: drop-shadow(0 0 7px rgba(250, 204, 21, 0.85)); animation-duration: 0.45s; }
+        .battle-phase-vector--rocket { stroke: #67e8f9; stroke-width: 3.5; stroke-dasharray: 7 4; filter: drop-shadow(0 0 8px rgba(103, 232, 249, 0.95)); animation-duration: 0.32s; }
+        .battle-phase-vector--airstrike { stroke: #fb923c; stroke-width: 3.5; stroke-dasharray: 5 5; filter: drop-shadow(0 0 8px rgba(251, 146, 60, 0.95)); animation-duration: 0.38s; }
+        .battle-phase-bolt { fill: #fde047; stroke: #713f12; stroke-width: 1.4; filter: drop-shadow(0 0 5px rgba(250, 204, 21, 0.95)); }
+        .battle-smoke-cloud { position: absolute; z-index: 4; display: none; width: 52px; height: 34px; color: #cbd5e1; opacity: 0; filter: drop-shadow(0 0 8px rgba(203, 213, 225, 0.5)); pointer-events: none; }
+        .battle-smoke-cloud > i { position: absolute; animation: battleSmokeDrift 2.3s ease-in-out infinite alternate; }
+        .battle-smoke-cloud > i:nth-child(1) { left: 2px; bottom: 0; font-size: 23px; }
+        .battle-smoke-cloud > i:nth-child(2) { left: 18px; bottom: 6px; font-size: 28px; animation-delay: -0.8s; }
+        .battle-smoke-cloud > i:nth-child(3) { right: 0; bottom: 0; font-size: 22px; animation-delay: -1.4s; }
+        .battle-map--phase-three .battle-smoke-cloud[data-battle-smoke="one"], .battle-map--phase-three .battle-smoke-cloud[data-battle-smoke="two"], .battle-map--phase-four .battle-smoke-cloud { display: block; opacity: 0.78; }
+        .battle-map--phase-three .battle-redwood-vehicle-raid, .battle-map--phase-four .battle-redwood-vehicle-raid, .battle-map--phase-five .battle-redwood-vehicle-raid, .battle-map--phase-six .battle-redwood-vehicle-raid { display: block; }
+        .battle-map--phase-four .battle-redwood-vehicle--destroyed .battle-redwood-vehicle-raid, .battle-map--phase-five .battle-redwood-vehicle--destroyed .battle-redwood-vehicle-raid, .battle-map--phase-six .battle-redwood-vehicle--destroyed .battle-redwood-vehicle-raid { display: none; }
+        .battle-redwood-vehicle-raid { display: none; color: #fde047; font-size: 5px; }
+        .battle-sniper-smoke-one { left: 25%; top: 8%; }
+        .battle-sniper-smoke-two { left: 37%; top: 16%; }
+        .battle-flash-zone { position: absolute; z-index: 4; top: 66%; left: 60%; display: none; width: 74px; height: 74px; place-items: center; transform: translate(-50%, -50%); border: 1px solid rgba(224, 242, 254, 0.88); border-radius: 50%; background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0 8%, rgba(186, 230, 253, 0.8) 14%, rgba(96, 165, 250, 0.25) 38%, transparent 72%); color: #fff; filter: drop-shadow(0 0 16px #bfdbfe); animation: battleFlashBurst 1.2s ease-out infinite; pointer-events: none; }
+        .battle-flash-zone > i { font-size: 27px; text-shadow: 0 0 13px #fff; }
+        .battle-map--phase-four .battle-flash-zone { display: grid; }
+        .battle-airstrike-warning { position: absolute; z-index: 10; top: 3%; left: 50%; display: none; transform: translateX(-50%); border: 1px solid rgba(251, 146, 60, 0.82); background: rgba(69, 10, 10, 0.94); padding: 5px 10px; color: #fed7aa; font: 900 10px/1.1 monospace; letter-spacing: 0.08em; text-align: center; white-space: nowrap; box-shadow: 0 0 16px rgba(249, 115, 22, 0.5); animation: battleAirstrikeWarning 1.1s steps(2, end) infinite; }
+        .battle-airstrike-warning i { margin-right: 5px; color: #fb923c; }
+        .battle-map--phase-six .battle-airstrike-warning { display: block; }
+        .battle-aircraft-run { position: absolute; z-index: 9; left: -14%; display: none; width: 110px; height: 68px; color: #e2e8f0; filter: drop-shadow(0 0 9px rgba(251, 146, 60, 0.85)); pointer-events: none; }
+        .battle-map--phase-six .battle-aircraft-run { display: block; animation: battleAirRaidFlight var(--flight-duration, 5.2s) linear infinite; animation-delay: var(--flight-delay, 0s); }
+        .battle-aircraft-model { position: absolute; top: 3px; left: 4px; display: block; width: 78px; height: 49px; color: #e2e8f0; }
+        .battle-aircraft-model > i:first-child { position: absolute; z-index: 2; top: 2px; left: 12px; transform: rotate(90deg); color: #f1f5f9; font-size: 52px; text-shadow: 0 0 9px rgba(148, 163, 184, 0.85); }
+        .battle-aircraft-model::before { position: absolute; z-index: 1; top: 2px; left: 30px; width: 17px; height: 44px; clip-path: polygon(50% 0, 100% 40%, 100% 58%, 50% 100%, 0 58%, 0 40%); border: 1px solid rgba(251, 146, 60, 0.9); background: linear-gradient(90deg, #64748b, #e2e8f0 48%, #475569); content: ''; }
+        .battle-aircraft-model::after { position: absolute; z-index: 1; top: 13px; left: 5px; width: 13px; height: 22px; clip-path: polygon(50% 0, 100% 38%, 100% 65%, 50% 100%, 0 65%, 0 38%); background: #94a3b8; content: ''; }
+        .battle-aircraft-cockpit { position: absolute; z-index: 3; top: 18px; left: 50px; width: 11px; height: 6px; transform: rotate(-25deg); border: 1px solid #bae6fd; border-radius: 70% 35%; background: #0e7490; box-shadow: 0 0 7px #38bdf8; }
+        .battle-aircraft-light { position: absolute; z-index: 3; top: 21px; left: 27px; width: 5px; height: 5px; border-radius: 50%; background: #fb7185; box-shadow: 0 0 8px 3px rgba(251, 113, 133, 0.85); animation: battleAircraftBeacon 0.8s steps(1, end) infinite; }
+        .battle-aircraft-label { position: absolute; z-index: 4; top: 48px; left: 10px; color: #fed7aa; font: 900 6px/1 monospace; letter-spacing: 0.08em; text-shadow: 0 0 5px #111; white-space: nowrap; }
+        .battle-aircraft-bomb { position: absolute; z-index: 1; top: 38px; left: 41px; display: block; color: #fbbf24; font-size: 12px; opacity: 0; filter: drop-shadow(0 0 4px #f97316); animation: battleBombDrop 1.85s linear infinite; animation-delay: var(--bomb-delay, 0s); }
+        .battle-aircraft-bomb::after { position: absolute; top: -11px; left: 5px; width: 2px; height: 12px; background: linear-gradient(#f97316, transparent); content: ''; }
+        .battle-airstrike-fire { position: absolute; z-index: 4; display: none; width: 74px; height: 62px; color: #fb923c; background: radial-gradient(ellipse at 50% 78%, rgba(255, 255, 190, 0.34), rgba(249, 115, 22, 0.12) 35%, transparent 72%); filter: drop-shadow(0 0 12px rgba(249, 115, 22, 0.9)); pointer-events: none; }
+        .battle-airstrike-fire::before { position: absolute; inset: -8px -13px -2px; transform: scale(0.55); border: 2px solid rgba(251, 191, 36, 0.82); border-radius: 50%; content: ''; animation: battleBlastRing 1.7s ease-out infinite; }
+        .battle-airstrike-fire::after { position: absolute; top: 23px; left: 22px; width: 28px; height: 28px; transform: scale(0.35); border-radius: 50%; background: #fff7bf; box-shadow: 0 0 22px 12px rgba(249, 115, 22, 0.85); content: ''; animation: battleAirstrikeFlash 1.7s ease-out infinite; }
+        .battle-airstrike-fire > i:first-child { position: absolute; bottom: 0; left: 14px; font-size: 43px; animation: battleWreckFlare 0.36s ease-in-out infinite alternate; }
+        .battle-airstrike-fire > i:nth-child(2) { position: absolute; bottom: 2px; left: 0; color: #facc15; font-size: 33px; animation: battleWreckFlare 0.42s ease-in-out infinite alternate-reverse; }
+        .battle-airstrike-fire > i:nth-child(3) { position: absolute; top: 0; left: 22px; color: #64748b; font-size: 29px; filter: drop-shadow(0 0 8px rgba(148, 163, 184, 0.8)); animation: battleSmokeDrift 1.15s ease-in-out infinite alternate; }
+        .battle-airstrike-fire > i:nth-child(4) { position: absolute; top: 8px; right: 0; color: #475569; font-size: 24px; filter: drop-shadow(0 0 8px rgba(148, 163, 184, 0.7)); animation: battleSmokeDrift 1.4s ease-in-out infinite alternate-reverse; }
+        .battle-map--phase-six .battle-airstrike-fire { display: block; }
+        .battle-map--phase-seven .battle-airstrike-warning, .battle-map--phase-seven .battle-aircraft-run, .battle-map--phase-seven .battle-aircraft-bomb, .battle-map--phase-seven .battle-airstrike-fire { display: none !important; }
+        .battle-epilogue { position: absolute; z-index: 11; top: 3%; left: 50%; display: none; width: min(88%, 520px); transform: translateX(-50%); border: 1px solid rgba(96, 165, 250, 0.9); background: rgba(7, 18, 39, 0.96); padding: 8px 12px; color: #dbeafe; text-align: center; box-shadow: 0 0 22px rgba(59, 130, 246, 0.45); }
+        .battle-epilogue strong { display: block; color: #fff; font: 900 12px/1.2 monospace; letter-spacing: 0.1em; }
+        .battle-epilogue span { display: block; margin-top: 4px; font: 700 8px/1.45 monospace; letter-spacing: 0.04em; }
+        .battle-map--finished .battle-epilogue { display: block; }
+        .battle-redwood-vehicle--destroyed { z-index: 7; border-color: rgba(251, 146, 60, 0.95); color: #fed7aa; background: linear-gradient(110deg, rgba(69, 26, 3, 0.98), rgba(28, 15, 12, 0.98)); box-shadow: 0 0 24px rgba(249, 115, 22, 0.62), inset 0 0 14px rgba(220, 38, 38, 0.48); }
+        .battle-vehicle-wreck-effects { position: absolute; z-index: -1; top: -32px; left: -15px; display: none; width: 170px; height: 88px; pointer-events: none; }
+        .battle-vehicle-wreck-effects > i { position: absolute; filter: drop-shadow(0 0 8px #f97316) drop-shadow(0 0 16px #dc2626); animation: battleWreckFlare 0.42s ease-in-out infinite alternate; }
+        .battle-vehicle-wreck-effects > i:nth-child(1) { left: 8px; bottom: 0; color: #fb923c; font-size: 39px; }
+        .battle-vehicle-wreck-effects > i:nth-child(2) { left: 43px; bottom: 7px; color: #facc15; font-size: 34px; animation-delay: -0.18s; }
+        .battle-vehicle-wreck-effects > i:nth-child(3) { left: 54px; top: 0; color: #64748b; font-size: 33px; filter: drop-shadow(0 0 8px rgba(148, 163, 184, 0.58)); animation: battleSmokeDrift 1s ease-in-out infinite alternate; }
+        .battle-vehicle-wreck-effects > i:nth-child(4) { left: 86px; top: 6px; color: #475569; font-size: 29px; filter: drop-shadow(0 0 8px rgba(148, 163, 184, 0.5)); animation: battleSmokeDrift 1.3s ease-in-out infinite alternate; }
+        .battle-redwood-vehicle--destroyed .battle-vehicle-wreck-effects { display: block; }
+        .battle-redwood-vehicle-destroyed { display: none; color: #fdba74 !important; font-weight: 900; }
+        .battle-redwood-vehicle--destroyed .battle-redwood-vehicle-destroyed { display: block; }
+        @keyframes battleWreckFlare { from { transform: translateY(2px) scale(0.82); opacity: 0.78; } to { transform: translateY(-7px) scale(1.13); opacity: 1; } }
+        @keyframes battleFlashBurst { 0%, 100% { transform: translate(-50%, -50%) scale(0.7); opacity: 0.38; } 38% { transform: translate(-50%, -50%) scale(1.18); opacity: 1; } 65% { transform: translate(-50%, -50%) scale(0.96); opacity: 0.78; } }
+        @keyframes battleAirRaidFlight { 0% { left: -14%; transform: translateY(0) rotate(-2deg); } 48% { transform: translateY(-9px) rotate(1deg); } 100% { left: 112%; transform: translateY(3px) rotate(-1deg); } }
+        @keyframes battleAirstrikeWarning { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        @keyframes battleBombDrop { 0%, 8% { transform: translate(0, -8px) rotate(-20deg); opacity: 0; } 14% { opacity: 1; } 78% { opacity: 1; } 100% { transform: translate(13px, 91px) rotate(55deg); opacity: 0; } }
+        @keyframes battleAircraftBeacon { 0%, 45%, 100% { opacity: 1; } 46%, 90% { opacity: 0.18; } }
+        @keyframes battleAirstrikeFlash { 0%, 100% { transform: scale(0.2); opacity: 0; } 9% { transform: scale(1.65); opacity: 1; } 30% { transform: scale(0.85); opacity: 0.82; } 55% { transform: scale(0.2); opacity: 0; } }
+        @keyframes battleSmokeDrift { from { transform: translate(0, 3px) scale(0.88); opacity: 0.65; } to { transform: translate(3px, -4px) scale(1.08); opacity: 1; } }
+        @keyframes battleUnitBreak { 0%, 100% { transform: translate(-50%, -50%) translateX(-2px) rotate(-1deg); } 50% { transform: translate(-50%, -50%) translateX(2px) rotate(1deg); } }
+        @keyframes battleWallFlame { from { opacity: 0.72; transform: translateY(1px) scale(0.86); } to { opacity: 1; transform: translateY(-3px) scale(1.12); } }
+        @keyframes battleSniperFlash { 0%, 100% { opacity: 0.15; } 35%, 55% { opacity: 1; } }
+        @keyframes battleSniperTargetPulse { 0%, 100% { filter: drop-shadow(0 0 1px rgba(34, 211, 238, 0.1)); } 50% { filter: drop-shadow(0 0 9px rgba(34, 211, 238, 0.85)); } }
+        .battle-redwood-wall { position: absolute; z-index: 2; top: 9%; left: 59%; width: 12px; height: 82%; border: 1px solid rgba(180, 196, 183, 0.72); background: repeating-linear-gradient(0deg, rgba(104, 122, 108, 0.98) 0 20px, rgba(22, 32, 27, 0.98) 20px 24px); box-shadow: 0 0 13px rgba(156, 180, 160, 0.25), inset 0 0 6px rgba(3, 8, 6, 0.9); }
+        .battle-redwood-wall::before, .battle-redwood-wall::after { position: absolute; left: -6px; width: 22px; height: 17px; border: 1px solid rgba(180, 196, 183, 0.75); background: #344238; box-shadow: 0 0 10px rgba(156, 180, 160, 0.2); content: ''; }
+        .battle-redwood-wall::before { top: 14%; }
+        .battle-redwood-wall::after { bottom: 14%; }
+        .battle-redwood-gate { position: absolute; z-index: 3; top: 45%; left: 57.1%; width: 3.8%; height: 10%; border: 1px solid rgba(214, 194, 138, 0.75); background: repeating-linear-gradient(90deg, rgba(63, 48, 27, 0.98) 0 4px, rgba(12, 17, 15, 0.98) 4px 7px); box-shadow: 0 0 13px rgba(251, 191, 36, 0.24); }
+        .battle-redwood-wall-label { position: absolute; z-index: 3; top: 12%; left: calc(59% + 16px); color: #cbd5c7; font: 800 7px monospace; letter-spacing: 0.12em; writing-mode: vertical-rl; text-shadow: 0 0 8px #111; }
+        .battle-redwood-building { position: absolute; z-index: 1; display: grid; place-items: center; border: 1px solid rgba(123, 158, 157, 0.34); background: linear-gradient(145deg, rgba(23, 43, 48, 0.95), rgba(10, 19, 25, 0.98)); color: rgba(191, 219, 219, 0.72); font: 700 7px monospace; letter-spacing: 0.08em; line-height: 1.5; text-align: center; box-shadow: inset 0 0 14px rgba(0, 0, 0, 0.55), 0 3px 10px rgba(0, 0, 0, 0.38); }
+        .battle-redwood-building--hq { left: 22%; top: 17%; width: 25%; height: 18%; border-color: rgba(74, 222, 128, 0.55); color: #bbf7d0; }
+        .battle-redwood-building--business { left: 10%; top: 45%; width: 25%; height: 16%; }
+        .battle-redwood-building--house-one { left: 36%; top: 68%; width: 17%; height: 12%; }
+        .battle-redwood-building--house-two { left: 13%; top: 74%; width: 18%; height: 11%; }
+        .battle-redwood-building--house-three { left: 39%; top: 39%; width: 14%; height: 10%; }
+        .battle-redwood-unit { position: absolute; z-index: 5; display: flex; min-width: 132px; min-height: 36px; align-items: center; gap: 7px; transform: translate(-50%, -50%); border: 1px solid currentColor; border-radius: 4px; background: rgba(7, 12, 13, 0.97); padding: 5px 7px; color: #e5e7eb; font: 800 8px/1.2 monospace; box-shadow: 0 0 14px rgba(0, 0, 0, 0.6); }
+        .battle-redwood-unit > i { flex: 0 0 auto; font-size: 13px; }
+        .battle-redwood-unit > span { display: grid; gap: 3px; white-space: nowrap; }
+        .battle-redwood-unit small { color: currentColor; font-size: 6px; opacity: 0.72; }
+        .battle-redwood-unit--vanguard { border-color: rgba(248, 113, 113, 0.82); color: #fca5a5; box-shadow: 0 0 15px rgba(239, 68, 68, 0.2); }
+        .battle-redwood-unit--meridian { border-color: rgba(34, 211, 238, 0.82); color: #a5f3fc; box-shadow: 0 0 15px rgba(34, 211, 238, 0.2); }
+        .battle-redwood-unit--mercenary { border-color: rgba(96, 165, 250, 0.94); color: #bfdbfe; background: rgba(7, 18, 39, 0.98); box-shadow: 0 0 18px rgba(59, 130, 246, 0.42); }
+        .battle-redwood-unit--reinforcement { display: none; }
+        .battle-map--phase-seven .battle-redwood-unit--reinforcement { display: flex; }
+        .battle-redwood-unit--redwood { border-color: rgba(74, 222, 128, 0.82); color: #bbf7d0; box-shadow: 0 0 15px rgba(34, 197, 94, 0.2); }
+        .battle-redwood-unit--traders { border-color: rgba(251, 191, 36, 0.9); color: #fde68a; box-shadow: 0 0 17px rgba(245, 158, 11, 0.24); background: rgba(28, 22, 9, 0.98); }
+        .battle-redwood-vehicle { position: absolute; z-index: 6; display: flex; min-width: 138px; min-height: 34px; align-items: center; gap: 7px; transform: translate(-50%, -50%); border: 1px solid rgba(248, 113, 113, 0.9); border-radius: 4px; background: linear-gradient(110deg, rgba(67, 19, 21, 0.98), rgba(15, 12, 13, 0.98)); padding: 4px 7px; color: #fecaca; font: 800 7px/1.15 monospace; box-shadow: 0 0 15px rgba(239, 68, 68, 0.3), inset 0 0 9px rgba(127, 29, 29, 0.25); }
+        .battle-redwood-vehicle-icon { position: relative; display: grid; width: 23px; height: 23px; flex: 0 0 23px; place-items: center; border: 1px solid rgba(248, 113, 113, 0.42); background: rgba(127, 29, 29, 0.28); }
+        .battle-redwood-vehicle-icon > i { font-size: 13px; }
+        .battle-redwood-vehicle-icon > span { position: absolute; top: -4px; right: -5px; display: grid; width: 11px; height: 11px; place-items: center; border: 1px solid #fecaca; border-radius: 50%; background: #450a0a; color: #fff1f2; font-size: 6px; }
+        .battle-redwood-vehicle > span:last-child { display: grid; gap: 3px; white-space: nowrap; }
+        .battle-redwood-vehicle small { color: #fda4af; font-size: 6px; }
+        .battle-staging { border-left: 2px solid rgba(251, 191, 36, 0.72); background: rgba(40, 31, 11, 0.28); }
+        .battle-phase-track { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+        .battle-phase-step { height: 3px; background: rgba(148, 163, 184, 0.2); }
+        .battle-phase-step.is-active, .battle-phase-step.is-complete { background: #f87171; box-shadow: 0 0 7px rgba(248, 113, 113, 0.45); }
+        @keyframes lampFlicker { 0%, 88%, 91%, 100% { opacity: 1; } 89%, 90% { opacity: 0.35; } }
+        @media (max-width: 767px) {
+            .battle-map--redwood { min-height: 360px; aspect-ratio: 0.82; }
+            .battle-redwood-wall { left: 59%; width: 9px; }
+            .battle-redwood-wall-label { left: 61%; font-size: 6px; }
+            .battle-redwood-gate { left: 57.1%; width: 3.8%; }
+            .battle-redwood-building { font-size: 6px; letter-spacing: 0.02em; }
+            .battle-redwood-unit { min-width: 82px; min-height: 30px; gap: 4px; padding: 3px 4px; font-size: 6px; }
+            .battle-redwood-unit[data-battle-unit="snipers"] { min-width: 74px; gap: 2px; padding: 3px 2px; font-size: 5px; }
+            .battle-redwood-unit[data-battle-unit="snipers"] small { font-size: 4px; }
+            .battle-redwood-unit > i { font-size: 10px; }
+            .battle-redwood-unit small { font-size: 5px; }
+            .battle-redwood-vehicle { min-width: 96px; min-height: 30px; gap: 5px; padding: 3px 5px; font-size: 5px; }
+            .battle-redwood-vehicle-icon { width: 19px; height: 19px; flex-basis: 19px; }
+            .battle-redwood-vehicle-icon > i { font-size: 11px; }
+            .battle-redwood-vehicle small { font-size: 4.5px; }
+            .battle-airstrike-warning { top: 4%; max-width: 96%; padding: 4px 6px; font-size: 7px; letter-spacing: 0.04em; }
+            .battle-aircraft-run { width: 88px; height: 58px; transform: scale(0.78); transform-origin: top left; }
+            .battle-airstrike-fire { width: 56px; height: 49px; }
+            .battle-airstrike-fire > i:first-child { font-size: 33px; }
+            .battle-airstrike-fire > i:nth-child(2) { font-size: 26px; }
+            .battle-airstrike-fire > i:nth-child(3) { font-size: 23px; }
+            .battle-airstrike-fire > i:nth-child(4) { font-size: 19px; }
+        }
         @media (max-width: 767px) {
             .battle-window { width: calc(100vw - 16px); max-height: calc(100vh - 16px); }
             .battle-map { min-height: 340px; aspect-ratio: 0.82; }
@@ -1070,9 +1241,9 @@
                     </section>
 
                     <section id="admin-battle-report-section" class="hidden bg-darkbg/60 border border-red-500/25 rounded-2xl p-5 mt-6">
-                        <div class="mb-4 flex flex-wrap items-start justify-between gap-3"><div><h3 class="font-cinzel text-lg font-bold text-white">Dowództwo · meldunki starcia</h3><p class="text-xs text-gray-500">Wiadomości pojawią się w panelu starcia i będą wspólne dla odwiedzających.</p></div><button id="admin-battle-advance-phase-five" type="button" class="rounded-lg border border-amber-400/40 bg-amber-500/10 px-3 py-2 text-[10px] font-bold text-amber-200 transition hover:border-amber-300 hover:bg-amber-500/20"><i class="fa-solid fa-forward-step mr-1" aria-hidden="true"></i>Przewiń do końcówki fazy 5</button></div>
+                        <div class="mb-4 flex flex-wrap items-start justify-between gap-3"><div><h3 class="font-cinzel text-lg font-bold text-white">Dowództwo · meldunki starcia</h3><p class="text-xs text-gray-500">Wiadomości pojawią się w panelu starcia i będą wspólne dla odwiedzających.</p></div><button id="admin-battle-advance-phase-five" type="button" class="rounded-lg border border-amber-400/40 bg-amber-500/10 px-3 py-2 text-[10px] font-bold text-amber-200 transition hover:border-amber-300 hover:bg-amber-500/20"><i class="fa-solid fa-forward-step mr-1" aria-hidden="true"></i>Przewiń do końcówki fazy 7</button></div>
                         <form id="admin-battle-report-form" class="grid grid-cols-1 gap-3 sm:grid-cols-[minmax(0,190px)_1fr_auto] sm:items-end">
-                            <label class="flex flex-col gap-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400">Jednostka / nadawca<select id="admin-battle-unit" class="rounded-lg border border-cardborder bg-cardbg px-3 py-2.5 text-xs text-white"><option>Dowództwo</option><option>Vanguard Force</option><option>Vanguard / Alpha</option><option>Vanguard / Bravo</option><option>Vanguard / Charlie</option><option>Vanguard / Delta</option><option>Meridian Scout</option><option>Grupa Snajperów</option><option>Grupa Zasadzki Jimmiego Brait'a</option><option>Grupa Uderzeniowa Caldwella</option></select></label>
+                            <label class="flex flex-col gap-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400">Jednostka / nadawca<select id="admin-battle-unit" class="rounded-lg border border-cardborder bg-cardbg px-3 py-2.5 text-xs text-white"><option>Dowództwo</option><option>Vanguard Force</option><option>Vanguard / Alpha</option><option>Vanguard / Bravo</option><option>Vanguard / Charlie</option><option>Vanguard / Delta</option><option>Vanguard / Echo</option><option>Vanguard / Predator X</option><option>Vanguard / Bushmaster</option><option>Redwood Garrison</option><option>Redwood Defense Front · Mieszkańcy</option><option>Blackwater · Handlarze</option><option>Meridian Scout · Snajperzy</option><option>Meridian Scout · Grupa Uderzeniowa Caldwella</option></select></label>
                             <label class="flex flex-col gap-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400">Treść meldunku<textarea id="admin-battle-report-text" maxlength="800" rows="2" required placeholder="Wprowadź meldunek z pola walki..." class="resize-y rounded-lg border border-cardborder bg-cardbg px-3 py-2.5 text-xs normal-case text-white placeholder-gray-600 outline-none focus:border-red-400/60"></textarea></label>
                             <button id="admin-battle-report-submit" type="submit" class="h-10 rounded-lg bg-red-600 px-4 text-xs font-bold text-white transition hover:bg-red-500 disabled:opacity-50"><i class="fa-solid fa-tower-broadcast mr-1"></i> Nadaj</button>
                         </form>
@@ -1431,10 +1602,11 @@
                 </div>
             </div>
             <div class="mb-4 flex justify-end">
-                <div id="battle-open" class="battle-entry inline-flex min-h-11 items-center gap-3 rounded-md px-4 py-2.5 text-left opacity-70" role="status" aria-live="polite">
-                    <i class="fa-solid fa-tower-broadcast text-gray-500" aria-hidden="true"></i>
-                    <span><strong class="block text-xs font-black uppercase tracking-wider text-gray-300">Brak aktywnego starcia</strong><span class="block text-[9px] font-semibold uppercase tracking-wider text-gray-500">Miejsce na kolejną operację</span></span>
-                </div>
+                <button id="battle-open" type="button" class="battle-entry inline-flex min-h-11 items-center gap-3 rounded-md px-4 py-2.5 text-left transition" aria-haspopup="dialog" aria-controls="battle-modal">
+                    <i class="fa-solid fa-shield-halved text-amber-200" aria-hidden="true"></i>
+                    <span><strong class="block text-xs font-black uppercase tracking-wider">Bitwa o Redwood</strong><span class="block text-[9px] font-semibold uppercase tracking-wider text-red-100/75">Otwórz briefing operacji</span></span>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-xs" aria-hidden="true"></i>
+                </button>
             </div>
             <div class="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1fr)_310px]">
                 <div class="min-w-0">
@@ -1499,88 +1671,94 @@
         <section class="battle-window my-auto flex max-h-[96vh] w-full max-w-[1480px] flex-col overflow-hidden rounded-lg">
             <header class="flex shrink-0 items-center justify-between gap-4 border-b border-white/10 bg-[#0d1411] px-4 py-3 sm:px-6">
                 <div class="min-w-0">
-                    <p class="mb-1 flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.2em] text-cyan-200/65"><span class="h-1.5 w-1.5 animate-pulse rounded-full bg-red-400"></span>Live event // Grayfall regional conflict</p>
-                    <h2 id="battle-title" class="truncate font-cinzel text-lg font-bold text-white sm:text-2xl">Starcie o przedmieścia Ekron</h2>
+                    <p class="mb-1 flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.2em] text-amber-200/65"><span class="h-1.5 w-1.5 rounded-full bg-amber-300"></span>Briefing operacyjny // Redwood Defense</p>
+                    <h2 id="battle-title" class="truncate font-cinzel text-lg font-bold text-white sm:text-2xl">Bitwa o Redwood</h2>
                 </div>
                 <button id="battle-close" type="button" class="flex h-9 w-9 shrink-0 items-center justify-center rounded border border-white/10 text-gray-400 transition hover:border-red-400/50 hover:text-white" aria-label="Zamknij okno starcia"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
             </header>
             <div class="grid min-h-0 flex-1 grid-cols-1 overflow-y-auto lg:grid-cols-[minmax(0,1fr)_330px] lg:overflow-hidden">
                 <main class="min-w-0 p-3 sm:p-5">
                     <div class="mb-3 flex flex-wrap items-end justify-between gap-2">
-                        <div><p class="font-mono text-[9px] uppercase tracking-[0.18em] text-gray-500">Obszar operacji</p><p class="mt-1 font-mono text-xs font-bold text-emerald-100">EKRON · EASTERN OUTSKIRTS</p></div>
-                        <span id="battle-cycle" class="font-mono text-[9px] uppercase tracking-widest text-gray-500">Operacja aktywna</span>
+                        <div><p class="font-mono text-[9px] uppercase tracking-[0.18em] text-gray-500">Obszar operacji</p><p class="mt-1 font-mono text-xs font-bold text-emerald-100">REDWOOD · LINIA MURU</p></div>
+                        <span id="battle-cycle" class="font-mono text-[9px] uppercase tracking-widest text-amber-200">BRIEFING · 10 MINUT</span>
                     </div>
-                    <div id="battle-map" class="battle-map" aria-label="Mapa starcia Vanguard Force i Meridian Scout">
-                        <span class="battle-zone-label">TAKTYCZNY PODGLĄD // EKRON-04</span>
+                    <div id="battle-map" class="battle-map battle-map--redwood" aria-label="Nocna mapa obrony miasta Redwood">
+                        <span class="battle-zone-label">MAPA TAKTYCZNA // REDWOOD DEFENSE FRONT</span>
+                        <span class="battle-moon" aria-label="Księżyc"><i class="fa-solid fa-moon" aria-hidden="true"></i></span>
+                        <span class="battle-star" style="left:12%;top:10%"></span><span class="battle-star" style="left:42%;top:9%"></span><span class="battle-star" style="left:88%;top:14%"></span><span class="battle-star" style="left:53%;top:17%"></span>
                         <div class="battle-road battle-road--main"></div><div class="battle-road battle-road--cross"></div><div class="battle-road battle-road--side"></div>
-                        <div class="battle-building battle-building--a">RESIDENTIAL</div><div class="battle-building battle-building--b">DEPOT</div><div class="battle-building battle-building--c">BLOCK 04</div><div class="battle-building battle-building--d">RUINS</div><div class="battle-building battle-building--e">CHECKPOINT</div>
-                        <div class="battle-fog"></div><div class="battle-rain" aria-hidden="true"></div><div class="battle-lightning battle-lightning--one" aria-hidden="true"></div><div class="battle-lightning battle-lightning--two" aria-hidden="true"></div>
-                        <span class="battle-location battle-location--ekron">EKRON · EAST BLOCK</span><span class="battle-location battle-location--sector">INFECTED SECTOR</span><span class="battle-frontline"></span>
+                        <span class="battle-street-lamp battle-street-lamp--one"></span><span class="battle-street-lamp battle-street-lamp--two"></span><span class="battle-street-lamp battle-street-lamp--three"></span>
+                        <div class="battle-redwood-building battle-redwood-building--hq">REDWOOD GARRISON<br>SEDE OSADY</div>
+                        <div class="battle-redwood-building battle-redwood-building--business">STREFA BIZNESOWA</div>
+                        <div class="battle-redwood-building battle-redwood-building--house-one" data-battle-building="house-one">DOM 01</div><div class="battle-redwood-building battle-redwood-building--house-two">DOM 02</div><div class="battle-redwood-building battle-redwood-building--house-three">DOM 03</div>
+                        <div class="battle-redwood-wall" aria-label="Mur obronny Redwood"><span class="battle-redwood-wall-fire" data-wall-fire="alpha" style="top:7%"><i class="fa-solid fa-fire" aria-hidden="true"></i></span><span class="battle-redwood-wall-fire" data-wall-fire="bravo" style="top:25%"><i class="fa-solid fa-fire" aria-hidden="true"></i></span><span class="battle-redwood-wall-fire battle-redwood-wall-fire--lower" data-wall-fire="bushmaster" style="top:49%"><i class="fa-solid fa-fire" aria-hidden="true"></i></span><span class="battle-redwood-wall-fire battle-redwood-wall-fire--lower" data-wall-fire="delta" style="top:70%"><i class="fa-solid fa-fire" aria-hidden="true"></i></span></div><div class="battle-redwood-gate"></div><span class="battle-redwood-wall-label">MUR OSADY · LINIA OBRONY</span>
+                        <span class="battle-redwood-label">REDWOOD · NIGHT DEFENSE</span>
+                        <span class="battle-airstrike-warning"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>TRWA NALOT VANGUARD AIR FORCE</span>
+                        <div class="battle-epilogue" role="status"><strong>OPERACJA REDWOOD ZAKOŃCZONA</strong><span>Redwood utrzymane. Vanguard Force wycofuje się po zniszczeniu pojazdów i rozbiciu Echo. Meridian Mercenary One i Two przybyły na czas.</span></div>
+                        <span class="battle-aircraft-run" style="top:18%;--flight-duration:5.2s;--flight-delay:-2.4s" aria-label="Bombowiec Vanguard Air Force, pierwszy nalot">
+                            <span class="battle-aircraft-model"><i class="fa-solid fa-plane" aria-hidden="true"></i><span class="battle-aircraft-cockpit"></span><span class="battle-aircraft-light"></span><b class="battle-aircraft-label">VAF · STRIKE 01</b></span>
+                            <span class="battle-aircraft-bomb" style="--bomb-delay:0s"><i class="fa-solid fa-bomb" aria-hidden="true"></i></span><span class="battle-aircraft-bomb" style="--bomb-delay:0.92s"><i class="fa-solid fa-bomb" aria-hidden="true"></i></span>
+                        </span>
+                        <span class="battle-aircraft-run" style="top:43%;--flight-duration:6.4s;--flight-delay:-4.1s" aria-label="Bombowiec Vanguard Air Force, drugi nalot">
+                            <span class="battle-aircraft-model"><i class="fa-solid fa-plane" aria-hidden="true"></i><span class="battle-aircraft-cockpit"></span><span class="battle-aircraft-light"></span><b class="battle-aircraft-label">VAF · STRIKE 02</b></span>
+                            <span class="battle-aircraft-bomb" style="--bomb-delay:0.35s"><i class="fa-solid fa-bomb" aria-hidden="true"></i></span><span class="battle-aircraft-bomb" style="--bomb-delay:1.27s"><i class="fa-solid fa-bomb" aria-hidden="true"></i></span>
+                        </span>
+                        <span class="battle-aircraft-run" style="top:72%;--flight-duration:5.8s;--flight-delay:-1.6s" aria-label="Bombowiec Vanguard Air Force, trzeci nalot">
+                            <span class="battle-aircraft-model"><i class="fa-solid fa-plane" aria-hidden="true"></i><span class="battle-aircraft-cockpit"></span><span class="battle-aircraft-light"></span><b class="battle-aircraft-label">VAF · STRIKE 03</b></span>
+                            <span class="battle-aircraft-bomb" style="--bomb-delay:0.62s"><i class="fa-solid fa-bomb" aria-hidden="true"></i></span><span class="battle-aircraft-bomb" style="--bomb-delay:1.54s"><i class="fa-solid fa-bomb" aria-hidden="true"></i></span>
+                        </span>
+                        <span class="battle-airstrike-fire" data-airstrike-fire="one" style="left:10%;top:42%" aria-hidden="true"><i class="fa-solid fa-fire"></i><i class="fa-solid fa-fire-flame-curved"></i><i class="fa-solid fa-smog"></i><i class="fa-solid fa-smog"></i></span>
+                        <span class="battle-airstrike-fire" data-airstrike-fire="two" style="left:29%;top:53%" aria-hidden="true"><i class="fa-solid fa-fire"></i><i class="fa-solid fa-fire-flame-curved"></i><i class="fa-solid fa-smog"></i><i class="fa-solid fa-smog"></i></span>
+                        <span class="battle-airstrike-fire" data-airstrike-fire="three" style="left:43%;top:38%" aria-hidden="true"><i class="fa-solid fa-fire"></i><i class="fa-solid fa-fire-flame-curved"></i><i class="fa-solid fa-smog"></i><i class="fa-solid fa-smog"></i></span>
+                        <span class="battle-airstrike-fire" data-airstrike-fire="four" style="left:12%;top:79%" aria-hidden="true"><i class="fa-solid fa-fire"></i><i class="fa-solid fa-fire-flame-curved"></i><i class="fa-solid fa-smog"></i><i class="fa-solid fa-smog"></i></span>
+                        <span class="battle-airstrike-fire" data-airstrike-fire="five" style="left:48%;top:82%" aria-hidden="true"><i class="fa-solid fa-fire"></i><i class="fa-solid fa-fire-flame-curved"></i><i class="fa-solid fa-smog"></i><i class="fa-solid fa-smog"></i></span>
                         <svg class="battle-fire-lines" viewBox="0 0 1000 600" preserveAspectRatio="none" aria-hidden="true">
                             <defs>
-                                <marker id="battle-arrow-blue" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 4 L0 8 Z" fill="#38bdf8"></path></marker>
-                                <marker id="battle-arrow-red" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 4 L0 8 Z" fill="#fb7185"></path></marker>
-                                <marker id="battle-arrow-cyan" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 4 L0 8 Z" fill="#67e8f9"></path></marker>
-                                <marker id="battle-arrow-toxic" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 4 L0 8 Z" fill="#86efac"></path></marker>
+                                <marker id="redwood-arrow-vanguard" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 4 L0 8 Z" fill="#fb7185"></path></marker>
+                                <marker id="redwood-arrow-meridian" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 4 L0 8 Z" fill="#22d3ee"></path></marker>
+                                <marker id="redwood-arrow-redwood" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 4 L0 8 Z" fill="#4ade80"></path></marker>
+                                <marker id="redwood-arrow-traders" viewBox="0 0 10 8" refX="9" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 4 L0 8 Z" fill="#fbbf24"></path></marker>
                             </defs>
-                            <path id="battle-path-snipers-alpha" class="battle-vector battle-vector--blue"></path>
-                            <path id="battle-path-snipers-bravo" class="battle-vector battle-vector--blue"></path>
-                            <path id="battle-path-alpha-ambush" class="battle-vector battle-vector--red"></path>
-                            <path id="battle-path-bravo-ambush" class="battle-vector battle-vector--red"></path>
-                            <path id="battle-path-ambush-charlie" class="battle-vector battle-vector--ambush"></path>
-                            <path id="battle-path-caldwell-delta" class="battle-vector battle-vector--support"></path>
-                            <path id="battle-path-foxrot-caldwell" class="battle-vector battle-vector--red"></path>
-                            <path id="battle-path-caldwell-escape" class="battle-vector battle-vector--support battle-vector--escape battle-vector--phase battle-vector--phase-six"></path>
-                            <path id="battle-path-alpha-escape" class="battle-vector battle-vector--red battle-vector--escape battle-vector--phase battle-vector--phase-seven"></path>
-                            <path id="battle-path-snipers-escape" class="battle-vector battle-vector--blue battle-vector--escape battle-vector--phase battle-vector--phase-eight"></path>
-                            <path id="battle-path-caldwell-final-escape" class="battle-vector battle-vector--blue battle-vector--escape battle-vector--phase battle-vector--phase-eight"></path>
-                            <path class="battle-vector battle-zombie-vector" d="M 110 0 Q 315 75 470 270"></path>
-                            <path class="battle-vector battle-zombie-vector" d="M 0 105 Q 190 180 445 290"></path>
-                            <path class="battle-vector battle-zombie-vector" d="M 45 510 Q 235 435 455 325"></path>
-                            <path class="battle-vector battle-zombie-vector" d="M 1000 60 Q 795 145 560 255"></path>
-                            <path class="battle-vector battle-zombie-vector" d="M 1000 315 Q 790 300 565 305"></path>
-                            <path class="battle-vector battle-zombie-vector" d="M 930 600 Q 760 455 555 360"></path>
-                            <path class="battle-vector battle-zombie-vector" d="M 535 0 Q 520 120 505 255"></path>
-                            <path class="battle-vector battle-zombie-vector" d="M 0 340 Q 205 330 445 315"></path>
-                            <path id="battle-fire-to-delta" class="battle-shot-path battle-shot-path--red"></path>
-                            <path id="battle-fire-to-caldwell" class="battle-shot-path battle-shot-path--blue"></path>
-                            <circle class="battle-projectile battle-projectile--red" r="4"><animateMotion dur="0.9s" repeatCount="indefinite"><mpath href="#battle-fire-to-delta"></mpath></animateMotion></circle>
-                            <circle class="battle-projectile battle-projectile--blue" r="4"><animateMotion dur="1.05s" begin="-0.5s" repeatCount="indefinite"><mpath href="#battle-fire-to-caldwell"></mpath></animateMotion></circle>
+                            <g id="battle-phase-vectors"></g>
                         </svg>
-                        <span class="battle-unit battle-unit--vanguard battle-foxrot" data-battle-unit="foxrot" aria-label="Helikopter Vanguard Foxrot Group"><i class="fa-solid fa-helicopter" aria-hidden="true"></i><span class="battle-foxrot-copy">VANGUARD<br>FOXROT GROUP</span></span>
-                        <span class="battle-drop-heading">ECHO VANGUARD // AIRBORNE DROP</span>
-                        <span class="battle-drop battle-drop--one" data-battle-drop="echo-one" aria-label="Echo Vanguard spadochroniarz"><i class="fa-solid fa-parachute-box" aria-hidden="true"></i></span>
-                        <span class="battle-drop battle-drop--two" data-battle-drop="echo-two" aria-label="Echo Vanguard spadochroniarz"><i class="fa-solid fa-parachute-box" aria-hidden="true"></i></span>
-                        <span class="battle-drop battle-drop--three" data-battle-drop="echo-three" aria-label="Echo Vanguard spadochroniarz"><i class="fa-solid fa-parachute-box" aria-hidden="true"></i></span>
-                        <span id="battle-jimmie-capture" class="battle-capture-zone" aria-label="Grupa zasadzki Jimmiego Brait'a otoczona i pojmana"><i class="fa-solid fa-handcuffs" aria-hidden="true"></i><span>POJMANA · JIMMIE BRAIT</span></span>
-                        <div class="battle-zombie-layer" aria-label="Horda zombie napływa do Ekron">
-                            <span class="battle-zombie" style="left:4%;top:12%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:11%;top:28%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:5%;top:49%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:9%;top:77%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span>
-                            <span class="battle-zombie" style="left:96%;top:14%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:92%;top:34%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:97%;top:57%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:91%;top:81%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span>
-                            <span class="battle-zombie" style="left:25%;top:8%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:55%;top:7%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:27%;top:91%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:72%;top:93%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span>
-                            <span class="battle-zombie" style="left:19%;top:39%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:81%;top:46%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:23%;top:67%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span><span class="battle-zombie" style="left:77%;top:70%"><i class="fa-solid fa-person-walking"></i><i class="fa-solid fa-skull"></i></span>
-                        </div>
-                        <span id="battle-charlie-impact" class="battle-impact" aria-label="Uderzenie przy Charlie"><i class="fa-solid fa-burst" aria-hidden="true"></i></span>
-                        <div class="battle-unit battle-unit--vanguard" data-battle-unit="alpha"><span class="battle-unit-flag" aria-hidden="true">US</span><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span class="battle-unit-copy">VANGUARD / ALPHA<small>US PLATOON</small></span></div>
-                        <div class="battle-unit battle-unit--vanguard" data-battle-unit="bravo"><span class="battle-unit-flag" aria-hidden="true">US</span><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span class="battle-unit-copy">VANGUARD / BRAVO<small>US PLATOON</small></span></div>
-                        <div class="battle-unit battle-unit--vanguard" data-battle-unit="charlie"><span class="battle-unit-flag" aria-hidden="true">US</span><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span class="battle-unit-copy">VANGUARD / CHARLIE<small>US PLATOON</small></span><span class="battle-defense-indicator" title="Charlie utrzymuje pozycję"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></span></div>
-                        <div class="battle-unit battle-unit--vanguard" data-battle-unit="delta"><span class="battle-unit-flag" aria-hidden="true">US</span><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span class="battle-unit-copy">VANGUARD / DELTA<small>US PLATOON</small></span><span class="battle-defense-indicator" title="Delta utrzymuje pozycję"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></span></div>
-                        <div class="battle-unit battle-unit--meridian" data-battle-unit="snipers"><i class="fa-solid fa-crosshairs" aria-hidden="true"></i><span class="battle-unit-copy">GRUPA SNAJPERÓW<small>MERIDIAN SCOUT</small></span></div>
-                        <div class="battle-unit battle-unit--meridian" data-battle-unit="jimmie"><i class="fa-solid fa-eye" aria-hidden="true"></i><span class="battle-unit-copy">GRUPA ZASADZKI<small>JIMMIE BRAIT</small></span></div>
-                        <div class="battle-unit battle-unit--meridian" data-battle-unit="caldwell"><i class="fa-solid fa-bullseye" aria-hidden="true"></i><span class="battle-unit-copy">GRUPA UDERZENIOWA<small>CALDWELL</small></span></div>
+                        <span class="battle-smoke-cloud" data-battle-smoke="one" style="left:38%;top:68%"><i class="fa-solid fa-smog"></i><i class="fa-solid fa-smog"></i><i class="fa-solid fa-smog"></i></span>
+                        <span class="battle-smoke-cloud" data-battle-smoke="two" style="left:48%;top:75%"><i class="fa-solid fa-smog"></i><i class="fa-solid fa-smog"></i><i class="fa-solid fa-smog"></i></span>
+                        <span class="battle-smoke-cloud battle-sniper-smoke-one" data-battle-smoke="sniper-one" aria-label="Zasłona dymna Meridian nad pozycją snajperów"><i class="fa-solid fa-smog"></i><i class="fa-solid fa-smog"></i><i class="fa-solid fa-smog"></i></span>
+                        <span class="battle-smoke-cloud battle-sniper-smoke-two" data-battle-smoke="sniper-two" aria-label="Zasłona dymna Meridian nad pozycją snajperów"><i class="fa-solid fa-smog"></i><i class="fa-solid fa-smog"></i><i class="fa-solid fa-smog"></i></span>
+                        <span class="battle-flash-zone" aria-label="Strefa wybuchu granatu błyskowego przy Vanguard Delta"><i class="fa-solid fa-burst" aria-hidden="true"></i></span>
+                        <div class="battle-redwood-unit battle-redwood-unit--vanguard" data-battle-unit="alpha" style="left:82%;top:18%"><i class="fa-solid fa-shield-halved"></i><span>VANGUARD / ALPHA<small>US PLATOON</small></span></div>
+                        <div class="battle-redwood-unit battle-redwood-unit--vanguard" data-battle-unit="bravo" style="left:84%;top:34%"><i class="fa-solid fa-shield-halved"></i><span>VANGUARD / BRAVO<small>US PLATOON</small></span></div>
+                        <div class="battle-redwood-unit battle-redwood-unit--vanguard" data-battle-unit="charlie" style="left:84%;top:51%"><i class="fa-solid fa-shield-halved"></i><span>VANGUARD / CHARLIE<small>US PLATOON</small></span></div>
+                        <div class="battle-redwood-unit battle-redwood-unit--vanguard" data-battle-unit="delta" style="left:81%;top:68%"><i class="fa-solid fa-shield-halved"></i><span>VANGUARD / DELTA<small>US PLATOON</small></span><span class="battle-unit-break" aria-hidden="true"><i class="fa-solid fa-burst"></i></span></div>
+                        <div class="battle-redwood-unit battle-redwood-unit--vanguard" data-battle-unit="echo" style="left:86%;top:84%"><i class="fa-solid fa-shield-halved"></i><span>VANGUARD / ECHO<small>US PLATOON</small></span><span class="battle-unit-break" aria-hidden="true"><i class="fa-solid fa-burst"></i></span><span class="battle-unit-flank" aria-label="Oskrzydlenie"><i class="fa-solid fa-bolt" aria-hidden="true"></i></span></div>
+                        <div class="battle-redwood-vehicle" data-battle-unit="predatorX" style="left:79%;top:26%" aria-label="Vanguard Force Predator X, granatnik 40 milimetrów"><span class="battle-redwood-vehicle-icon"><i class="fa-solid fa-truck-monster" aria-hidden="true"></i><span><i class="fa-solid fa-crosshairs" data-battle-vehicle-badge aria-hidden="true"></i></span></span><span>PREDATOR X<small>GRANATNIK 40 MM</small><small class="battle-redwood-vehicle-raid"><i class="fa-solid fa-bolt" aria-hidden="true"></i> FOROSOWNY RAJD</small><small class="battle-redwood-vehicle-destroyed">ZNISZCZONE</small></span><span class="battle-vehicle-wreck-effects" aria-hidden="true"><i class="fa-solid fa-fire"></i><i class="fa-solid fa-fire-flame-curved"></i><i class="fa-solid fa-smog"></i><i class="fa-solid fa-smog"></i></span></div>
+                        <div class="battle-redwood-vehicle" data-battle-unit="bushmaster" style="left:79%;top:60%" aria-label="Vanguard Force Bushmaster, granatnik 40 milimetrów"><span class="battle-redwood-vehicle-icon"><i class="fa-solid fa-truck-monster" aria-hidden="true"></i><span><i class="fa-solid fa-crosshairs" data-battle-vehicle-badge aria-hidden="true"></i></span></span><span>BUSHMASTER<small>GRANATNIK 40 MM</small><small class="battle-redwood-vehicle-raid"><i class="fa-solid fa-bolt" aria-hidden="true"></i> FOROSOWNY RAJD</small><small class="battle-redwood-vehicle-destroyed">ZNISZCZONE</small></span><span class="battle-vehicle-wreck-effects" aria-hidden="true"><i class="fa-solid fa-fire"></i><i class="fa-solid fa-fire-flame-curved"></i><i class="fa-solid fa-smog"></i><i class="fa-solid fa-smog"></i></span></div>
+                        <div class="battle-redwood-unit battle-redwood-unit--meridian" data-battle-unit="snipers" style="left:22%;top:35%"><i class="fa-solid fa-crosshairs"></i><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span>GRUPA SNAJPERÓW<small>MERIDIAN SCOUT</small></span><span class="battle-unit-break" aria-hidden="true"><i class="fa-solid fa-burst"></i></span><span class="battle-sniper-shields" aria-label="Podwójna tarcza"><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><i class="fa-solid fa-shield-halved" aria-hidden="true"></i></span></div>
+                        <div class="battle-redwood-unit battle-redwood-unit--meridian" data-battle-unit="assault" style="left:45%;top:60%"><i class="fa-solid fa-bullseye" data-battle-unit-icon></i><span>GRUPA UDERZENIOWA<small>CALDWELL · MERIDIAN</small></span><span class="battle-unit-break" aria-hidden="true"><i class="fa-solid fa-burst"></i></span></div>
+                        <div class="battle-redwood-unit battle-redwood-unit--redwood" data-battle-unit="garrison" style="left:45%;top:45%"><i class="fa-solid fa-shield-halved"></i><span>REDWOOD GARRISON<small>REDWOOD DEFENSE FRONT</small></span></div>
+                        <div class="battle-redwood-unit battle-redwood-unit--traders" data-battle-unit="traders" style="left:19%;top:52%"><i class="fa-solid fa-store"></i><span>GRUPA OCHOTNICY<small>HANDLARZE Z BLACKWATER</small></span><span class="battle-unit-break" aria-hidden="true"><i class="fa-solid fa-burst"></i></span></div>
+                        <div class="battle-redwood-unit battle-redwood-unit--redwood" data-battle-unit="residents" style="left:28%;top:78%"><i class="fa-solid fa-people-group"></i><i class="fa-solid fa-shield-halved" aria-hidden="true"></i><span>GRUPA MIESZKAŃCÓW<small>REDWOOD DEFENSE FRONT</small></span><span class="battle-unit-break" aria-hidden="true"><i class="fa-solid fa-burst"></i></span></div>
+                        <div class="battle-redwood-unit battle-redwood-unit--mercenary battle-redwood-unit--reinforcement" data-battle-unit="mercenaryOne" style="left:84%;top:10%"><i class="fa-solid fa-crosshairs" aria-hidden="true"></i><span>MERIDIAN MERCENARY ONE<small>REGULAR MERCENARY FORCE</small></span></div>
+                        <div class="battle-redwood-unit battle-redwood-unit--mercenary battle-redwood-unit--reinforcement" data-battle-unit="mercenaryTwo" style="left:90%;top:30%"><i class="fa-solid fa-people-group" aria-hidden="true"></i><span>MERIDIAN MERCENARY TWO<small>REGULAR MERCENARY FORCE</small></span></div>
                     </div>
-                    <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 font-mono text-[9px] uppercase tracking-wider text-gray-500"><span class="inline-flex items-center gap-2"><i class="h-2 w-2 rounded-full bg-red-400"></i>US Vanguard · plutony</span><span class="inline-flex items-center gap-2"><i class="h-2 w-2 rounded-full bg-cyan-300"></i>Meridian Scout</span><span class="inline-flex items-center gap-2"><i class="h-px w-4 bg-gray-400"></i>Linia kontaktu</span></div>
+                    <div class="mt-3 flex flex-wrap gap-x-5 gap-y-2 font-mono text-[9px] uppercase tracking-wider text-gray-500"><span class="inline-flex items-center gap-2"><i class="h-2 w-2 rounded-full bg-red-400"></i>Vanguard Force</span><span class="inline-flex items-center gap-2"><i class="fa-solid fa-truck-monster text-red-300"></i>Wozy · granatniki 40 mm</span><span class="inline-flex items-center gap-2"><i class="h-2 w-2 rounded-full bg-cyan-300"></i>Meridian Scout</span><span class="inline-flex items-center gap-2"><i class="h-2 w-2 rounded-full bg-green-300"></i>Redwood Defense Front</span><span class="inline-flex items-center gap-2"><i class="h-2 w-2 rounded-full bg-amber-300"></i>Ochotnicy · Blackwater</span><span class="inline-flex items-center gap-2"><i class="fa-solid fa-arrow-right text-red-400"></i>Kierunek Vanguard</span><span class="inline-flex items-center gap-2"><i class="fa-solid fa-arrow-right text-cyan-300"></i>Wsparcie Meridian</span><span class="inline-flex items-center gap-2"><i class="fa-solid fa-arrow-right text-green-300"></i>Ruch obrony</span><span class="inline-flex items-center gap-2"><i class="fa-solid fa-arrow-right text-amber-300"></i>Ochotnicy</span></div>
                 </main>
                 <aside class="flex min-h-0 flex-col border-t border-white/10 bg-[#0b1210] p-4 sm:p-5 lg:border-l lg:border-t-0">
-                    <div class="flex items-center justify-between gap-3"><div><p class="font-mono text-[9px] uppercase tracking-[0.18em] text-gray-500">Current battle state</p><h3 id="battle-phase" class="mt-1 font-cinzel text-base font-bold text-white">Łączenie z dowództwem...</h3></div><span class="inline-flex items-center gap-2 font-mono text-[9px] text-red-300"><i class="h-1.5 w-1.5 animate-pulse rounded-full bg-red-400"></i>LIVE</span></div>
-                    <div class="mt-5 space-y-4">
-                        <div><div class="mb-1.5 flex justify-between gap-2 font-mono text-[9px] font-bold uppercase text-cyan-100"><span>Meridian Scout Group</span><span id="battle-meridian-value">23%</span></div><div class="h-1.5 overflow-hidden rounded-full bg-white/5"><div id="battle-meridian-bar" class="h-full bg-cyan-400 transition-all duration-1000" style="width:23%"></div></div></div>
-                        <div><div class="mb-1.5 flex justify-between gap-2 font-mono text-[9px] font-bold uppercase text-red-200"><span>Vanguard Force</span><span id="battle-vanguard-value">77%</span></div><div class="h-1.5 overflow-hidden rounded-full bg-white/5"><div id="battle-vanguard-bar" class="h-full bg-red-400 transition-all duration-1000" style="width:77%"></div></div></div>
+                    <div class="flex items-center justify-between gap-3"><div><p class="font-mono text-[9px] uppercase tracking-[0.18em] text-gray-500">Stan operacji</p><h3 id="battle-phase" class="mt-1 font-cinzel text-base font-bold text-amber-100">Briefing przed bitwą</h3></div><span class="inline-flex items-center gap-2 font-mono text-[9px] text-amber-200"><i class="h-1.5 w-1.5 rounded-full bg-amber-300"></i><span id="battle-stage-badge">BRIEFING</span></span></div>
+                    <div class="battle-staging mt-4 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-2.5"><div><p class="font-mono text-[8px] uppercase tracking-wider text-gray-500">Do następnego etapu</p><p id="battle-next-phase" class="mt-1 font-mono text-[10px] text-gray-300">Start fazy 1 za</p></div><strong id="battle-countdown" class="font-mono text-xl tabular-nums text-amber-200">10:00</strong></div>
+                    <div id="battle-phase-track" class="battle-phase-track mt-3" role="img" aria-label="Postęp: briefing przed bitwą"><span class="battle-phase-step" data-phase-step="0"></span><span class="battle-phase-step" data-phase-step="1"></span><span class="battle-phase-step" data-phase-step="2"></span><span class="battle-phase-step" data-phase-step="3"></span><span class="battle-phase-step" data-phase-step="4"></span><span class="battle-phase-step" data-phase-step="5"></span><span class="battle-phase-step" data-phase-step="6"></span></div>
+                    <p id="battle-status" class="mt-2 min-h-4 font-mono text-[8px] text-gray-500" role="status" aria-live="polite"></p>
+                    <div id="battle-objective" class="battle-staging mt-2 px-3 py-2 font-mono text-[10px] leading-relaxed text-gray-300">Redwood Defense Front obsadza mur i przygotowuje obronę miasta.</div>
+                    <div class="mt-4 space-y-3 border-t border-white/10 pt-4">
+                        <div><p class="mb-2 font-mono text-[9px] font-bold uppercase tracking-wider text-red-300">Vanguard Force · 5 plutonów + 2 wozy</p><p class="font-mono text-[9px] leading-relaxed text-gray-400">Alpha · Bravo · Charlie · Delta · Echo<br>Predator X · Bushmaster · granatniki 40 mm</p></div>
+                        <div><p class="mb-2 font-mono text-[9px] font-bold uppercase tracking-wider text-green-300">Redwood Defense Front</p><p class="font-mono text-[9px] leading-relaxed text-gray-400">Redwood Garrison · Grupa Mieszkańców Redwood</p></div>
+                        <div><p class="mb-2 font-mono text-[9px] font-bold uppercase tracking-wider text-amber-200">Ochotnicy z Blackwater</p><p class="font-mono text-[9px] leading-relaxed text-gray-400">Grupa Ochotnicy Handlarze z BlackWater · Strefa biznesowa</p></div>
+                        <div><p class="mb-2 font-mono text-[9px] font-bold uppercase tracking-wider text-cyan-300">Meridian Scout Group</p><p class="font-mono text-[9px] leading-relaxed text-gray-400">Grupa Snajperów · Grupa Uderzeniowa Caldwella</p></div>
                     </div>
-                    <div class="mt-4 border-l-2 border-amber-400 px-3 py-2 font-mono text-[10px] text-gray-300"><span id="battle-next-phase">Następna faza za 03:00</span><span id="battle-countdown" class="float-right font-bold text-amber-200">03:00</span></div>
+                    <div class="mt-4 border-l-2 border-amber-400 px-3 py-2 font-mono text-[10px] text-gray-300">Noc · latarnie miejskie · obrońcy za murem</div>
                     <div class="mt-5 flex min-h-[180px] flex-1 flex-col border-t border-white/10 pt-4">
-                        <div class="mb-2 flex items-center justify-between"><h3 class="font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-gray-400">Field reports</h3><span id="battle-report-count" class="font-mono text-[9px] text-gray-600">0</span></div>
-                        <div id="battle-reports" class="min-h-[140px] flex-1 space-y-2 overflow-y-auto pr-1" role="log" aria-live="polite"></div>
-                        <p id="battle-status" class="mt-2 min-h-4 font-mono text-[9px] text-amber-300" role="status"></p>
+                        <div class="mb-2 flex items-center justify-between"><h3 class="font-mono text-[9px] font-bold uppercase tracking-[0.18em] text-gray-400">Field reports</h3><span id="battle-report-count" class="font-mono text-[9px] text-gray-600">0 / 30</span></div>
+                        <div id="battle-reports" class="battle-staging min-h-[130px] flex-1 space-y-2 overflow-y-auto px-3 py-3 font-mono text-[10px] leading-relaxed text-gray-500" role="log" aria-live="polite"><p class="text-gray-500">Kanał operacji Redwood gotowy. Meldunki pojawią się po rozpoczęciu bitwy.</p></div>
                     </div>
                 </aside>
             </div>
@@ -2803,17 +2981,122 @@
             else window.addEventListener('resize', resize, { passive: true });
         }
 
-        const BATTLE_PHASE_DURATIONS = [600000, 600000, 600000, 600000, 600000, 600000, 600000, Infinity];
+        const BATTLE_TIMELINE_VERSION = 2;
+        const BATTLE_PHASE_DURATION = 10 * 60 * 1000;
+        const BATTLE_PHASE_DURATIONS = Array(8).fill(BATTLE_PHASE_DURATION).concat(Infinity);
         const BATTLE_PHASES = [
-            { title: 'Kontakt i rozpoznanie', meridian: 23, vanguard: 77, report: 'Posterunki Vanguard wykryły ruch na skraju przedmieść.' },
-            { title: 'Desant Echo Vanguard', meridian: 31, vanguard: 69, report: 'Echo Vanguard schodzi na spadochronach do wschodnich kwartałów Ekron; Alpha i Bravo przesuwają linię.' },
-            { title: 'Zasadzka Meridian', meridian: 46, vanguard: 54, report: 'Grupa Jimmiego Brait’a zamyka korytarz między ruinami.' },
-            { title: 'Kontratak Vanguard', meridian: 38, vanguard: 62, report: 'Charlie i Delta próbują obejść pozycje zwiadowców.' },
-            { title: 'Przegrupowanie', meridian: 52, vanguard: 48, report: 'Caldwell wyznacza nową linię; obie strony utrzymują kontakt.' },
-            { title: 'Odwrót grupy uderzeniowej', meridian: 19, vanguard: 81, report: 'Grupa uderzeniowa Caldwella zostaje otoczona i wycofuje się w panice na zachód.' },
-            { title: 'Horda w Ekron · Alpha rozbita', meridian: 12, vanguard: 88, report: 'Hałas starcia ściąga do Ekron hordę zombie. Rozbita Alpha ucieka, a grupa Jimmiego Brait’a zostaje otoczona i pojmana.' },
-            { title: 'Koniec starcia', meridian: 8, vanguard: 64, report: 'Resztki Meridian wycofują się. Vanguard wstrzymuje marsz na Redwood z powodu poniesionych strat.' },
+            { title: 'Briefing przed bitwą', report: 'Rozpoczęto dziesięciominutowy briefing przed bitwą o Redwood.' },
+            ...Array.from({ length: 7 }, (_, index) => ({
+                title: `Faza ${index + 1}`,
+                report: index === 1
+                    ? 'Grupa Uderzeniowa rozbija Vanguard Echo; obrońcy podpalają odcinki muru, a Vanguard odpowiada mołotowami i granatnikami.'
+                    : index === 2
+                        ? 'Vanguard zajmuje mur, pojazdy wjeżdżają do osady, a Grupa Uderzeniowa i mieszkańcy przechodzą do obrony oraz odwrotu.'
+                        : index === 3
+                            ? 'Snajperzy Meridian osłaniają się dymem; Grupa Uderzeniowa trafia rakietą Bushmastera i oślepia Deltę granatem błyskowym.'
+                            : index === 4
+                                ? 'Płonie drugi pojazd Vanguard. Rozbici snajperzy i ochotnicy utrzymują pozycje lub wycofują się, a Echo oskrzydla Grupę Uderzeniową.'
+                                : index === 5
+                                    ? 'Nalot Vanguard Air Force uderza w Redwood; Predator X zostaje zniszczony, a obrońcy kryją się w ogniu i dymie.'
+                                    : index === 6
+                                        ? 'Regularne oddziały Meridian Mercenary One i Two wchodzą do walki, przerywając ofensywę Vanguard Force.'
+                    : `Rozpoczęto fazę ${index + 1} bitwy o Redwood.`,
+            })),
         ];
+        const BATTLE_REDWOOD_PHASE_ONE_POSITIONS = {
+            alpha: [76, 18], bravo: [76, 34], charlie: [76, 51], delta: [76, 68], echo: [76, 84],
+            predatorX: [76.5, 26], bushmaster: [76.5, 60], snipers: [34.5, 12.5], assault: [43, 90],
+            garrison: [44, 42], traders: [44.5, 50], residents: [44.5, 63],
+        };
+        const BATTLE_REDWOOD_PHASE_ONE_VECTORS = [
+            { from: 'snipers', to: 'alpha', faction: 'meridian', firing: true },
+            { from: 'snipers', to: 'bravo', faction: 'meridian', firing: true },
+            { from: 'garrison', point: [58.5, 42], faction: 'redwood' },
+            { from: 'assault', point: [58.5, 90], faction: 'meridian' },
+            { from: 'traders', point: [59, 50], faction: 'traders' },
+            { from: 'predatorX', point: [58.5, 26], faction: 'vanguard' },
+            { from: 'bushmaster', point: [58.5, 60], faction: 'vanguard' },
+            { from: 'alpha', to: 'snipers', faction: 'vanguard' },
+            { from: 'alpha', to: 'garrison', faction: 'vanguard' },
+            { from: 'bravo', to: 'snipers', faction: 'vanguard' },
+            { from: 'bravo', to: 'garrison', faction: 'vanguard' },
+            { from: 'charlie', to: 'assault', faction: 'vanguard' },
+            { from: 'charlie', to: 'residents', faction: 'vanguard' },
+            { from: 'delta', to: 'assault', faction: 'vanguard' },
+            { from: 'delta', to: 'residents', faction: 'vanguard' },
+            { from: 'echo', to: 'assault', faction: 'vanguard' },
+        ];
+        const BATTLE_REDWOOD_PHASE_ONE_OBJECTIVE = 'Vanguard podciąga plutony i wozy pod mur. Alpha i Bravo nacierają na snajperów oraz Redwood Garrison; Charlie i Delta kierują atak na grupę uderzeniową i mieszkańców, a Echo wspiera natarcie na grupę uderzeniową. Snajperzy prowadzą ogień z dachu siedziby, obrońcy zajmują mur, ochotnicy osłaniają bramę.';
+        const BATTLE_REDWOOD_PHASE_TWO_POSITIONS = {
+            assault: [51, 82], delta: [75, 68], bushmaster: [76.5, 60], residents: [44.5, 63],
+        };
+        const BATTLE_REDWOOD_PHASE_TWO_VECTORS = [
+            { from: 'assault', point: [58.4, 82], faction: 'meridian' },
+            { from: 'echo', point: [99.2, 84], faction: 'vanguard', retreat: true },
+            { from: 'delta', point: [58.4, 68], faction: 'vanguard', effect: 'molotov' },
+            { from: 'bushmaster', point: [58.4, 60], faction: 'vanguard', effect: 'molotov' },
+            { from: 'alpha', point: [58.4, 18], faction: 'vanguard', effect: 'molotov' },
+            { from: 'alpha', point: [58.4, 15], faction: 'vanguard', effect: 'grenade' },
+            { from: 'bravo', point: [58.4, 34], faction: 'vanguard', effect: 'molotov' },
+            { from: 'bravo', point: [58.4, 31], faction: 'vanguard', effect: 'grenade' },
+        ];
+        const BATTLE_REDWOOD_PHASE_TWO_OBJECTIVE = 'Grupa Uderzeniowa Meridian rozbija Vanguard Echo; Echo wycofuje się na wschód. Alpha i Bravo obrzucają swój odcinek muru mołotowami i ostrzeliwują go z granatników. Delta oraz Bushmaster podpalają dolny odcinek. Grupa uderzeniowa podchodzi wyżej pod mur, a mieszkańcy w panice zajmują pozycje obronne.';
+        const BATTLE_REDWOOD_PHASE_THREE_POSITIONS = {
+            alpha: [59.6, 15], bravo: [59.6, 32], charlie: [59.6, 49], delta: [59.6, 66], echo: [59.6, 83],
+            predatorX: [30, 24], bushmaster: [17, 54], assault: [44.5, 74], garrison: [44, 40], traders: [44.5, 58], residents: [15, 66],
+        };
+        const BATTLE_REDWOOD_PHASE_THREE_VECTORS = [
+            { from: 'assault', point: [39.5, 70], faction: 'meridian', effect: 'smoke' },
+            { from: 'assault', point: [49.5, 77], faction: 'meridian', effect: 'smoke' },
+            { from: 'residents', point: [0.8, 66], faction: 'redwood', retreat: true },
+            { from: 'predatorX', point: [48, 35], faction: 'vanguard', effect: 'raid' },
+            { from: 'bushmaster', point: [40, 58], faction: 'vanguard', effect: 'raid' },
+        ];
+        const BATTLE_REDWOOD_PHASE_THREE_OBJECTIVE = 'Vanguard Force zajmuje mur, a Predator X i Bushmaster wjeżdżają do osady, rozpoczynając forsowny rajd. Grupa Uderzeniowa umacnia się w Domu 01 i rzuca granaty dymne, tworząc osłonę. Grupa Mieszkańców zostaje rozbita i wycofuje się na zachód; Redwood Garrison utrzymuje pozycje obronne.';
+        const BATTLE_REDWOOD_PHASE_FOUR_VECTORS = [
+            { from: 'snipers', to: 'alpha', faction: 'meridian' },
+            { from: 'assault', to: 'bushmaster', faction: 'meridian', effect: 'rocket' },
+            { from: 'traders', to: 'charlie', faction: 'traders' },
+            { from: 'alpha', to: 'snipers', faction: 'vanguard' },
+            { from: 'bravo', to: 'snipers', faction: 'vanguard' },
+            { from: 'charlie', to: 'garrison', faction: 'vanguard' },
+            { from: 'delta', to: 'assault', faction: 'vanguard' },
+            { from: 'echo', to: 'assault', faction: 'vanguard' },
+            { from: 'predatorX', to: 'snipers', faction: 'vanguard', effect: 'raid' },
+        ];
+        const BATTLE_REDWOOD_PHASE_FOUR_POSITIONS = { bushmaster: [15.5, 54] };
+        const BATTLE_REDWOOD_PHASE_FOUR_OBJECTIVE = 'Grupa Snajperów rzuca granaty dymne nad pozycją i prowadzi ostrzał Alpha. Grupa Uderzeniowa trafia rakietą Bushmastera: pojazd płonie i jest zniszczony. Granaty błyskowe oślepiają Deltę. Blackwater kieruje natarcie na Charlie; Alpha i Bravo nacierają na snajperów, Charlie na Redwood Garrison, a Delta i Echo na Grupę Uderzeniową. Sprawny Predator X prowadzi rajd w kierunku snajperów.';
+        const BATTLE_REDWOOD_PHASE_FIVE_POSITIONS = { echo: [52, 60], traders: [8, 45] };
+        const BATTLE_REDWOOD_PHASE_FIVE_VECTORS = [
+            { from: 'assault', to: 'delta', faction: 'meridian' },
+            { from: 'traders', point: [0.8, 45], faction: 'traders', retreat: true },
+            { from: 'delta', point: [99.2, 66], faction: 'vanguard', retreat: true },
+        ];
+        const BATTLE_REDWOOD_PHASE_FIVE_OBJECTIVE = 'Drugi pojazd Vanguard zostaje zniszczony; Bushmaster płonie i dymi. Rozbici snajperzy utrzymują pozycję i osłaniają ją podwójną tarczą. Ochotnicy wycofują się z miasta na zachód, a Grupa Uderzeniowa naciera na Deltę, która zostaje rozbita i ucieka na wschód. Echo wchodzi głębiej do Redwood i wykonuje oskrzydlenie Grupy Uderzeniowej.';
+        const BATTLE_REDWOOD_PHASE_SIX_POSITIONS = { echo: [53, 63], snipers: [27, 31], predatorX: [29, 20] };
+        const BATTLE_REDWOOD_PHASE_SIX_VECTORS = [
+            { from: 'alpha', to: 'garrison', faction: 'vanguard' },
+            { from: 'bravo', to: 'garrison', faction: 'vanguard' },
+            { from: 'snipers', point: [18, 30], faction: 'meridian', retreat: true },
+        ];
+        const BATTLE_REDWOOD_PHASE_SIX_OBJECTIVE = 'Vanguard Air Force rozpoczyna nalot na Redwood. W kilku częściach miasta wybuchają pożary, a płomienie i dym obejmują osadę. Alpha i Bravo nacierają na Redwood Garrison. Predator X zostaje trafiony i zniszczony. Grupa Snajperów cofa się na tyły, ukrywa w mieście i utrzymuje podwójną tarczę mimo rozbicia. Grupa Uderzeniowa pozostaje na pozycji, silnie rozbita; Echo zbliża się do niej.';
+        const BATTLE_REDWOOD_PHASE_SEVEN_POSITIONS = {
+            alpha: [66, 20], bravo: [70, 40], charlie: [74, 48], delta: [78, 70], echo: [62, 59],
+            predatorX: [29, 20], bushmaster: [15.5, 54], snipers: [27, 31], assault: [53, 68],
+            garrison: [44, 40], traders: [8, 45], residents: [15, 66], mercenaryOne: [84, 10], mercenaryTwo: [90, 30],
+        };
+        const BATTLE_REDWOOD_PHASE_SEVEN_VECTORS = [
+            { from: 'mercenaryOne', point: [60, 20], faction: 'meridian' },
+            { from: 'mercenaryTwo', point: [62, 37], faction: 'meridian' },
+            { from: 'assault', to: 'echo', faction: 'meridian' },
+            { from: 'alpha', point: [99.2, 20], faction: 'vanguard', retreat: true },
+            { from: 'bravo', point: [99.2, 40], faction: 'vanguard', retreat: true },
+            { from: 'charlie', point: [99.2, 48], faction: 'vanguard', retreat: true },
+            { from: 'delta', point: [99.2, 70], faction: 'vanguard', retreat: true },
+            { from: 'echo', point: [99.2, 59], faction: 'vanguard', retreat: true },
+        ];
+        const BATTLE_REDWOOD_PHASE_SEVEN_OBJECTIVE = 'SIŁY VANGUARD FORCE WYCOFUJĄ SIĘ. RESZTKI SIŁ COFAJĄ SIĘ, PRZERYWAJĄC OFENSYWĘ, WIDZĄC WEJŚCIE REGULARNYCH ODDZIAŁÓW NAJEMNICZYCH MERIDIAN, KTÓRE PRZYBYŁY NA CZAS.';
+        let renderedBattleMapLayout = '';
         const BATTLE_UNIT_POSITIONS = {
             alpha: [[76, 24], [72, 27], [68, 31], [63, 33], [66, 35], [63, 23], [6, 18], [6, 18]],
             bravo: [[79, 43], [76, 44], [69, 47], [64, 48], [70, 47], [76, 43], [77, 43], [77, 43]],
@@ -2866,12 +3149,12 @@
         function readLocalBattleState() {
             try {
                 const state = JSON.parse(localStorage.getItem('grayfall:battle-state') || 'null');
-                if (state?.startedAt) return state;
-                const initialState = { startedAt: new Date().toISOString() };
+                if (state?.startedAt && state.scenario === 'redwood' && state.timelineVersion === BATTLE_TIMELINE_VERSION) return state;
+                const initialState = { startedAt: new Date().toISOString(), scenario: 'redwood', timelineVersion: BATTLE_TIMELINE_VERSION };
                 localStorage.setItem('grayfall:battle-state', JSON.stringify(initialState));
                 return initialState;
             } catch {
-                return { startedAt: new Date().toISOString() };
+                return { startedAt: new Date().toISOString(), scenario: 'redwood', timelineVersion: BATTLE_TIMELINE_VERSION };
             }
         }
 
@@ -2882,12 +3165,158 @@
 
         function getBattlePhaseTiming(elapsed) {
             let phaseElapsed = Math.max(0, elapsed);
-            for (let phaseIndex = 0; phaseIndex < BATTLE_PHASES.length - 1; phaseIndex += 1) {
+            for (let phaseIndex = 0; phaseIndex < BATTLE_PHASES.length; phaseIndex += 1) {
                 const duration = BATTLE_PHASE_DURATIONS[phaseIndex];
                 if (phaseElapsed < duration) return { phaseIndex, remaining: duration - phaseElapsed };
                 phaseElapsed -= duration;
             }
-            return { phaseIndex: BATTLE_PHASES.length - 1, remaining: 0 };
+            return { phaseIndex: BATTLE_PHASES.length, remaining: 0 };
+        }
+
+        function getBattleMapPointFromMarker(marker, mapRect) {
+            const rect = marker.getBoundingClientRect();
+            return {
+                x: ((rect.left + rect.width / 2 - mapRect.left) / mapRect.width) * 1000,
+                y: ((rect.top + rect.height / 2 - mapRect.top) / mapRect.height) * 600,
+                halfWidth: rect.width / mapRect.width * 500,
+                halfHeight: rect.height / mapRect.height * 300,
+            };
+        }
+
+        function getBattleMapEdgePoint(center, toward, inset) {
+            const dx = toward.x - center.x;
+            const dy = toward.y - center.y;
+            const length = Math.hypot(dx, dy) || 1;
+            const unitX = dx / length;
+            const unitY = dy / length;
+            const edgeDistance = Math.min(
+                Math.abs(unitX) ? center.halfWidth / Math.abs(unitX) : Infinity,
+                Math.abs(unitY) ? center.halfHeight / Math.abs(unitY) : Infinity,
+            ) + inset;
+            return { x: center.x + unitX * edgeDistance, y: center.y + unitY * edgeDistance };
+        }
+
+        function renderBattleRedwoodPhase(phaseIndex) {
+            const map = document.getElementById('battle-map');
+            const mapRect = map.getBoundingClientRect();
+            if (!mapRect.width || !mapRect.height) return;
+            const phaseOneActive = phaseIndex >= 1;
+            const phaseTwoActive = phaseIndex >= 2;
+            const phaseThreeActive = phaseIndex >= 3;
+            const phaseFourActive = phaseIndex >= 4;
+            const phaseFiveActive = phaseIndex >= 5;
+            const phaseSixActive = phaseIndex >= 6;
+            const phaseSevenActive = phaseIndex >= 7;
+            const layoutKey = `${phaseSevenActive ? 7 : phaseSixActive ? 6 : phaseFiveActive ? 5 : phaseFourActive ? 4 : phaseThreeActive ? 3 : phaseTwoActive ? 2 : phaseOneActive ? 1 : 0}:${Math.round(mapRect.width)}x${Math.round(mapRect.height)}`;
+            const layoutChanged = layoutKey !== renderedBattleMapLayout;
+            if (layoutChanged) renderedBattleMapLayout = layoutKey;
+
+            const markers = [...map.querySelectorAll('[data-battle-unit]')];
+            markers.forEach((marker) => {
+                if (!marker.dataset.briefingPosition) marker.dataset.briefingPosition = `${marker.style.left}|${marker.style.top}`;
+                const unit = marker.dataset.battleUnit;
+                const position = phaseSevenActive
+                    ? BATTLE_REDWOOD_PHASE_SEVEN_POSITIONS[unit] || BATTLE_REDWOOD_PHASE_SIX_POSITIONS[unit] || BATTLE_REDWOOD_PHASE_FIVE_POSITIONS[unit] || BATTLE_REDWOOD_PHASE_FOUR_POSITIONS[unit] || BATTLE_REDWOOD_PHASE_THREE_POSITIONS[unit] || BATTLE_REDWOOD_PHASE_TWO_POSITIONS[unit] || BATTLE_REDWOOD_PHASE_ONE_POSITIONS[unit]
+                    : phaseSixActive
+                        ? BATTLE_REDWOOD_PHASE_SIX_POSITIONS[unit] || BATTLE_REDWOOD_PHASE_FIVE_POSITIONS[unit] || BATTLE_REDWOOD_PHASE_FOUR_POSITIONS[unit] || BATTLE_REDWOOD_PHASE_THREE_POSITIONS[unit] || BATTLE_REDWOOD_PHASE_TWO_POSITIONS[unit] || BATTLE_REDWOOD_PHASE_ONE_POSITIONS[unit]
+                    : phaseFiveActive
+                        ? BATTLE_REDWOOD_PHASE_FIVE_POSITIONS[unit] || BATTLE_REDWOOD_PHASE_FOUR_POSITIONS[unit] || BATTLE_REDWOOD_PHASE_THREE_POSITIONS[unit] || BATTLE_REDWOOD_PHASE_TWO_POSITIONS[unit] || BATTLE_REDWOOD_PHASE_ONE_POSITIONS[unit]
+                    : phaseFourActive
+                        ? BATTLE_REDWOOD_PHASE_FOUR_POSITIONS[unit] || BATTLE_REDWOOD_PHASE_THREE_POSITIONS[unit] || BATTLE_REDWOOD_PHASE_TWO_POSITIONS[unit] || BATTLE_REDWOOD_PHASE_ONE_POSITIONS[unit]
+                    : phaseThreeActive
+                        ? BATTLE_REDWOOD_PHASE_THREE_POSITIONS[unit] || BATTLE_REDWOOD_PHASE_TWO_POSITIONS[unit] || BATTLE_REDWOOD_PHASE_ONE_POSITIONS[unit]
+                    : phaseTwoActive
+                        ? BATTLE_REDWOOD_PHASE_TWO_POSITIONS[unit] || BATTLE_REDWOOD_PHASE_ONE_POSITIONS[unit]
+                        : phaseOneActive ? BATTLE_REDWOOD_PHASE_ONE_POSITIONS[unit] : null;
+                const [briefingLeft, briefingTop] = marker.dataset.briefingPosition.split('|');
+                if (layoutChanged) {
+                    const positionX = phaseSevenActive
+                        ? position?.[0]
+                        : phaseFiveActive && !phaseSevenActive && unit === 'delta'
+                        ? (window.innerWidth <= 767 ? 82 : 90)
+                        : phaseFiveActive && !phaseSevenActive && unit === 'traders' && window.innerWidth <= 767
+                            ? 14
+                        : phaseThreeActive && !phaseFiveActive && ['alpha', 'bravo', 'charlie', 'delta', 'echo'].includes(unit)
+                            ? (window.innerWidth <= 767 ? 60.35 : 59.6)
+                        : phaseTwoActive && !phaseFiveActive && unit === 'echo'
+                            ? (window.innerWidth <= 767 ? 81 : 88)
+                            : phaseTwoActive && unit === 'assault' && window.innerWidth <= 767
+                                ? 45
+                                : position?.[0];
+                    marker.style.left = `${positionX ?? Number.parseFloat(briefingLeft)}%`;
+                    marker.style.top = `${position?.[1] ?? Number.parseFloat(briefingTop)}%`;
+                }
+                marker.classList.toggle('battle-redwood-unit--snipers-firing', phaseOneActive && !phaseTwoActive && unit === 'snipers');
+                marker.classList.toggle('battle-redwood-unit--sniper-targeted', phaseOneActive && !phaseTwoActive && ['alpha', 'bravo'].includes(unit));
+                marker.classList.toggle('battle-redwood-unit--broken', (phaseTwoActive && !phaseThreeActive && unit === 'echo') || (phaseThreeActive && !phaseFourActive && unit === 'residents') || (phaseFiveActive && ['snipers', 'traders', 'delta'].includes(unit)) || (phaseSixActive && unit === 'assault') || (phaseSevenActive && unit === 'echo'));
+                marker.classList.toggle('battle-redwood-unit--shaken', (phaseTwoActive && !phaseThreeActive && unit === 'residents') || (phaseFiveActive && ['snipers', 'traders', 'delta'].includes(unit)) || (phaseSixActive && unit === 'assault') || (phaseSevenActive && unit === 'echo'));
+                marker.classList.toggle('battle-redwood-unit--heavily-broken', phaseSixActive && unit === 'assault');
+            });
+
+            const vectorLayer = document.getElementById('battle-phase-vectors');
+            vectorLayer.replaceChildren();
+            map.classList.toggle('is-phase-one', phaseOneActive && !phaseTwoActive);
+            map.classList.toggle('battle-map--phase-two', phaseTwoActive && !phaseThreeActive);
+            map.classList.toggle('battle-map--phase-three', phaseThreeActive);
+            map.classList.toggle('battle-map--phase-four', phaseIndex === 4);
+            map.classList.toggle('battle-map--phase-five', phaseFiveActive);
+            map.classList.toggle('battle-map--phase-six', phaseSixActive && !phaseSevenActive);
+            map.classList.toggle('battle-map--phase-seven', phaseSevenActive);
+            map.classList.toggle('battle-map--finished', phaseIndex >= BATTLE_PHASES.length);
+            map.querySelectorAll('.battle-unit-flank').forEach((badge) => badge.classList.toggle('battle-unit-flank--active', phaseFiveActive && badge.closest('[data-battle-unit]').dataset.battleUnit === 'echo'));
+            map.querySelectorAll('[data-battle-vehicle-badge]').forEach((badge) => {
+                const vehicle = badge.closest('[data-battle-unit]');
+                const vehicleId = vehicle.dataset.battleUnit;
+                const isDestroyed = (phaseFourActive && vehicleId === 'bushmaster') || (phaseSixActive && vehicleId === 'predatorX');
+                badge.classList.toggle('fa-fire', isDestroyed);
+                badge.classList.toggle('fa-bolt', phaseThreeActive && !isDestroyed);
+                badge.classList.toggle('fa-crosshairs', !phaseThreeActive);
+                if (['bushmaster', 'predatorX'].includes(vehicleId)) {
+                    vehicle.classList.toggle('battle-redwood-vehicle--destroyed', isDestroyed);
+                    const vehicleName = vehicleId === 'bushmaster' ? 'Bushmaster' : 'Predator X';
+                    vehicle.setAttribute('aria-label', isDestroyed ? `Zniszczony Vanguard ${vehicleName}, płonie i emituje dym` : `Vanguard Force ${vehicleName}, granatnik 40 milimetrów`);
+                }
+            });
+            const assaultIcon = map.querySelector('[data-battle-unit="assault"] [data-battle-unit-icon]');
+            assaultIcon.classList.toggle('fa-shield-halved', phaseThreeActive);
+            assaultIcon.classList.toggle('fa-bullseye', !phaseThreeActive);
+            if (!phaseOneActive) return;
+
+            const svgNamespace = 'http://www.w3.org/2000/svg';
+            const vectors = phaseSevenActive
+                ? BATTLE_REDWOOD_PHASE_SEVEN_VECTORS
+                : phaseSixActive
+                    ? BATTLE_REDWOOD_PHASE_SIX_VECTORS
+                : phaseFiveActive
+                    ? BATTLE_REDWOOD_PHASE_FIVE_VECTORS
+                : phaseFourActive
+                    ? BATTLE_REDWOOD_PHASE_FOUR_VECTORS
+                : phaseThreeActive
+                    ? BATTLE_REDWOOD_PHASE_THREE_VECTORS
+                    : phaseTwoActive ? BATTLE_REDWOOD_PHASE_TWO_VECTORS : BATTLE_REDWOOD_PHASE_ONE_VECTORS;
+            vectors.forEach((vector) => {
+                const source = map.querySelector(`[data-battle-unit="${vector.from}"]`);
+                const sourceCenter = getBattleMapPointFromMarker(source, mapRect);
+                const target = vector.to ? map.querySelector(`[data-battle-unit="${vector.to}"]`) : null;
+                const targetCenter = target
+                    ? getBattleMapPointFromMarker(target, mapRect)
+                    : { x: vector.point[0] * 10, y: vector.point[1] * 6 };
+                const start = getBattleMapEdgePoint(sourceCenter, targetCenter, 2);
+                const end = target ? getBattleMapEdgePoint(targetCenter, sourceCenter, -2) : targetCenter;
+                const path = document.createElementNS(svgNamespace, 'path');
+                path.setAttribute('class', `battle-phase-vector battle-phase-vector--${vector.faction}${vector.effect ? ` battle-phase-vector--${vector.effect}` : ''}${vector.retreat ? ' battle-phase-vector--retreat' : ''}`);
+                path.setAttribute('d', `M ${start.x} ${start.y} L ${end.x} ${end.y}`);
+                path.setAttribute('marker-end', `url(#redwood-arrow-${vector.faction})`);
+                vectorLayer.appendChild(path);
+                if (vector.effect === 'raid') {
+                    const bolt = document.createElementNS(svgNamespace, 'path');
+                    const middleX = (start.x + end.x) / 2;
+                    const middleY = (start.y + end.y) / 2;
+                    bolt.setAttribute('class', 'battle-phase-bolt');
+                    bolt.setAttribute('d', `M ${middleX + 3} ${middleY - 9} L ${middleX - 4} ${middleY + 1} L ${middleX} ${middleY + 1} L ${middleX - 2} ${middleY + 9} L ${middleX + 5} ${middleY - 1} L ${middleX + 1} ${middleY - 1} Z`);
+                    vectorLayer.appendChild(bolt);
+                }
+            });
         }
 
         function getBattlePhaseStartOffset(phaseIndex) {
@@ -2905,7 +3334,7 @@
             }));
             const reports = [...automaticReports, ...battleAdminReports]
                 .sort((first, second) => Date.parse(first.createdAt) - Date.parse(second.createdAt))
-                .slice(-10);
+                .slice(-30);
             reportsElement.replaceChildren();
             reports.forEach((report) => {
                 const item = document.createElement('article');
@@ -2925,7 +3354,7 @@
                 item.append(meta, text);
                 reportsElement.appendChild(item);
             });
-            document.getElementById('battle-report-count').textContent = `${reports.length} / 10`;
+            document.getElementById('battle-report-count').textContent = `${reports.length} / 30`;
             reportsElement.scrollTop = reportsElement.scrollHeight;
         }
 
@@ -2973,31 +3402,43 @@
             const startTime = Date.parse(battleState.startedAt);
             const elapsed = Math.max(0, Date.now() - startTime);
             const { phaseIndex, remaining } = getBattlePhaseTiming(elapsed);
-            const phase = BATTLE_PHASES[phaseIndex];
-            document.getElementById('battle-phase').textContent = phase.title;
-            document.getElementById('battle-meridian-value').textContent = `${phase.meridian}%`;
-            document.getElementById('battle-vanguard-value').textContent = `${phase.vanguard}%`;
-            document.getElementById('battle-meridian-bar').style.width = `${phase.meridian}%`;
-            document.getElementById('battle-vanguard-bar').style.width = `${phase.vanguard}%`;
-            document.getElementById('battle-cycle').textContent = `FAZA ${String(phaseIndex + 1).padStart(2, '0')} / 08`;
+            const isBriefing = phaseIndex === 0;
+            const isFinished = phaseIndex >= BATTLE_PHASES.length;
+            const currentPhase = phaseIndex - 1;
+            const phaseName = BATTLE_PHASES[phaseIndex]?.title || 'Bitwa zakończona';
+            renderBattleRedwoodPhase(phaseIndex);
+            document.getElementById('battle-phase').textContent = isBriefing ? 'Briefing przed bitwą' : phaseName;
+            document.getElementById('battle-stage-badge').textContent = isBriefing ? 'BRIEFING' : isFinished ? 'KONIEC' : `FAZA ${String(phaseIndex).padStart(2, '0')} / 07`;
+            document.getElementById('battle-cycle').textContent = isBriefing ? 'BRIEFING · 10 MINUT' : isFinished ? 'KONIEC BITWY · FAZA 07 / 07' : `FAZA ${String(phaseIndex).padStart(2, '0')} / 07`;
+            document.getElementById('battle-next-phase').textContent = isBriefing ? 'Start fazy 1 za' : isFinished ? 'Bitwa zakończona' : phaseIndex === 7 ? 'Koniec bitwy za' : `Faza ${phaseIndex + 1} za`;
+            document.getElementById('battle-countdown').textContent = isFinished ? 'KONIEC' : formatBattleClock(remaining);
+            document.getElementById('battle-objective').textContent = isBriefing
+                ? 'Redwood Defense Front obsadza mur i przygotowuje obronę miasta. Briefing trwa 10 minut.'
+                : phaseIndex === 1
+                    ? BATTLE_REDWOOD_PHASE_ONE_OBJECTIVE
+                    : phaseIndex === 2
+                        ? BATTLE_REDWOOD_PHASE_TWO_OBJECTIVE
+                    : phaseIndex === 3
+                        ? BATTLE_REDWOOD_PHASE_THREE_OBJECTIVE
+                    : phaseIndex === 4
+                        ? BATTLE_REDWOOD_PHASE_FOUR_OBJECTIVE
+                    : phaseIndex === 5
+                        ? BATTLE_REDWOOD_PHASE_FIVE_OBJECTIVE
+                    : phaseIndex === 6
+                        ? BATTLE_REDWOOD_PHASE_SIX_OBJECTIVE
+                    : phaseIndex === 7
+                        ? BATTLE_REDWOOD_PHASE_SEVEN_OBJECTIVE
+                    : isFinished
+                        ? 'Operacja Redwood zakończona. Redwood utrzymane, Vanguard Force wycofuje się, a Meridian Mercenary One i Two przybyły na czas.'
+                        : `Rozpiska Fazy ${phaseIndex} jest w przygotowaniu; mapa zachowuje ostatni ustalony układ Fazy 1.`;
 
-            const finalPhase = phaseIndex === BATTLE_PHASES.length - 1;
-            document.getElementById('battle-next-phase').textContent = finalPhase ? 'Stanowiska utrzymane' : 'Następna faza za';
-            document.getElementById('battle-countdown').textContent = finalPhase ? 'HOLD' : formatBattleClock(remaining);
-
-            Object.entries(BATTLE_UNIT_POSITIONS).forEach(([unit, positions]) => {
-                const marker = document.querySelector(`[data-battle-unit="${unit}"]`);
-                const [x, y] = getBattleUnitPosition(unit, phaseIndex);
-                marker.style.left = `${x}%`;
-                marker.style.top = `${y}%`;
-                const isRouted = (unit === 'caldwell' && phaseIndex >= 5)
-                    || (unit === 'alpha' && phaseIndex >= 6)
-                    || (['snipers', 'caldwell'].includes(unit) && phaseIndex >= 7);
-                marker.classList.toggle('is-routed', isRouted);
-                marker.classList.toggle('is-captured', unit === 'jimmie' && phaseIndex >= 6);
+            document.querySelectorAll('#battle-phase-track [data-phase-step]').forEach((step) => {
+                const stepIndex = Number(step.dataset.phaseStep);
+                step.classList.toggle('is-active', !isBriefing && !isFinished && stepIndex === currentPhase);
+                step.classList.toggle('is-complete', isFinished || (!isBriefing && stepIndex < currentPhase));
             });
-            updateBattleTacticalEffects(phaseIndex);
-            renderBattleReports(phaseIndex, battleState.startedAt);
+            const progressLabel = isBriefing ? 'Postęp: briefing przed bitwą' : isFinished ? 'Postęp: bitwa zakończona, ukończono siedem faz' : `Postęp: faza ${phaseIndex} z siedmiu`;
+            document.getElementById('battle-phase-track').setAttribute('aria-label', progressLabel);
         }
 
         async function loadBattleData() {
@@ -3006,8 +3447,8 @@
                 const response = await fetch('/api/team?channel=battle', { cache: 'no-store' });
                 const data = await response.json().catch(() => ({}));
                 if (!response.ok) throw new Error(data.error || 'Nie udało się pobrać meldunków starcia.');
-                if (!data.state?.startedAt || !Array.isArray(data.messages)) {
-                    throw new Error('API nie obsługuje kanału starcia. Wdróż aktualny plik api/team.js.');
+                if (!data.state?.startedAt || data.state.scenario !== 'redwood' || data.state.timelineVersion !== BATTLE_TIMELINE_VERSION || !Array.isArray(data.messages)) {
+                    throw new Error('API nie obsługuje osi czasu Redwood. Wdróż aktualny plik api/team.js.');
                 }
                 battleState = data.state;
                 battleAdminReports = Array.isArray(data.messages) ? data.messages : [];
@@ -3022,19 +3463,29 @@
                     : error.message || 'Brak synchronizacji meldunków starcia.';
             }
             updateBattleSimulation();
+            renderCurrentBattleReports();
             return serverSynced;
+        }
+
+        function renderCurrentBattleReports() {
+            if (!battleState?.startedAt) return;
+            const elapsed = Math.max(0, Date.now() - Date.parse(battleState.startedAt));
+            const { phaseIndex } = getBattlePhaseTiming(elapsed);
+            renderBattleReports(phaseIndex, battleState.startedAt);
         }
 
         function openBattleWindow() {
             const modal = document.getElementById('battle-modal');
             modal.classList.remove('hidden');
             document.body.classList.add('overflow-hidden');
-            loadBattleData();
             window.clearInterval(battlePhaseTimer);
             window.clearInterval(battlePollTimer);
-            battlePhaseTimer = window.setInterval(updateBattleSimulation, 1000);
-            battlePollTimer = window.setInterval(loadBattleData, 15000);
             document.getElementById('battle-close').focus();
+            void loadBattleData();
+            battlePhaseTimer = window.setInterval(updateBattleSimulation, 1000);
+            battlePollTimer = window.setInterval(() => {
+                if (!modal.classList.contains('hidden')) void loadBattleData();
+            }, 15000);
         }
 
         function closeBattleWindow() {
@@ -3044,6 +3495,7 @@
             window.clearInterval(battlePollTimer);
         }
 
+        document.getElementById('battle-open').addEventListener('click', openBattleWindow);
         document.getElementById('battle-close').addEventListener('click', closeBattleWindow);
         document.getElementById('battle-modal').addEventListener('click', (event) => {
             if (event.target.id === 'battle-modal') closeBattleWindow();
@@ -3325,7 +3777,7 @@
             advanceBattlePhaseButton.innerHTML = advanceBattlePhaseDefaultLabel;
         }
 
-        async function advanceBattleToPhaseFiveEnd() {
+        async function advanceBattleToPhaseSevenEnd() {
             const button = advanceBattlePhaseButton;
             const status = document.getElementById('admin-battle-report-status');
             button.disabled = true;
@@ -3333,19 +3785,19 @@
             try {
                 const { state } = await battleApiRequest({
                     method: 'POST',
-                    body: JSON.stringify({ action: 'advance-to-phase-five-end' }),
+                    body: JSON.stringify({ action: 'advance-to-phase-seven-end' }),
                 });
                 battleState = state;
                 localStorage.setItem('grayfall:battle-state', JSON.stringify(state));
                 await loadBattleData();
-                status.textContent = 'Wspólna bitwa ustawiona na końcówkę fazy 5.';
+                status.textContent = 'Wspólna bitwa ustawiona na końcówkę fazy 7.';
                 status.className = 'mt-2 min-h-4 text-xs text-emerald-300';
             } catch (error) {
                 if (window.location.protocol === 'file:') {
-                    battleState = { startedAt: new Date(Date.now() - (5 * 10 * 60 * 1000 - 60 * 1000)).toISOString() };
+                    battleState = { startedAt: new Date(Date.now() - (79 * 60 * 1000)).toISOString(), scenario: 'redwood', timelineVersion: BATTLE_TIMELINE_VERSION };
                     localStorage.setItem('grayfall:battle-state', JSON.stringify(battleState));
                     updateBattleSimulation();
-                    status.textContent = 'Podgląd lokalny ustawiony na fazę 5 · zmiana nie dotyczy grayfall.pl.';
+                    status.textContent = 'Podgląd lokalny ustawiony na końcówkę fazy 7 · zmiana nie dotyczy grayfall.pl.';
                 } else {
                     status.textContent = error.message;
                 }
@@ -3365,7 +3817,7 @@
             }
 
             resetBattlePhaseAdvanceConfirmation();
-            window.setTimeout(advanceBattleToPhaseFiveEnd, 0);
+            window.setTimeout(advanceBattleToPhaseSevenEnd, 0);
         });
 
         async function openAdminPanel() {
@@ -3389,7 +3841,7 @@
         async function loadAdminPanel() {
             const canManageTeam = !!adminAccess?.canManageTeam;
             document.getElementById('admin-radio-section').classList.toggle('hidden', !canManageTeam);
-            document.getElementById('admin-battle-report-section').classList.add('hidden');
+            document.getElementById('admin-battle-report-section').classList.toggle('hidden', !canManageTeam);
             if (canManageTeam) hydrateRadioDisplaySettingsForm();
             const radioRequest = canManageTeam ? loadAdminRadio() : Promise.resolve();
             try {
@@ -3808,7 +4260,7 @@
                 status.className = 'mt-2 min-h-4 text-xs text-emerald-300';
                 updateBattleSimulation();
             } catch (error) {
-                if (window.location.protocol === 'file:') {
+                if (window.location.protocol === 'file:' && text.value.trim().length >= 3) {
                     try {
                         const report = {
                             id: `local-${Date.now()}`,
@@ -3823,6 +4275,7 @@
                         localStorage.setItem('grayfall:battle-reports', JSON.stringify(battleAdminReports));
                         text.value = '';
                         updateBattleSimulation();
+                        renderCurrentBattleReports();
                         status.textContent = 'Zapisano lokalnie — meldunek nie jest widoczny dla innych osób.';
                     } catch (storageError) {
                         status.textContent = storageError.message || error.message;
