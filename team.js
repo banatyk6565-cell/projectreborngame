@@ -33,6 +33,21 @@ module.exports = async function handler(req, res) {
     }
 
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
+    if (body.action === 'reset-to-briefing') {
+      const admin = requireAdmin(req, res, 'canManageTeam');
+      if (!admin) return;
+      const state = {
+        startedAt: new Date().toISOString(),
+        scenario: 'redwood',
+        timelineVersion: BATTLE_TIMELINE_VERSION,
+        updatedAt: new Date().toISOString(),
+        updatedBy: admin.session.globalName || 'Dowództwo',
+      };
+      await writeJson(BATTLE_STATE_KEY, state);
+      res.setHeader('Cache-Control', 'no-store');
+      return res.status(200).json({ state });
+    }
+
     if (body.action === 'advance-to-phase-seven-end') {
       const admin = requireAdmin(req, res, 'canManageTeam');
       if (!admin) return;
