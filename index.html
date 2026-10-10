@@ -3447,11 +3447,13 @@
                 const response = await fetch('/api/team?channel=battle', { cache: 'no-store' });
                 const data = await response.json().catch(() => ({}));
                 if (!response.ok) throw new Error(data.error || 'Nie udało się pobrać meldunków starcia.');
-                if (!data.state?.startedAt || data.state.scenario !== 'redwood' || data.state.timelineVersion !== BATTLE_TIMELINE_VERSION || !Array.isArray(data.messages)) {
+                const unsupportedScenario = data.state?.scenario && data.state.scenario !== 'redwood';
+                const unsupportedTimeline = Number(data.state?.timelineVersion || 0) > BATTLE_TIMELINE_VERSION;
+                if (!data.state?.startedAt || unsupportedScenario || unsupportedTimeline || !Array.isArray(data.messages)) {
                     throw new Error('API nie obsługuje osi czasu Redwood. Wdróż aktualny plik api/team.js.');
                 }
-                battleState = data.state;
-                battleAdminReports = Array.isArray(data.messages) ? data.messages : [];
+                battleState = { ...data.state, scenario: 'redwood', timelineVersion: BATTLE_TIMELINE_VERSION };
+                battleAdminReports = data.messages;
                 localStorage.setItem('grayfall:battle-state', JSON.stringify(battleState));
                 document.getElementById('battle-status').textContent = '';
                 serverSynced = true;
