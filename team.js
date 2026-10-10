@@ -48,6 +48,14 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ state });
     }
 
+    if (body.action === 'clear-battle-reports') {
+      const admin = requireAdmin(req, res, 'canManageTeam');
+      if (!admin) return;
+      await writeJson(BATTLE_REPORTS_KEY, []);
+      res.setHeader('Cache-Control', 'no-store');
+      return res.status(200).json({ messages: [] });
+    }
+
     if (body.action === 'advance-to-phase-seven-end') {
       const admin = requireAdmin(req, res, 'canManageTeam');
       if (!admin) return;
