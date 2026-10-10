@@ -3765,6 +3765,12 @@
             const response = await fetch(path, { headers: { 'Content-Type': 'application/json' }, ...options });
             const data = await response.json().catch(() => ({}));
             if (response.status === 405) throw new Error('grayfall.pl ma starą wersję api/team.js obsługującą tylko GET. Wdróż aktualne api/team.js, aby nadawać meldunki bitwy.');
+            if (response.status === 400 && data.error === 'Nieznana operacja zespołu.') {
+                let action = '';
+                try { action = JSON.parse(options.body || '{}').action || ''; } catch {}
+                const operation = action === 'reset-to-briefing' ? 'resetu briefingu' : 'meldunków bitwy';
+                throw new Error(`Serwer nie obsługuje ${operation}. Wdróż aktualny plik api/team.js. Wspólny czas nie został zmieniony.`);
+            }
             if (!response.ok) throw new Error(data.error || `Battle API zwróciło HTTP ${response.status}.`);
             return data;
         }
