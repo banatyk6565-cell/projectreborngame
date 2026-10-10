@@ -33,11 +33,11 @@ module.exports = async function handler(req, res) {
     }
 
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
-    if (body.action === 'reset-to-briefing') {
+    if (body.action === 'reset-to-phase-one') {
       const admin = requireAdmin(req, res, 'canManageTeam');
       if (!admin) return;
       const state = {
-        startedAt: new Date().toISOString(),
+        startedAt: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
         scenario: 'redwood',
         timelineVersion: BATTLE_TIMELINE_VERSION,
         updatedAt: new Date().toISOString(),

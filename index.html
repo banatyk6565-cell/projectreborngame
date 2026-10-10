@@ -1241,7 +1241,7 @@
                     </section>
 
                     <section id="admin-battle-report-section" class="hidden bg-darkbg/60 border border-red-500/25 rounded-2xl p-5 mt-6">
-                        <div class="mb-4 flex flex-wrap items-start justify-between gap-3"><div><h3 class="font-cinzel text-lg font-bold text-white">Dowództwo · meldunki starcia</h3><p class="text-xs text-gray-500">Wiadomości pojawią się w panelu starcia i będą wspólne dla odwiedzających.</p></div><button id="admin-battle-reset-timeline" type="button" class="rounded-lg border border-red-400/45 bg-red-500/10 px-3 py-2 text-[10px] font-bold text-red-200 transition hover:border-red-300 hover:bg-red-500/20"><i class="fa-solid fa-rotate-left mr-1" aria-hidden="true"></i>Resetuj wspólny czas</button></div>
+                        <div class="mb-4 flex flex-wrap items-start justify-between gap-3"><div><h3 class="font-cinzel text-lg font-bold text-white">Dowództwo · meldunki starcia</h3><p class="text-xs text-gray-500">Wiadomości pojawią się w panelu starcia i będą wspólne dla odwiedzających.</p></div><button id="admin-battle-reset-timeline" type="button" class="rounded-lg border border-red-400/45 bg-red-500/10 px-3 py-2 text-[10px] font-bold text-red-200 transition hover:border-red-300 hover:bg-red-500/20"><i class="fa-solid fa-rotate-left mr-1" aria-hidden="true"></i>Ustaw Fazę 1</button></div>
                         <form id="admin-battle-report-form" class="grid grid-cols-1 gap-3 sm:grid-cols-[minmax(0,190px)_1fr_auto] sm:items-end">
                             <label class="flex flex-col gap-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400">Jednostka / nadawca<select id="admin-battle-unit" class="rounded-lg border border-cardborder bg-cardbg px-3 py-2.5 text-xs text-white"><option>Dowództwo</option><option>Vanguard Force</option><option>Vanguard / Alpha</option><option>Vanguard / Bravo</option><option>Vanguard / Charlie</option><option>Vanguard / Delta</option><option>Vanguard / Echo</option><option>Vanguard / Predator X</option><option>Vanguard / Bushmaster</option><option>Redwood Garrison</option><option>Redwood Defense Front · Mieszkańcy</option><option>Blackwater · Handlarze</option><option>Meridian Scout · Snajperzy</option><option>Meridian Scout · Grupa Uderzeniowa Caldwella</option></select></label>
                             <label class="flex flex-col gap-2 text-[10px] font-semibold uppercase tracking-wider text-gray-400">Treść meldunku<textarea id="admin-battle-report-text" maxlength="800" rows="2" required placeholder="Wprowadź meldunek z pola walki..." class="resize-y rounded-lg border border-cardborder bg-cardbg px-3 py-2.5 text-xs normal-case text-white placeholder-gray-600 outline-none focus:border-red-400/60"></textarea></label>
@@ -2983,6 +2983,8 @@
 
         const BATTLE_TIMELINE_VERSION = 2;
         const BATTLE_PHASE_DURATION = 10 * 60 * 1000;
+        const BATTLE_LOCAL_RESET_KEY = 'grayfall:battle:index-reset';
+        const BATTLE_LOCAL_RESET_VERSION = 'phase-one-v1';
         const BATTLE_PHASE_DURATIONS = Array(8).fill(BATTLE_PHASE_DURATION).concat(Infinity);
         const BATTLE_PHASES = [
             { title: 'Briefing przed bitwą', report: 'Rozpoczęto dziesięciominutowy briefing przed bitwą o Redwood.' },
@@ -3146,15 +3148,26 @@
             return mobilePosition || BATTLE_UNIT_POSITIONS[unit][phaseIndex];
         }
 
+        function startLocalBattleAtPhaseOne() {
+            const state = {
+                startedAt: new Date(Date.now() - BATTLE_PHASE_DURATION).toISOString(),
+                scenario: 'redwood',
+                timelineVersion: BATTLE_TIMELINE_VERSION,
+            };
+            try {
+                localStorage.setItem('grayfall:battle-state', JSON.stringify(state));
+                localStorage.setItem(BATTLE_LOCAL_RESET_KEY, BATTLE_LOCAL_RESET_VERSION);
+            } catch {}
+            return state;
+        }
+
         function readLocalBattleState() {
             try {
                 const state = JSON.parse(localStorage.getItem('grayfall:battle-state') || 'null');
-                if (state?.startedAt && state.scenario === 'redwood' && state.timelineVersion === BATTLE_TIMELINE_VERSION) return state;
-                const initialState = { startedAt: new Date().toISOString(), scenario: 'redwood', timelineVersion: BATTLE_TIMELINE_VERSION };
-                localStorage.setItem('grayfall:battle-state', JSON.stringify(initialState));
-                return initialState;
+                if (state?.startedAt && state.scenario === 'redwood' && state.timelineVersion === BATTLE_TIMELINE_VERSION && localStorage.getItem(BATTLE_LOCAL_RESET_KEY) === BATTLE_LOCAL_RESET_VERSION) return state;
+                return startLocalBattleAtPhaseOne();
             } catch {
-                return { startedAt: new Date().toISOString(), scenario: 'redwood', timelineVersion: BATTLE_TIMELINE_VERSION };
+                return startLocalBattleAtPhaseOne();
             }
         }
 
@@ -3452,10 +3465,16 @@
                 if (!data.state?.startedAt || unsupportedScenario || unsupportedTimeline || !Array.isArray(data.messages)) {
                     throw new Error('API nie obsługuje osi czasu Redwood. Wdróż aktualny plik api/team.js.');
                 }
-                battleState = { ...data.state, scenario: 'redwood', timelineVersion: BATTLE_TIMELINE_VERSION };
+                const legacyTimeline = !data.state.scenario || Number(data.state.timelineVersion || 0) < BATTLE_TIMELINE_VERSION;
+                battleState = legacyTimeline
+                    ? readLocalBattleState()
+                    : { ...data.state, scenario: 'redwood', timelineVersion: BATTLE_TIMELINE_VERSION };
                 battleAdminReports = data.messages;
                 localStorage.setItem('grayfall:battle-state', JSON.stringify(battleState));
-                document.getElementById('battle-status').textContent = '';
+                if (legacyTimeline) localStorage.setItem(BATTLE_LOCAL_RESET_KEY, BATTLE_LOCAL_RESET_VERSION);
+                document.getElementById('battle-status').textContent = legacyTimeline
+                    ? 'Stary zegar API · Faza 1 uruchomiona lokalnie. Wspólny zegar wymaga aktualizacji api/team.js.'
+                    : '';
                 serverSynced = true;
             } catch (error) {
                 battleState = readLocalBattleState();
@@ -3793,19 +3812,20 @@
             try {
                 const { state } = await battleApiRequest({
                     method: 'POST',
-                    body: JSON.stringify({ action: 'reset-to-briefing' }),
+                    body: JSON.stringify({ action: 'reset-to-phase-one' }),
                 });
                 battleState = state;
                 localStorage.setItem('grayfall:battle-state', JSON.stringify(state));
                 await loadBattleData();
-                status.textContent = 'Wspólny briefing rozpoczęty. Faza 1 za 10:00.';
+                status.textContent = 'Wspólna Faza 1 rozpoczęta · następna faza za 10:00.';
                 status.className = 'mt-2 min-h-4 text-xs text-emerald-300';
             } catch (error) {
-                if (window.location.protocol === 'file:') {
-                    battleState = { startedAt: new Date().toISOString(), scenario: 'redwood', timelineVersion: BATTLE_TIMELINE_VERSION };
-                    localStorage.setItem('grayfall:battle-state', JSON.stringify(battleState));
+                if (window.location.protocol === 'file:' || error.message.includes('resetu Fazy 1')) {
+                    battleState = startLocalBattleAtPhaseOne();
                     updateBattleSimulation();
-                    status.textContent = 'Lokalny briefing rozpoczęty; zmiana nie dotyczy grayfall.pl.';
+                    status.textContent = window.location.protocol === 'file:'
+                        ? 'Lokalna Faza 1 uruchomiona; zmiana nie dotyczy innych osób.'
+                        : 'Faza 1 uruchomiona lokalnie. Wdróż aktualny api/team.js, aby zsynchronizować wszystkich.';
                 } else {
                     status.textContent = error.message;
                 }
@@ -3818,8 +3838,8 @@
         battleTimelineResetButton.addEventListener('click', () => {
             if (battleTimelineResetButton.dataset.confirming !== 'true') {
                 battleTimelineResetButton.dataset.confirming = 'true';
-                battleTimelineResetButton.innerHTML = '<i class="fa-solid fa-check mr-1" aria-hidden="true"></i>Kliknij ponownie, aby potwierdzić reset';
-                document.getElementById('admin-battle-report-status').textContent = 'Reset wspólnego zegara obowiązuje wszystkich. Potwierdzenie ważne 5 sekund.';
+                battleTimelineResetButton.innerHTML = '<i class="fa-solid fa-check mr-1" aria-hidden="true"></i>Kliknij ponownie, aby rozpocząć Fazę 1';
+                document.getElementById('admin-battle-report-status').textContent = 'Potwierdzenie resetu osi czasu ważne 5 sekund.';
                 battleTimelineResetTimeout = window.setTimeout(resetBattleTimelineConfirmation, 5000);
                 return;
             }
