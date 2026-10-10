@@ -4,6 +4,7 @@ const { writeJson } = require('../lib/admin-store');
 
 const BATTLE_STATE_KEY = 'grayfall:battle:state';
 const BATTLE_REPORTS_KEY = 'grayfall:battle:reports';
+const BATTLE_TIMELINE_VERSION = 2;
 
 module.exports = async function handler(req, res) {
   const requestUrl = new URL(req.url, 'http://localhost');
@@ -17,8 +18,8 @@ module.exports = async function handler(req, res) {
     if (req.method === 'GET' && isBattleChannel) {
       res.setHeader('Cache-Control', 'no-store');
       let state = await readJson(BATTLE_STATE_KEY, null);
-      if (!state?.startedAt) {
-        state = { startedAt: new Date().toISOString() };
+      if (!state?.startedAt || state.scenario !== 'redwood' || state.timelineVersion !== BATTLE_TIMELINE_VERSION) {
+        state = { startedAt: new Date().toISOString(), scenario: 'redwood', timelineVersion: BATTLE_TIMELINE_VERSION };
         await writeJson(BATTLE_STATE_KEY, state);
       }
       const messages = await readJson(BATTLE_REPORTS_KEY, []);
@@ -32,12 +33,14 @@ module.exports = async function handler(req, res) {
     }
 
     const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
-    if (body.action === 'advance-to-phase-five-end') {
+    if (body.action === 'advance-to-phase-seven-end') {
       const admin = requireAdmin(req, res, 'canManageTeam');
       if (!admin) return;
-      const phaseFiveEnd = 5 * 10 * 60 * 1000 - 60 * 1000;
+      const phaseSevenEnd = 79 * 60 * 1000;
       const state = {
-        startedAt: new Date(Date.now() - phaseFiveEnd).toISOString(),
+        startedAt: new Date(Date.now() - phaseSevenEnd).toISOString(),
+        scenario: 'redwood',
+        timelineVersion: BATTLE_TIMELINE_VERSION,
         updatedAt: new Date().toISOString(),
         updatedBy: admin.session.globalName || 'Dowództwo',
       };
