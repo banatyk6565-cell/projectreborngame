@@ -1390,6 +1390,81 @@
             </div>
         </div>
     </div>
+    <section id="server-status" class="relative mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+        <div class="relative overflow-hidden rounded-[28px] border border-cardborder bg-[#0d1013]/90 p-5 shadow-[0_30px_80px_rgba(0,0,0,0.45)] sm:p-7">
+            <div class="absolute inset-0 bg-gradient-to-r from-red-700/10 via-transparent to-amber-500/10"></div>
+            <div class="relative z-10">
+                <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <p class="text-[10px] font-semibold uppercase tracking-[0.28em] text-red-400">Serwer / live feed</p>
+                        <h3 class="mt-2 font-cinzel text-2xl font-black text-white sm:text-3xl">Status serwera Project Zomboid</h3>
+                    </div>
+                    <div class="flex items-center gap-2 self-start rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.2em] text-emerald-300 sm:self-auto">
+                        <span id="server-status-dot" class="h-2.5 w-2.5 rounded-full bg-amber-400 shadow-[0_0_12px_rgba(252,211,77,0.7)]"></span>
+                        <span id="server-status-label">Sprawdzanie statusu</span>
+                    </div>
+                </div>
+
+                <div class="grid gap-4 md:grid-cols-4">
+                    <div class="rounded-2xl border border-cardborder bg-darkbg/80 p-4">
+                        <p class="text-[10px] uppercase tracking-[0.22em] text-gray-500">Stan</p>
+                        <p id="server-status-online" class="mt-3 text-xl font-bold text-white">Weryfikacja</p>
+                        <p class="mt-1 text-xs text-gray-400">Połączenie do serwera</p>
+                    </div>
+                    <div class="rounded-2xl border border-cardborder bg-darkbg/80 p-4">
+                        <p class="text-[10px] uppercase tracking-[0.22em] text-gray-500">Gracze</p>
+                        <p id="server-status-players" class="mt-3 text-xl font-bold text-white">0 / 0</p>
+                        <p class="mt-1 text-xs text-gray-400">Online / limit</p>
+                    </div>
+                    <div class="rounded-2xl border border-cardborder bg-darkbg/80 p-4">
+                        <p class="text-[10px] uppercase tracking-[0.22em] text-gray-500">Mapa / świat</p>
+                        <p id="server-status-map" class="mt-3 text-sm font-bold text-white">Ładowanie...</p>
+                        <p class="mt-1 text-xs text-gray-400">World / server map</p>
+                    </div>
+                    <div class="rounded-2xl border border-cardborder bg-darkbg/80 p-4">
+                        <p class="text-[10px] uppercase tracking-[0.22em] text-gray-500">Uptime</p>
+                        <p id="server-status-uptime" class="mt-3 text-xl font-bold text-white">--</p>
+                        <p class="mt-1 text-xs text-gray-400">Czas działania</p>
+                    </div>
+                </div>
+
+                <div class="mt-6 grid gap-4 xl:grid-cols-[1.6fr_1fr]">
+                    <div class="rounded-2xl border border-cardborder bg-darkbg/80 p-4 sm:p-5">
+                        <div class="mb-3 flex items-center justify-between">
+                            <h4 class="text-sm font-bold uppercase tracking-[0.18em] text-gray-300">Lista graczy na żywo</h4>
+                            <span id="server-status-player-count-badge" class="rounded-full border border-cardborder bg-black/20 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-400">0 online</span>
+                        </div>
+                        <div id="server-status-players-list" class="space-y-2 text-sm text-gray-300">
+                            <div class="rounded-xl border border-cardborder bg-black/10 p-3 text-gray-500">Ładowanie listy graczy...</div>
+                        </div>
+                    </div>
+
+                    <div class="rounded-2xl border border-cardborder bg-darkbg/80 p-4 sm:p-5">
+                        <h4 class="text-sm font-bold uppercase tracking-[0.18em] text-gray-300">Statystyki serwera</h4>
+                        <div class="mt-4 space-y-3 text-sm">
+                            <div class="flex items-center justify-between rounded-xl border border-cardborder bg-black/10 p-3">
+                                <span class="text-gray-400">Zabici zombi</span>
+                                <span id="server-stat-zombies" class="font-semibold text-white">0</span>
+                            </div>
+                            <div class="flex items-center justify-between rounded-xl border border-cardborder bg-black/10 p-3">
+                                <span class="text-gray-400">Śmierci</span>
+                                <span id="server-stat-deaths" class="font-semibold text-white">0</span>
+                            </div>
+                            <div class="flex items-center justify-between rounded-xl border border-cardborder bg-black/10 p-3">
+                                <span class="text-gray-400">Najdłużej grający</span>
+                                <span id="server-stat-longest" class="font-semibold text-white">--</span>
+                            </div>
+                            <div class="flex items-center justify-between rounded-xl border border-cardborder bg-black/10 p-3">
+                                <span class="text-gray-400">Top aktywności</span>
+                                <span id="server-stat-activity" class="font-semibold text-white">--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- Hero Section -->
     <header class="relative min-h-screen flex flex-col justify-end pt-20 pb-16 sm:pb-24 px-4 overflow-hidden">
         <!-- Warstwa tła: grafika z powolnym efektem Ken Burns -->
@@ -3616,6 +3691,70 @@
         const DISCORD_INVITE_URL = 'https://discord.gg/p7d9etbSgY';
         // ID serwera Discord używane do sprawdzania przynależności i ról.
         const DISCORD_GUILD_ID = '617606630615547906';
+
+        async function loadServerStatus() {
+            const statusDot = document.getElementById('server-status-dot');
+            const statusLabel = document.getElementById('server-status-label');
+            const serverStatusOnline = document.getElementById('server-status-online');
+            const serverStatusPlayers = document.getElementById('server-status-players');
+            const serverStatusMap = document.getElementById('server-status-map');
+            const serverStatusUptime = document.getElementById('server-status-uptime');
+            const playersList = document.getElementById('server-status-players-list');
+            const playerCountBadge = document.getElementById('server-status-player-count-badge');
+            const zombiesStat = document.getElementById('server-stat-zombies');
+            const deathsStat = document.getElementById('server-stat-deaths');
+            const longestStat = document.getElementById('server-stat-longest');
+            const activityStat = document.getElementById('server-stat-activity');
+
+            try {
+                const response = await fetch('/api/server-status', { cache: 'no-store' });
+                const data = response.ok ? await response.json() : null;
+                const isOnline = !!data?.online;
+
+                statusDot.className = `h-2.5 w-2.5 rounded-full ${isOnline ? 'bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.75)]' : 'bg-amber-400 shadow-[0_0_12px_rgba(252,211,77,0.75)]'}`;
+                statusLabel.textContent = isOnline ? 'Serwer online' : 'Serwer weryfikacja';
+                serverStatusOnline.textContent = isOnline ? 'Online' : 'Offline';
+                serverStatusOnline.className = `mt-3 text-xl font-bold ${isOnline ? 'text-emerald-300' : 'text-amber-300'}`;
+                serverStatusPlayers.textContent = isOnline ? `${data.playersOnline ?? 0} / ${data.maxPlayers ?? 0}` : '0 / 0';
+                serverStatusMap.textContent = isOnline && data.map ? data.map : 'Brak synchronizacji';
+                serverStatusUptime.textContent = isOnline && data.uptime ? data.uptime : '--';
+                playerCountBadge.textContent = isOnline ? `${data.playersOnline ?? 0} online` : 'offline';
+                zombiesStat.textContent = data?.stats?.zombiesKilled ?? 0;
+                deathsStat.textContent = data?.stats?.deaths ?? 0;
+                longestStat.textContent = data?.stats?.longestSessionHours ? `${data.stats.longestSessionHours} h` : '--';
+                activityStat.textContent = data?.stats?.topActivity || '--';
+
+                if (!data?.players || !data.players.length) {
+                    playersList.innerHTML = '<div class="rounded-xl border border-cardborder bg-black/10 p-3 text-gray-500">Brak aktywnych graczy / serwer nie odpowiada.</div>';
+                    return;
+                }
+
+                playersList.innerHTML = data.players.map((player) => `
+                    <div class="flex items-center justify-between gap-3 rounded-xl border border-cardborder bg-black/10 p-3">
+                        <div class="flex min-w-0 items-center gap-3">
+                            <span class="flex h-7 w-7 items-center justify-center rounded-full bg-red-500/15 text-[10px] font-bold uppercase tracking-wide text-red-300">${(player.name || 'G').slice(0, 2).toUpperCase()}</span>
+                            <div class="min-w-0">
+                                <p class="truncate font-semibold text-white">${player.name || 'Gracz'}</p>
+                                <p class="text-[11px] text-gray-500">${player.status || 'online'}</p>
+                            </div>
+                        </div>
+                        <span class="shrink-0 rounded-full border border-cardborder bg-black/20 px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-gray-300">${player.time || 'n/a'}</span>
+                    </div>
+                `).join('');
+            } catch (error) {
+                statusDot.className = 'h-2.5 w-2.5 rounded-full bg-amber-400 shadow-[0_0_12px_rgba(252,211,77,0.75)]';
+                statusLabel.textContent = 'Status nieodświeżony';
+                serverStatusOnline.textContent = 'Offline';
+                serverStatusPlayers.textContent = '0 / 0';
+                serverStatusMap.textContent = 'Brak danych';
+                serverStatusUptime.textContent = '--';
+                playerCountBadge.textContent = 'offline';
+                playersList.innerHTML = '<div class="rounded-xl border border-cardborder bg-black/10 p-3 text-gray-500">Połączenie z serwerem jest chwilowo niedostępne.</div>';
+            }
+        }
+
+        loadServerStatus();
+        window.setInterval(loadServerStatus, 30000);
 
         let currentUser = null;
         let adminAccess = null;
