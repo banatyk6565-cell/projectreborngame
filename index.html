@@ -3339,19 +3339,20 @@
         function renderBattleReports(phaseIndex, startedAt) {
             const reportsElement = document.getElementById('battle-reports');
             const startTime = Date.parse(startedAt);
-            const automaticReports = BATTLE_PHASES.slice(0, phaseIndex + 1).map((phase, index) => ({
-                unit: index === 0 ? 'DOWÓDZTWO' : 'MELDUNEK SYSTEMOWY',
-                text: phase.report,
-                createdAt: new Date(startTime + getBattlePhaseStartOffset(index)).toISOString(),
-                automatic: true,
-            }));
-            const reports = [...automaticReports, ...battleAdminReports]
+            const reports = battleAdminReports
+                .filter((report) => !report.automatic && Date.parse(report.createdAt) >= startTime)
                 .sort((first, second) => Date.parse(first.createdAt) - Date.parse(second.createdAt))
                 .slice(-30);
             reportsElement.replaceChildren();
+            if (reports.length === 0) {
+                const empty = document.createElement('p');
+                empty.className = 'text-gray-500';
+                empty.textContent = 'Brak komunikatów z panelu dowództwa dla tej bitwy.';
+                reportsElement.appendChild(empty);
+            }
             reports.forEach((report) => {
                 const item = document.createElement('article');
-                item.className = `battle-report${report.automatic ? '' : ' battle-report--command'}`;
+                item.className = 'battle-report battle-report--command';
                 const meta = document.createElement('p');
                 meta.className = 'mb-1 flex justify-between gap-2 font-mono text-[8px] uppercase tracking-wider text-gray-500';
                 const unit = document.createElement('span');
@@ -3608,13 +3609,12 @@
 
         // ================== LOGOWANIE PRZEZ DISCORD ==================
 
-        // TODO: podmień na swoje Client ID z Discord Developer Portal (zakładka OAuth2)
-        // To jest wartość PUBLICZNA - może bezpiecznie znaleźć się w kodzie front-endu.
+        // Wartość publiczna dla OAuth2 Discord; można trzymać w front-endzie.
         const DISCORD_CLIENT_ID = '1548820786037399554';
         const DISCORD_REDIRECT_URI = window.location.origin + '/api/auth/callback';
-        // TODO: podmień na link zaproszenia na Twój serwer Discord (np. https://discord.gg/XXXXXXX)
+        // Link zaproszeniowy do serwera Discord, który jest również używany w UI i weryfikacji członkostwa.
         const DISCORD_INVITE_URL = 'https://discord.gg/p7d9etbSgY';
-        // To samo ID serwera, którego już użyłeś jako DISCORD_GUILD_ID w Vercelu. Nie jest tajne.
+        // ID serwera Discord używane do sprawdzania przynależności i ról.
         const DISCORD_GUILD_ID = '617606630615547906';
 
         let currentUser = null;
