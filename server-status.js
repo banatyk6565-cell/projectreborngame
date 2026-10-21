@@ -1,152 +1,147 @@
-const net = require('net');
+const dgram = require('dgram');
 
-function buildPacket(id, type, body) {
-  const payload = Buffer.from(`${body}\0\0`, 'utf8');
-  const packet = Buffer.alloc(4 + 4 + 4 + payload.length);
-  packet.writeInt32LE(packet.length - 4, 0);
-  packet.writeInt32LE(id, 4);
-  packet.writeInt32LE(type, 8);
-  payload.copy(packet, 12);
-  return packet;
+const QUERY_TIMEOUT_MS = 2500;
+
+function makeRequest(type, challenge = Buffer.alloc(4, 0xff)) {
+  if (type === 'info') {
+    return Buffer.concat([
+      Buffer.from([0xff, 0xff, 0xff, 0xff, 0x54]),
+      Buffer.from('Source Engine Query\0', 'ascii'),
+      challenge,
+    ]);
+  }
+  return Buffer.concat([
+    Buffer.from([0xff, 0xff, 0xff, 0xff, 0x55]),
+    challenge,
+  ]);
 }
 
-function decodeRconResponse(raw) {
-  if (!raw || raw.length < 12) return '';
-  const size = raw.readInt32LE(0);
-  const requestId = raw.readInt32LE(4);
-  const type = raw.readInt32LE(8);
-  if (size <= 0 || type === 0) return '';
-  const body = raw.subarray(12, raw.length - 2);
-  const text = body.toString('utf8').replace(/\u0000+$/g, '');
-  return text || '';
+function sendQuery(socket, packet, host, port) {
+  return new Promise((resolve, reject) => {
+    const timeout = setTimeout(() => reject(new Error('QUERY_TIMEOUT')), QUERY_TIMEOUT_MS);
+    const onMessage = (message) => {
+      clearTimeout(timeout);
+      socket.removeListener('message', onMessage);
+      resolve(message);
+    };
+    socket.once('message', onMessage);
+    socket.send(packet, port, host, (error) => {
+      if (!error) return;
+      clearTimeout(timeout);
+      socket.removeListener('message', onMessage);
+      reject(error);
+    });
+  });
 }
 
-function makeFallbackStatus() {
+async function queryWithChallenge(socket, type, host, port) {
+  let response = await sendQuery(socket, makeRequest(type), host, port);
+  if (response.length >= 9 && response.readUInt32LE(0) === 0xffffffff && response[4] === 0x41) {
+    response = await sendQuery(socket, makeRequest(type, response.subarray(5, 9)), host, port);
+  }
+  if (response.length < 5 || response.readUInt32LE(0) !== 0xffffffff) {
+    throw new Error('INVALID_QUERY_RESPONSE');
+  }
+  return response;
+}
+
+function readNullTerminatedString(buffer, state) {
+  const start = state.offset;
+  while (state.offset < buffer.length && buffer[state.offset] !== 0) state.offset += 1;
+  if (state.offset >= buffer.length) throw new Error('INVALID_INFO_RESPONSE');
+  const value = buffer.toString('utf8', start, state.offset);
+  state.offset += 1;
+  return value;
+}
+
+function parseInfo(response) {
+  if (response[4] !== 0x49 || response.length < 6) throw new Error('INVALID_INFO_RESPONSE');
+  const state = { offset: 6 };
+  const name = readNullTerminatedString(response, state);
+  const map = readNullTerminatedString(response, state);
+  readNullTerminatedString(response, state);
+  readNullTerminatedString(response, state);
+  if (state.offset + 7 > response.length) throw new Error('INVALID_INFO_RESPONSE');
+  state.offset += 2;
+  const playersOnline = response[state.offset++];
+  const maxPlayers = response[state.offset++];
+  state.offset += 3;
+  const visibility = response[state.offset++];
+  state.offset += 1;
+  const protocolVersion = readNullTerminatedString(response, state);
+  let gameVersion = protocolVersion;
+
+  const versionMatch = response.toString('utf8').match(/VERSION:([0-9.]+)/i);
+  if (versionMatch) gameVersion = versionMatch[1];
+
   return {
-    online: false,
-    serverName: 'Grayfall',
-    map: 'Serwer offline',
-    version: 'Weryfikacja w toku',
-    playersOnline: 0,
-    maxPlayers: 0,
-    uptime: 'Brak danych',
-    maintenance: false,
-    restartScheduled: false,
-    players: [],
-    stats: {
-      zombiesKilled: 0,
-      deaths: 0,
-      longestSessionHours: 0,
-      topActivity: 'Brak danych',
-      monthly: 'W kolejce',
-    },
-    lastUpdated: new Date().toISOString(),
-    source: 'fallback',
+    serverName: name || 'Grayfall',
+    map: map || 'Nieznana mapa',
+    playersOnline,
+    maxPlayers,
+    version: gameVersion || 'Nieznana',
+    visibility,
   };
 }
 
-function parseStatusResponse(text) {
-  if (!text) return null;
-  const status = { online: true, players: [] };
-  const lines = text.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
-
-  const playersLine = lines.find((line) => /players?/i.test(line) || /player/i.test(line));
-  if (playersLine) {
-    const match = playersLine.match(/(\d+)\s*\/\s*(\d+)/i);
-    if (match) {
-      status.playersOnline = Number(match[1]);
-      status.maxPlayers = Number(match[2]);
-    }
+function parsePlayers(response) {
+  if (response[4] !== 0x44 || response.length < 6) return [];
+  const count = response[5];
+  const players = [];
+  const state = { offset: 6 };
+  for (let index = 0; index < count; index += 1) {
+    const name = readNullTerminatedString(response, state);
+    if (state.offset + 8 > response.length) break;
+    const score = response.readInt32LE(state.offset);
+    state.offset += 4;
+    const duration = response.readFloatLE(state.offset);
+    state.offset += 4;
+    players.push({
+      id: `player-${index}`,
+      name: name || 'Gracz',
+      score,
+      time: `${Math.floor(duration / 3600)} h ${Math.floor((duration % 3600) / 60)} min`,
+      status: 'online',
+    });
   }
-
-  const mapLine = lines.find((line) => /map/i.test(line) || /world/i.test(line));
-  if (mapLine) {
-    const match = mapLine.match(/(?::|\s)([A-Za-z0-9_\- ]{2,})$/i);
-    status.map = match ? match[1].trim() : mapLine;
-  }
-
-  const validPlayers = lines.filter((line) => /\d+\s+\S+/.test(line));
-  status.players = validPlayers.slice(0, 20).map((line, index) => ({
-    id: `slot-${index}`,
-    name: line.replace(/^\d+\s+/, '').split(/\s{2,}/)[0] || 'Gracz',
-    time: 'Brak danych',
-    status: 'online',
-  }));
-
-  status.serverName = 'Grayfall';
-  status.version = 'Project Zomboid';
-  status.uptime = 'Weryfikacja';
-  status.maintenance = false;
-  status.restartScheduled = false;
-  status.lastUpdated = new Date().toISOString();
-  status.source = 'rcon';
-  return status;
+  return players;
 }
 
-function tryRconStatus(host, port, password) {
-  return new Promise((resolve) => {
-    if (!host || !password) {
-      resolve(null);
-      return;
+async function getServerStatus(host, port) {
+  const socket = dgram.createSocket('udp4');
+  try {
+    const startedAt = Date.now();
+    const infoResponse = await queryWithChallenge(socket, 'info', host, port);
+    const ping = Date.now() - startedAt;
+    const info = parseInfo(infoResponse);
+    let players = [];
+    try {
+      players = parsePlayers(await queryWithChallenge(socket, 'players', host, port));
+    } catch (error) {
+      if (error.message !== 'QUERY_TIMEOUT') throw error;
     }
-
-    const commands = ['status', 'serverinfo', 'showplayers'];
-    const results = [];
-
-    let index = 0;
-
-    const attemptNext = () => {
-      if (index >= commands.length) {
-        resolve(results.find(Boolean) || null);
-        return;
-      }
-
-      const command = commands[index];
-      index += 1;
-      const socket = new net.Socket();
-      let settled = false;
-      let chunks = [];
-
-      const fail = () => {
-        if (settled) return;
-        settled = true;
-        attemptNext();
-      };
-
-      socket.setTimeout(2000);
-      socket.once('connect', () => {
-        const authPacket = buildPacket(0, 3, password);
-        socket.write(authPacket);
-        setTimeout(() => {
-          const cmdPacket = buildPacket(1, 2, command);
-          socket.write(cmdPacket);
-        }, 120);
-      });
-
-      socket.on('data', (chunk) => {
-        if (settled) return;
-        chunks.push(chunk);
-        const body = Buffer.concat(chunks);
-        const decoded = decodeRconResponse(body);
-        if (decoded) {
-          settled = true;
-          results.push(decoded);
-          socket.destroy();
-          resolve(parseStatusResponse(decoded) || { online: false, source: 'rcon' });
-        }
-      });
-
-      socket.on('timeout', fail);
-      socket.on('error', fail);
-      socket.on('close', () => {
-        if (!settled) fail();
-      });
-
-      socket.connect(port, host);
+    return {
+      online: true,
+      ...info,
+      ping,
+      uptime: null,
+      maintenance: null,
+      restartScheduled: null,
+      playersOnline: info.playersOnline,
+      players,
+      stats: {
+        zombiesKilled: null,
+        deaths: null,
+        longestSessionHours: null,
+        topActivity: null,
+        monthly: null,
+      },
+      lastUpdated: new Date().toISOString(),
+      source: 'steam-query',
     };
-
-    attemptNext();
-  });
+  } finally {
+    socket.close();
+  }
 }
 
 module.exports = async function handler(req, res) {
@@ -155,33 +150,43 @@ module.exports = async function handler(req, res) {
     return res.status(405).json({ error: 'Metoda niedozwolona.' });
   }
 
+  const host = process.env.PROJECT_ZOMBOID_SERVER_HOST || '5.39.69.222';
+  const port = Number(process.env.PROJECT_ZOMBOID_SERVER_PORT || 27000);
+  if (!Number.isInteger(port) || port < 1 || port > 65535) {
+    return res.status(500).json({ error: 'Nieprawidłowy port query serwera.' });
+  }
+
   try {
-    const host = process.env.PROJECT_ZOMBOID_SERVER_HOST || process.env.PROJECT_ZOMBOID_HOST || '5.39.69.222';
-    const port = Number(process.env.PROJECT_ZOMBOID_RCON_PORT || 27001);
-    const password = process.env.PROJECT_ZOMBOID_RCON_PASSWORD;
-
-    const status = await tryRconStatus(host, port, password);
-    if (status && status.online) {
-      res.setHeader('Cache-Control', 'no-store');
-      return res.status(200).json(status);
+    const status = await getServerStatus(host, port);
+    res.setHeader('Cache-Control', 'no-store');
+    return res.status(200).json(status);
+  } catch (error) {
+    if (error.message !== 'QUERY_TIMEOUT') {
+      console.error('Błąd odczytu publicznego query Project Zomboid:', error);
     }
-
-    const fallback = makeFallbackStatus();
     res.setHeader('Cache-Control', 'no-store');
     return res.status(200).json({
-      ...fallback,
+      online: null,
       serverName: 'Grayfall',
-      map: 'Serwer offline / brak synchronizacji',
-      version: 'Weryfikacja po stronie serwera',
-      source: 'fallback',
-      message: 'Połączenie z serwerem nie jest aktywne w tej chwili. Status będzie odświeżany automatycznie po ustaleniu połączenia RCON.',
-    });
-  } catch (error) {
-    console.error('Błąd pobierania statusu serwera:', error);
-    return res.status(200).json({
-      ...makeFallbackStatus(),
-      source: 'fallback',
-      message: 'Serwer nie odpowiada; to nie jest błąd strony, tylko brak aktywnego połączenia do backendu projektu.',
+      map: null,
+      version: null,
+      playersOnline: null,
+      maxPlayers: null,
+      ping: null,
+      uptime: null,
+      maintenance: null,
+      restartScheduled: null,
+      players: [],
+      stats: {
+        zombiesKilled: null,
+        deaths: null,
+        longestSessionHours: null,
+        topActivity: null,
+        monthly: null,
+      },
+      lastUpdated: new Date().toISOString(),
+      source: 'unavailable',
+      message: 'Nie udało się odczytać publicznego query serwera. To nie potwierdza, że serwer jest offline.',
     });
   }
 };
