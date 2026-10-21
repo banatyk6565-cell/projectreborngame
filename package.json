@@ -4,6 +4,6 @@
   "private": true,
   "description": "Strona Project Grayfall + logowanie przez Discord OAuth2 (Vercel serverless functions)",
   "engines": {
-    "node": ">=18"
+    "node": ">=24"
   }
 }
