@@ -1,0 +1,122 @@
+const { sign } = require('../../lib/session');
+const { serializeCookie } = require('../../lib/cookies');
+
+module.exports = async function handler(req, res) {
+  const { code, error } = req.query;
+
+  if (error) {
+    res.writeHead(302, { Location: '/?login=error' });
+    return res.end();
+  }
+  if (!code) {
+    return res.status(400).send('Brak kodu autoryzacji (code) w zapytaniu.');
+  }
+
+  const required = ['DISCORD_CLIENT_ID', 'DISCORD_CLIENT_SECRET', 'DISCORD_REDIRECT_URI', 'SESSION_SECRET'];
+  const missing = required.filter((k) => !process.env[k]);
+  if (missing.length) {
+    console.error('Brakuje zmiennych środowiskowych:', missing.join(', '));
+    return res.status(500).send('Błąd konfiguracji serwera. Sprawdź zmienne środowiskowe.');
+  }
+
+  try {
+    // 1) Wymiana kodu na access token (client_secret zostaje bezpiecznie po stronie serwera)
+    const tokenParams = new URLSearchParams({
+      client_id: process.env.DISCORD_CLIENT_ID,
+      client_secret: process.env.DISCORD_CLIENT_SECRET,
+      grant_type: 'authorization_code',
+      code,
+      redirect_uri: process.env.DISCORD_REDIRECT_URI,
+    });
+
+    const tokenRes = await fetch('https://discord.com/api/oauth2/token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: tokenParams,
+    });
+
+    if (!tokenRes.ok) {
+      console.error('Wymiana tokenu nieudana:', await tokenRes.text());
+      res.writeHead(302, { Location: '/?login=error' });
+      return res.end();
+    }
+    const tokenData = await tokenRes.json();
+
+    // 2) Pobranie danych zalogowanego użytkownika
+    const userRes = await fetch('https://discord.com/api/users/@me', {
+      headers: { Authorization: `Bearer ${tokenData.access_token}` },
+    });
+    if (!userRes.ok) {
+      console.error('Pobranie użytkownika nieudane:', await userRes.text());
+      res.writeHead(302, { Location: '/?login=error' });
+      return res.end();
+    }
+    const user = await userRes.json();
+
+    const avatarUrl = user.avatar
+      ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png?size=128`
+      : `https://cdn.discordapp.com/embed/avatars/${Number(user.discriminator || 0) % 5}.png`;
+
+    // 2b) Opcjonalnie: sprawdzenie członkostwa na serwerze Discord i posiadanych ról
+    //     (wymaga zakresu "guilds.members.read" w linku logowania i ustawienia DISCORD_GUILD_ID).
+    //     Jeśli DISCORD_GUILD_ID nie jest ustawione, ten krok jest po prostu pomijany.
+    let inGuild = false;
+    let isWhitelisted = false;
+    let memberRoles = [];
+    const guildId = process.env.DISCORD_GUILD_ID;
+
+    if (guildId) {
+      try {
+        const memberRes = await fetch(`https://discord.com/api/users/@me/guilds/${guildId}/member`, {
+          headers: { Authorization: `Bearer ${tokenData.access_token}` },
+        });
+
+        if (memberRes.ok) {
+          const member = await memberRes.json();
+          inGuild = true;
+          memberRoles = member.roles || [];
+          const whitelistRoleId = process.env.DISCORD_WHITELIST_ROLE_ID;
+          if (whitelistRoleId) {
+            isWhitelisted = memberRoles.includes(whitelistRoleId);
+          }
+        } else if (memberRes.status === 404) {
+          inGuild = false; // użytkownik po prostu nie jest (jeszcze) na serwerze
+        } else {
+          console.error('Nie udało się pobrać danych członkostwa:', memberRes.status, await memberRes.text());
+        }
+      } catch (guildErr) {
+        console.error('Błąd sprawdzania członkostwa na serwerze:', guildErr);
+      }
+    }
+
+    // 3) Podpisany, bezstanowy "session token" trzymany w httpOnly cookie (7 dni)
+    const sessionPayload = {
+      id: user.id,
+      username: user.username,
+      globalName: user.global_name || user.username,
+      avatar: avatarUrl,
+      inGuild,
+      isWhitelisted,
+      roles: memberRoles, // tymczasowo, do diagnostyki - Twoje własne ID ról, nic tajnego
+      exp: Date.now() + 1000 * 60 * 60 * 24 * 7,
+    };
+    const sessionToken = sign(sessionPayload, process.env.SESSION_SECRET);
+
+    res.setHeader(
+      'Set-Cookie',
+      serializeCookie('grayfall_session', sessionToken, {
+        maxAge: 60 * 60 * 24 * 7,
+        httpOnly: true,
+        secure: true,
+        sameSite: 'Lax',
+      })
+    );
+
+    res.writeHead(302, { Location: '/' });
+    res.end();
+  } catch (err) {
+    console.error('Błąd podczas logowania przez Discord:', err);
+    res.writeHead(302, { Location: '/?login=error' });
+    res.end();
+  }
+};
